@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>IORB × SOFR × BTC — Signal Dashboard</title>
+    <meta name="theme-color" content="#070A0F" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=20260114_7" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="bg-grid"></div>
+    <div class="bg-scanlines"></div>
+
+    <header class="header">
+      <div class="brand">
+        <div class="brand__title">IORB × SOFR × BTC</div>
+        <div class="brand__subtitle">Liquidity Stress → Correlation → Trading Signal</div>
+      </div>
+      <div class="header__right">
+        <div class="pill" id="statusPill">
+          <span class="pill__dot" id="statusDot"></span>
+          <span class="pill__text" id="statusText">Cargando…</span>
+        </div>
+        <button class="btn btn--ghost" id="helpBtn" type="button" aria-label="Abrir ayuda">Ayuda</button>
+        <button class="btn btn--ghost" id="detailsBtn" type="button" aria-label="Mostrar u ocultar detalles">Detalles</button>
+        <button class="btn btn--ghost" id="statusBtn" type="button" aria-label="Abrir estado">Estado</button>
+        <button class="btn btn--ghost" id="refreshBtn" type="button">Actualizar</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="hero">
+        <div class="signal-card" id="signalCard" aria-live="polite">
+          <div class="signal-card__top">
+            <div class="signal-chip" id="signalChip">SIGNAL</div>
+            <div class="signal-meta">
+            <div class="signal-meta__label">Régimen</div>
+            <div class="signal-meta__value" id="regimeText">—</div>
+            <div class="signal-meta__label">Confianza</div>
+              <div class="signal-meta__value" id="signalStrength">—</div>
+            </div>
+          </div>
+          <div class="signal-card__main">
+            <div class="signal" id="signalText">—</div>
+            <div class="signal-sub" id="signalSub">Esperando datos…</div>
+          </div>
+          <div class="signal-card__explain" id="trafficBox">
+            <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;">
+              <div>
+                <div style="color:rgba(234,241,255,.55); font-size:11px;">Semáforo</div>
+                <div id="trafficLight" style="font-weight:900; margin-top:6px; letter-spacing:.4px;">—</div>
+              </div>
+              <div>
+                <div style="color:rgba(234,241,255,.55); font-size:11px;">Resumen</div>
+                <div id="oneLiner" style="font-weight:700; margin-top:6px;">—</div>
+              </div>
+            </div>
+          </div>
+        <div class="signal-card__explain" id="planBox">
+          <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+            <div>
+              <div style="color:rgba(234,241,255,.55); font-size:11px;">Plan</div>
+              <div id="planAction" style="font-weight:800; margin-top:6px;">—</div>
+            </div>
+            <div>
+              <div style="color:rgba(234,241,255,.55); font-size:11px;">Target</div>
+              <div id="planTarget" style="font-weight:800; margin-top:6px;">—</div>
+            </div>
+          </div>
+          <div id="planExplain" style="margin-top:10px;">—</div>
+        </div>
+          <div class="signal-card__explain" id="signalExplain">—</div>
+          <div class="signal-card__bottom">
+            <label class="switch">
+              <input id="soundToggle" type="checkbox" />
+              <span class="switch__track"></span>
+              <span class="switch__label">Sonido</span>
+            </label>
+            <label class="switch">
+              <input id="explainToggle" type="checkbox" checked />
+              <span class="switch__track"></span>
+              <span class="switch__label">Explicación</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="card__title">
+              BTC (USD)
+              <span class="tip" data-tip="Precio y % de cambio 24h desde CoinGecko.">?</span>
+            </div>
+            <div class="card__value" id="btcPrice">—</div>
+            <div class="card__sub" id="btcChange24h">—</div>
+          </div>
+
+          <div class="card">
+            <div class="card__title">
+              IORB
+              <span class="tip" data-tip="Interest on Reserve Balances (tasa pagada por reservas en la Fed).">?</span>
+            </div>
+            <div class="card__value" id="iorbValue">—</div>
+            <div class="card__sub" id="iorbSource">Fuente: —</div>
+          </div>
+
+          <div class="card">
+            <div class="card__title">
+              SOFR
+              <span class="tip" data-tip="Secured Overnight Financing Rate (proxy del costo de fondeo overnight).">?</span>
+            </div>
+            <div class="card__value" id="sofrValue">—</div>
+            <div class="card__sub" id="sofrSource">Fuente: —</div>
+          </div>
+
+          <div class="card">
+            <div class="card__title">
+              Spread (SOFR − IORB)
+              <span class="tip" data-tip="Stress de liquidez suele verse cuando SOFR sube por encima de IORB.">?</span>
+            </div>
+            <div class="card__value" id="spreadValue">—</div>
+            <div class="card__sub" id="spreadTrend">Tendencia: —</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-detail="true">
+        <div class="panel__top">
+          <div class="panel__title">BTC vs IORB vs SOFR (histórico)</div>
+          <div class="panel__controls">
+            <div class="segmented">
+              <button class="segmented__btn is-active" data-range="90" type="button">90d</button>
+              <button class="segmented__btn" data-range="180" type="button">180d</button>
+              <button class="segmented__btn" data-range="365" type="button">1y</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="mainChart" height="120"></canvas>
+        </div>
+      </section>
+
+      <section class="panel" data-detail="true">
+        <div class="panel__top">
+          <div class="panel__title">Correlación (Pearson)</div>
+          <div class="panel__subtitle">
+            Correlación entre <b>retornos diarios de BTC</b> y el <b>nivel diario del spread (SOFR − IORB)</b> (alineado por fecha).
+          </div>
+        </div>
+        <div class="corr-grid">
+          <div class="corr">
+            <div class="corr__label">7d</div>
+            <div class="corr__value" id="corr7">—</div>
+          </div>
+          <div class="corr">
+            <div class="corr__label">30d</div>
+            <div class="corr__value" id="corr30">—</div>
+          </div>
+          <div class="corr">
+            <div class="corr__label">90d</div>
+            <div class="corr__value" id="corr90">—</div>
+          </div>
+          <div class="corr corr--wide">
+            <div class="corr__label">Señal usa</div>
+            <div class="corr__value corr__value--small">
+              Spread actual + correlación 30d
+              <span class="tip" data-tip="Reglas: SOFR > IORB y corr30 > 0 → LONG. SOFR < IORB y corr30 < 0 → SHORT. Si no, NEUTRAL.">?</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-detail="true">
+        <div class="panel__top">
+          <div class="panel__title">Ajustes (opcional)</div>
+          <div class="panel__subtitle">
+            Por defecto la web se actualiza sola: BTC (CoinGecko), SOFR (NY Fed), IORB (CSV público). Solo toca esto si quieres forzar valores.
+          </div>
+        </div>
+
+        <details class="details" id="settingsDetails">
+          <summary class="details__summary">Abrir ajustes avanzados</summary>
+
+          <div class="fed-grid" style="margin-top:10px;">
+            <div class="field">
+              <label class="field__label" for="parityBps">Paridad (bps)</label>
+              <input class="field__input" id="parityBps" inputmode="numeric" placeholder="Ej: 5" />
+              <div class="field__hint">OPERAR si |SOFR−IORB| ≤ bps (default 5 bps).</div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="manualIorb">IORB manual (%)</label>
+              <input class="field__input" id="manualIorb" inputmode="decimal" placeholder="(auto) Ej: 5.40" />
+              <div class="field__hint">Si lo completas, override a IORB automático.</div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="manualSofr">SOFR manual (%)</label>
+              <input class="field__input" id="manualSofr" inputmode="decimal" placeholder="(auto) Ej: 5.33" />
+              <div class="field__hint">Si lo completas, override a SOFR automático.</div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="alertsToggle">Alertas</label>
+              <label class="switch" style="justify-content:space-between;">
+                <input id="alertsToggle" type="checkbox" />
+                <span class="switch__track"></span>
+                <span class="switch__label">Notificar cambios</span>
+              </label>
+              <div class="field__hint">Aviso cuando cambia OPERAR/NO OPERAR, señal o Plan.</div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="presetSelect">Preset BingX</label>
+              <select class="field__input" id="presetSelect">
+                <option value="normal">Normal</option>
+                <option value="conservador">Conservador</option>
+                <option value="agresivo">Agresivo</option>
+              </select>
+              <div class="field__hint">Setea riesgo/leverage/fees/margen extra.</div>
+            </div>
+
+            <div class="field field--actions">
+              <button class="btn btn--ghost" id="exportCsvBtn" type="button">Export CSV</button>
+              <button class="btn btn--ghost" id="copyLinkBtn" type="button">Copiar link</button>
+              <div class="field__hint">El refresh es automático; el botón de arriba fuerza refresh.</div>
+            </div>
+          </div>
+
+          <div class="field field--wide" style="margin-top:10px;">
+            <label class="field__label" for="levelsInput">Niveles objetivo BTC (USD)</label>
+            <textarea
+              class="field__textarea"
+              id="levelsInput"
+              rows="3"
+              placeholder="Ej: 90000, 95000, 98000-100000, 105000"
+            ></textarea>
+            <div class="field__hint">
+              Opcional. Si lo dejas vacío, el Plan no usa niveles. Formatos: <code>98000</code> o zona <code>98000-100000</code>.
+            </div>
+          </div>
+
+          <div class="field field--wide" style="margin-top:10px;">
+            <label class="field__label" for="iorbSchedule">IORB por tramos (fecha → valor)</label>
+            <textarea
+              class="field__textarea"
+              id="iorbSchedule"
+              rows="4"
+              placeholder="Formato: YYYY-MM-DD,valor\nEj:\n2025-09-19,5.40\n2025-12-18,4.90"
+            ></textarea>
+            <div class="field__hint">Opcional. Si lo completas, tiene prioridad sobre IORB automático.</div>
+          </div>
+        </details>
+      </section>
+
+      <section class="panel" data-detail="true">
+        <div class="panel__top">
+          <div class="panel__title">Historial de señales</div>
+          <div class="panel__subtitle">Guardado localmente en este navegador.</div>
+        </div>
+        <div class="history">
+          <div class="history__actions">
+            <button class="btn btn--ghost" id="clearHistoryBtn" type="button">Borrar historial</button>
+          </div>
+          <div class="history__list" id="historyList"></div>
+        </div>
+      </section>
+
+      <section class="panel" data-detail="true">
+        <div class="panel__top">
+          <div class="panel__title">Spread + Rolling Correlation</div>
+          <div class="panel__subtitle">
+            Spread diario (SOFR − IORB) y correlación rolling 30d con retornos diarios de BTC.
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="auxChart" height="120"></canvas>
+        </div>
+      </section>
+
+      <section class="panel" data-detail="true">
+        <div class="panel__top">
+          <div class="panel__title">Backtest (demo)</div>
+          <div class="panel__subtitle">
+            Simulación simple: operar solo en paridad, dirección por cambio 7d del spread, stop por ATR14 y TP=2R (editable en código si quieres).
+          </div>
+        </div>
+        <div class="corr-grid">
+          <div class="corr">
+            <div class="corr__label">Trades</div>
+            <div class="corr__value" id="btTrades">—</div>
+          </div>
+          <div class="corr">
+            <div class="corr__label">Winrate</div>
+            <div class="corr__value" id="btWinrate">—</div>
+          </div>
+          <div class="corr">
+            <div class="corr__label">Expectancy (R)</div>
+            <div class="corr__value" id="btExpR">—</div>
+          </div>
+          <div class="corr corr--wide">
+            <div class="corr__label">Nota</div>
+            <div class="corr__value corr__value--small" id="btNote">—</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__top">
+          <div class="panel__title">Futures Toolkit</div>
+          <div class="panel__subtitle">
+            Calculadora en vivo (no requiere botones): tamaño de posición por riesgo, margen, y liquidación aproximada (USDT perp).
+          </div>
+        </div>
+
+        <div class="fed-grid">
+          <div class="field">
+            <label class="field__label" for="equityUsd">Equity (USDT)</label>
+            <input class="field__input" id="equityUsd" inputmode="decimal" placeholder="Ej: 1000" />
+            <div class="field__hint">Saldo que usas para calcular riesgo.</div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="riskPct">Riesgo (%)</label>
+            <input class="field__input" id="riskPct" inputmode="decimal" placeholder="Ej: 0.5" />
+            <div class="field__hint">Por trade. Default 0.5%.</div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="leverage">Leverage (x)</label>
+            <input class="field__input" id="leverage" inputmode="numeric" placeholder="Ej: 10" />
+            <div class="field__hint">Para margen/liq (aprox).</div>
+          </div>
+
+          <div class="field field--wide">
+            <label class="field__label" for="entryPrice">Entry (USD)</label>
+            <input class="field__input" id="entryPrice" inputmode="decimal" placeholder="(auto) precio actual" />
+            <div class="field__hint">Si lo dejas vacío, usa precio actual.</div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="stopPrice">Stop (USD)</label>
+            <input class="field__input" id="stopPrice" inputmode="decimal" placeholder="(auto) ATR-based" />
+            <div class="field__hint">Sugerido por ATR14 (editable).</div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="targetPrice">Target (USD)</label>
+            <input class="field__input" id="targetPrice" inputmode="decimal" placeholder="(auto) nivel / 2R" />
+            <div class="field__hint">Siguiente nivel si existe; si no, 2R.</div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="mmrPct">Maint. margin (%)</label>
+            <input class="field__input" id="mmrPct" inputmode="decimal" placeholder="0.5" />
+            <div class="field__hint">Default 0.5% (aprox).</div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="marginExtraUsd">Margen extra (USDT)</label>
+            <input class="field__input" id="marginExtraUsd" inputmode="decimal" placeholder="0" />
+            <div class="field__hint">Colchón (cross) / margen adicional aparte del inicial.</div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="feeBps">Fees (bps roundtrip)</label>
+            <input class="field__input" id="feeBps" inputmode="numeric" placeholder="12" />
+            <div class="field__hint">Ej: 12 bps = 0.12% ida+vuelta (depende de tier).</div>
+          </div>
+        </div>
+
+        <div class="corr-grid" style="margin-top:10px;">
+          <div class="corr">
+            <div class="corr__label">Posición</div>
+            <div class="corr__value" id="posSizeBtc">—</div>
+            <div class="corr__value corr__value--small" id="posNotional">—</div>
+          </div>
+          <div class="corr">
+            <div class="corr__label">Riesgo (USDT)</div>
+            <div class="corr__value" id="riskUsd">—</div>
+            <div class="corr__value corr__value--small" id="rMultiple">—</div>
+            <div class="corr__value corr__value--small" id="feeCost">—</div>
+          </div>
+          <div class="corr">
+            <div class="corr__label">Margin (aprox)</div>
+            <div class="corr__value" id="marginUsd">—</div>
+            <div class="corr__value corr__value--small" id="liqPrice">—</div>
+          </div>
+          <div class="corr corr--wide">
+            <div class="corr__label">Notas</div>
+            <div class="corr__value corr__value--small" id="riskNote">—</div>
+          </div>
+          <div class="corr corr--wide">
+            <div class="corr__label">Orden sugerida</div>
+            <div class="corr__value corr__value--small" id="orderText">—</div>
+            <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn--ghost" id="copyOrderBtn" type="button">Copiar orden</button>
+              <button class="btn btn--ghost" id="saveTradeBtn" type="button">Guardar en Journal</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-detail="true">
+        <div class="panel__top">
+          <div class="panel__title">Journal</div>
+          <div class="panel__subtitle">Guarda trades sugeridos y marca Win/Loss para calcular tu expectancy real.</div>
+        </div>
+        <div class="history">
+          <div class="history__actions">
+            <button class="btn btn--ghost" id="clearJournalBtn" type="button">Borrar journal</button>
+          </div>
+          <div class="corr-grid" style="margin-bottom:10px;">
+            <div class="corr">
+              <div class="corr__label">Trades</div>
+              <div class="corr__value" id="jrTrades">—</div>
+            </div>
+            <div class="corr">
+              <div class="corr__label">Winrate</div>
+              <div class="corr__value" id="jrWinrate">—</div>
+            </div>
+            <div class="corr">
+              <div class="corr__label">Expectancy (R)</div>
+              <div class="corr__value" id="jrExpR">—</div>
+            </div>
+          </div>
+          <div class="history__list" id="journalList"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer__left">
+        <span class="muted">Disclaimer:</span> esto es una demo educativa, <b>no</b> asesoría financiera.
+      </div>
+      <div class="footer__right">
+        <button class="linklike" id="helpLink" type="button">Ayuda</button>
+        <span class="muted" id="lastUpdated">—</span>
+      </div>
+    </footer>
+
+    <div class="modal" id="helpModal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal__backdrop" id="helpBackdrop"></div>
+      <div class="modal__panel" role="document">
+        <div class="modal__top">
+          <div class="modal__title">Ayuda rápida</div>
+          <button class="btn btn--ghost" id="helpClose" type="button">Cerrar</button>
+        </div>
+        <div class="modal__body">
+          <div class="modal__section">
+            <div class="modal__h">Cómo usar (simple)</div>
+            <div class="modal__p">
+              1) Abre la web → se actualiza sola. 2) Mira <b>Régimen</b>: si dice <b>OPERAR</b>, el Plan te sugiere
+              <b>ABRIR</b> y un <b>Target</b> (si pusiste niveles). 3) Si dice <b>NO OPERAR</b>, espera.
+            </div>
+          </div>
+          <div class="modal__section">
+            <div class="modal__h">¿Por qué pone NEUTRAL o Confianza BAJA?</div>
+            <div class="modal__p">
+              - <b>NEUTRAL</b> significa “<b>esperar</b>”: ocurre si estás fuera de paridad, o si el spread no da dirección (cambio 7d ~ 0).<br />
+              - <b>Confianza</b> (BAJA/MEDIA/ALTA) resume si hay condiciones suficientes (paridad, movimiento del spread, datos/volatilidad) para ejecutar.
+            </div>
+          </div>
+          <div class="modal__section">
+            <div class="modal__h">Glosario</div>
+            <div class="modal__p">
+              - <b>SOFR</b>: tasa overnight (NY Fed).<br />
+              - <b>IORB</b>: tasa sobre reservas (FRED CSV público).<br />
+              - <b>Spread</b>: SOFR − IORB. <br />
+              - <b>Paridad</b>: |spread| pequeño (default ±5 bps) → “se puede operar”.<br />
+              - <b>Rolling corr30</b>: correlación 30d (retornos BTC vs spread).
+            </div>
+          </div>
+          <div class="modal__section">
+            <div class="modal__h">Compartir configuración</div>
+            <div class="modal__p">
+              En <b>Ajustes</b> usa <b>Copiar link</b> para compartir paridad/niveles con otra persona.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="statusModal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal__backdrop" id="statusBackdrop"></div>
+      <div class="modal__panel" role="document">
+        <div class="modal__top">
+          <div class="modal__title">Estado</div>
+          <button class="btn btn--ghost" id="statusClose" type="button">Cerrar</button>
+        </div>
+        <div class="modal__body">
+          <div class="modal__section">
+            <div class="modal__h">Fuentes</div>
+            <div class="modal__p" id="sourceStatus">—</div>
+          </div>
+          <div class="modal__section">
+            <div class="modal__h">Último estado guardado</div>
+            <div class="modal__p" id="staleStatus">—</div>
+          </div>
+          <div class="modal__section">
+            <div class="modal__h">PWA / Caché</div>
+            <div class="modal__p">Si ves UI vieja, limpia el caché del service worker y recarga.</div>
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn--ghost" id="clearCacheBtn" type="button">Limpiar caché PWA</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <audio id="beepAudio" preload="auto">
+      <source
+        src="data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEAESsAABErAAABAAgAZGF0YRAAAAAA//////////////////////////////8="
+        type="audio/wav"
+      />
+    </audio>
+
+    <script src="./app.js?v=20260114_7"></script>
+  </body>
+</html>
+
