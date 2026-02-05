@@ -292,15 +292,33 @@
 
       <section class="panel" data-detail="true">
         <div class="panel__top">
-          <div class="panel__title">Spread + Rolling Correlation</div>
-          <div class="panel__subtitle">
-            Spread diario (SOFR − IORB) y correlación rolling 30d con retornos diarios de BTC.
+          <div>
+            <div class="panel__title">Spread + Rolling Correlation</div>
+            <div class="panel__subtitle">
+              Spread diario (SOFR − IORB) y correlación rolling 30d con retornos diarios de BTC.
+            </div>
+          </div>
+          <div class="panel__controls">
+            <button class="btn btn--ghost" id="auxChartFullscreenBtn" type="button">Ver en grande</button>
           </div>
         </div>
         <div class="chart-wrap">
           <canvas id="auxChart" height="120"></canvas>
         </div>
       </section>
+
+      <div class="modal" id="auxChartModal" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal__backdrop" id="auxChartModalBackdrop"></div>
+        <div class="modal__panel modal__panel--chart" role="document">
+          <div class="modal__top">
+            <div class="panel__title">Spread + Rolling Correlation</div>
+            <button class="btn btn--ghost" id="auxChartModalClose" type="button">Cerrar</button>
+          </div>
+          <div class="chart-wrap chart-wrap--fullscreen">
+            <canvas id="auxChartBig" height="400"></canvas>
+          </div>
+        </div>
+      </div>
 
       <section class="panel" data-detail="true">
         <div class="panel__top">

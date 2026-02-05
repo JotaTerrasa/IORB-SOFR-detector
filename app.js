@@ -883,6 +883,46 @@ function buildAuxChart({ labels, spread, rollingCorr30 }) {
       },
     },
   });
+  window.__auxChartData = { labels, spread, rollingCorr30 };
+}
+
+let chartBigAux = null;
+
+function buildAuxChartBig(data) {
+  const d = data || window.__auxChartData;
+  const canvas = $("auxChartBig");
+  if (!canvas || !d?.labels?.length) return;
+  if (chartBigAux) chartBigAux.destroy();
+  chartBigAux = new Chart(canvas.getContext("2d"), {
+    type: "line",
+    data: {
+      labels: d.labels,
+      datasets: [
+        { label: "Spread (SOFR − IORB) %", data: d.spread, yAxisID: "ySpread", borderColor: "rgba(255,204,102,.90)", backgroundColor: "rgba(255,204,102,.10)", borderWidth: 2, tension: 0.25, pointRadius: 0 },
+        { label: "Rolling corr30", data: d.rollingCorr30, yAxisID: "yCorr", borderColor: "rgba(0,255,213,.90)", backgroundColor: "rgba(0,255,213,.10)", borderWidth: 2, tension: 0.25, pointRadius: 0, spanGaps: true },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { labels: { color: "rgba(234,241,255,.75)" } },
+        tooltip: {
+          backgroundColor: "rgba(10,14,22,.95)",
+          borderColor: "rgba(0,255,213,.22)",
+          borderWidth: 1,
+          titleColor: "rgba(234,241,255,.92)",
+          bodyColor: "rgba(234,241,255,.82)",
+        },
+      },
+      scales: {
+        x: { ticks: { color: "rgba(234,241,255,.55)", maxRotation: 0, autoSkip: true }, grid: { color: "rgba(234,241,255,.06)" } },
+        ySpread: { position: "left", ticks: { color: "rgba(234,241,255,.55)", callback: (v) => `${v}%` }, grid: { color: "rgba(234,241,255,.06)" } },
+        yCorr: { position: "right", min: -1, max: 1, ticks: { color: "rgba(234,241,255,.55)" }, grid: { drawOnChartArea: false, color: "rgba(234,241,255,.06)" } },
+      },
+    },
+  });
 }
 
 function animateNumber(el, targetText) {
@@ -1226,6 +1266,7 @@ async function computeAndRender({ rangeDays, fed }) {
   const roll = rollingPearson({ x: rets, y: spreadForRets, window: 30 });
   const rollAligned = [null, ...roll];
   buildAuxChart({ labels, spread: spreadDaily, rollingCorr30: rollAligned });
+  if ($("auxChartModal")?.classList.contains("is-open")) buildAuxChartBig(window.__auxChartData);
 
   $("corr7").textContent = corr7 == null ? "—" : fmtNum(corr7, 3);
   $("corr30").textContent = corr30 == null ? "—" : fmtNum(corr30, 3);
@@ -1713,6 +1754,7 @@ function bindUI() {
       closeHelp();
       closeModal("statusModal");
       if ($("chartModal")?.classList.contains("is-open")) closeChartModal();
+      if ($("auxChartModal")?.classList.contains("is-open")) closeAuxChartModal();
     }
   });
 
@@ -1729,6 +1771,20 @@ function bindUI() {
   });
   $("chartModalClose")?.addEventListener("click", closeChartModal);
   $("chartModalBackdrop")?.addEventListener("click", closeChartModal);
+
+  function closeAuxChartModal() {
+    if (chartBigAux) {
+      chartBigAux.destroy();
+      chartBigAux = null;
+    }
+    closeModal("auxChartModal");
+  }
+  $("auxChartFullscreenBtn")?.addEventListener("click", () => {
+    openModal("auxChartModal");
+    buildAuxChartBig(window.__auxChartData);
+  });
+  $("auxChartModalClose")?.addEventListener("click", closeAuxChartModal);
+  $("auxChartModalBackdrop")?.addEventListener("click", closeAuxChartModal);
 
   // Status modal
   const openStatus = () => {
