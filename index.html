@@ -13,7 +13,7 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260114_9" />
+    <link rel="stylesheet" href="./styles.css?v=20260114_10" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   </head>
   <body>
@@ -143,12 +143,26 @@
               <button class="segmented__btn" data-range="180" type="button">180d</button>
               <button class="segmented__btn" data-range="365" type="button">1y</button>
             </div>
+            <button class="btn btn--ghost" id="chartFullscreenBtn" type="button">Ver en grande</button>
           </div>
         </div>
         <div class="chart-wrap">
           <canvas id="mainChart" height="120"></canvas>
         </div>
       </section>
+
+      <div class="modal" id="chartModal" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="modal__backdrop" id="chartModalBackdrop"></div>
+        <div class="modal__panel modal__panel--chart" role="document">
+          <div class="modal__top">
+            <div class="panel__title">BTC vs IORB vs SOFR (histórico)</div>
+            <button class="btn btn--ghost" id="chartModalClose" type="button">Cerrar</button>
+          </div>
+          <div class="chart-wrap chart-wrap--fullscreen">
+            <canvas id="mainChartBig" height="400"></canvas>
+          </div>
+        </div>
+      </div>
 
       <section class="panel" data-detail="true">
         <div class="panel__top">

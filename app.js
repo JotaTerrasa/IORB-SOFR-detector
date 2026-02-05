@@ -4,7 +4,7 @@
    - Correlation: Pearson between BTC daily returns and spread (SOFR - IORB)
 */
 
-const APP_VERSION = "20260114_9";
+const APP_VERSION = "20260114_10";
 const CG_BASE = "/api/cg";
 const NYFED_API = "/api/nyfed";
 const IORB_API = "/api/iorb";
@@ -769,6 +769,51 @@ function buildChart({ labels, btc, iorb, sofr }) {
       },
     },
   });
+  window.__mainChartData = { labels, btc, iorb, sofr };
+}
+
+let chartBig = null;
+
+function buildChartBig(data) {
+  const d = data || window.__mainChartData;
+  const canvas = $("mainChartBig");
+  if (!canvas || !d?.labels?.length) return;
+  if (chartBig) chartBig.destroy();
+  chartBig = new Chart(canvas.getContext("2d"), {
+    type: "line",
+    data: {
+      labels: d.labels,
+      datasets: [
+        { label: "BTC (USD)", data: d.btc, yAxisID: "yBtc", borderColor: "rgba(0,255,213,.95)", backgroundColor: "rgba(0,255,213,.12)", borderWidth: 2, tension: 0.25, pointRadius: 0 },
+        { label: "IORB (%)", data: d.iorb, yAxisID: "yRate", borderColor: "rgba(88,244,255,.90)", backgroundColor: "rgba(88,244,255,.10)", borderWidth: 2, tension: 0.25, pointRadius: 0 },
+        { label: "SOFR (%)", data: d.sofr, yAxisID: "yRate", borderColor: "rgba(57,255,136,.85)", backgroundColor: "rgba(57,255,136,.10)", borderWidth: 2, tension: 0.25, pointRadius: 0 },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { labels: { color: "rgba(234,241,255,.75)" } },
+        tooltip: {
+          backgroundColor: "rgba(10,14,22,.95)",
+          borderColor: "rgba(0,255,213,.22)",
+          borderWidth: 1,
+          titleColor: "rgba(234,241,255,.92)",
+          bodyColor: "rgba(234,241,255,.82)",
+        },
+      },
+      scales: {
+        x: { ticks: { color: "rgba(234,241,255,.55)", maxRotation: 0, autoSkip: true }, grid: { color: "rgba(234,241,255,.06)" } },
+        yBtc: {
+          position: "left",
+          ticks: { color: "rgba(234,241,255,.55)", callback: (v) => (Number.isFinite(v) ? Number(v).toLocaleString(undefined, { notation: "compact" }) : v) },
+          grid: { color: "rgba(234,241,255,.06)" },
+        },
+        yRate: { position: "right", ticks: { color: "rgba(234,241,255,.55)", callback: (v) => `${v}%` }, grid: { drawOnChartArea: false, color: "rgba(234,241,255,.06)" } },
+      },
+    },
+  });
 }
 
 function buildAuxChart({ labels, spread, rollingCorr30 }) {
@@ -1174,6 +1219,7 @@ async function computeAndRender({ rangeDays, fed }) {
   }
 
   buildChart({ labels, btc, iorb: iorbLine, sofr: sofrLine });
+  if ($("chartModal")?.classList.contains("is-open")) buildChartBig(window.__mainChartData);
 
   // Aux: spread + rolling corr30
   const spreadForRets = spreadDaily.slice(1);
@@ -1666,8 +1712,23 @@ function bindUI() {
     if (e.key === "Escape") {
       closeHelp();
       closeModal("statusModal");
+      if ($("chartModal")?.classList.contains("is-open")) closeChartModal();
     }
   });
+
+  function closeChartModal() {
+    if (chartBig) {
+      chartBig.destroy();
+      chartBig = null;
+    }
+    closeModal("chartModal");
+  }
+  $("chartFullscreenBtn")?.addEventListener("click", () => {
+    openModal("chartModal");
+    buildChartBig(window.__mainChartData);
+  });
+  $("chartModalClose")?.addEventListener("click", closeChartModal);
+  $("chartModalBackdrop")?.addEventListener("click", closeChartModal);
 
   // Status modal
   const openStatus = () => {

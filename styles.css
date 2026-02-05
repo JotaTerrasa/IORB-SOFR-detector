@@ -555,6 +555,20 @@ body{
 .modal__h{font-weight:800; color:rgba(234,241,255,.86); margin-bottom:6px;}
 .modal__p b{color:rgba(234,241,255,.90);}
 
+/* Chart fullscreen modal */
+.modal__panel--chart{
+  width:min(96vw, 1200px);
+  max-width:none;
+}
+.chart-wrap--fullscreen{
+  height:72vh;
+  min-height:380px;
+  position:relative;
+}
+.chart-wrap--fullscreen canvas{
+  display:block;
+}
+
 /* Details mode */
 [data-detail="true"]{display:none;}
 body.show-details [data-detail="true"]{display:block;}
