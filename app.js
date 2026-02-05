@@ -4,12 +4,10 @@
    - Correlation: Pearson between BTC daily returns and spread (SOFR - IORB)
 */
 
-const APP_VERSION = "20260114_7";
-const CG_BASE = "https://api.coingecko.com/api/v3";
-const NYFED_SOFR_LAST = "https://markets.newyorkfed.org/api/rates/secured/sofr/last/1.json";
-const NYFED_SOFR_SEARCH = "https://markets.newyorkfed.org/api/rates/secured/sofr/search.json";
-const FRED_GRAPH_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv";
-const ALLORIGINS_RAW = "https://api.allorigins.win/raw?url=";
+const APP_VERSION = "20260114_9";
+const CG_BASE = "/api/cg";
+const NYFED_API = "/api/nyfed";
+const IORB_API = "/api/iorb";
 
 const LS = {
   fredKey: "iorbsofr:friedKey", // legacy (no longer used)
@@ -40,7 +38,88 @@ const LS = {
   lastInParity: "iorbsofr:lastInParity",
   lastAlertKey: "iorbsofr:lastAlertKey",
   lastAlertAt: "iorbsofr:lastAlertAt",
+  health: "iorbsofr:health",
+  lastClose: "iorbsofr:lastClose",
 };
+
+function loadHealth() {
+  try {
+    const raw = localStorage.getItem(LS.health);
+    const v = raw ? JSON.parse(raw) : null;
+    if (v && typeof v === "object") return v;
+  } catch {}
+  return {
+    cg: { ok: null, at: null, msg: "" },
+    nyfed: { ok: null, at: null, msg: "" },
+    iorb: { ok: null, at: null, msg: "" },
+  };
+}
+
+function saveHealth(next) {
+  try {
+    localStorage.setItem(LS.health, JSON.stringify(next));
+  } catch {}
+}
+
+function markHealth(key, ok, msg) {
+  const h = loadHealth();
+  h[key] = { ok: !!ok, at: nowIsoShort(), msg: msg || "" };
+  saveHealth(h);
+}
+
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+async function fetchWithBackoff(url, opts = {}) {
+  const {
+    retries = 2,
+    baseDelayMs = 450,
+    maxDelayMs = 2500,
+    timeoutMs = 12_000,
+    cacheKey = null,
+    ttlMs = 0,
+    parse = "json", // "json" | "text"
+    headers = {},
+  } = opts;
+
+  // localStorage cache
+  if (cacheKey && ttlMs > 0) {
+    try {
+      const raw = localStorage.getItem(cacheKey);
+      const obj = raw ? JSON.parse(raw) : null;
+      if (obj?.at && Date.now() - obj.at < ttlMs) return obj.val;
+    } catch {}
+  }
+
+  let lastErr = null;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), timeoutMs);
+      const res = await fetch(url, { signal: ctrl.signal, headers: { ...headers } });
+      clearTimeout(t);
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(`HTTP ${res.status} ${res.statusText}: ${txt.slice(0, 120)}`);
+      }
+      const val = parse === "text" ? await res.text() : await res.json();
+      if (cacheKey && ttlMs > 0) {
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify({ at: Date.now(), val }));
+        } catch {}
+      }
+      return val;
+    } catch (e) {
+      lastErr = e;
+      if (attempt < retries) {
+        const d = Math.min(maxDelayMs, baseDelayMs * Math.pow(2, attempt));
+        await sleep(d);
+      }
+    }
+  }
+  throw lastErr || new Error("fetch failed");
+}
 
 function coolDownOk(ms) {
   const last = Number(localStorage.getItem(LS.lastAlertAt) || "0");
@@ -128,6 +207,21 @@ function pct(n, digits = 2) {
   return n == null || Number.isNaN(n) ? "—" : `${(n * 100).toFixed(digits)}%`;
 }
 
+function snapIncrement(price) {
+  if (!Number.isFinite(price)) return 1000;
+  if (price >= 100000) return 1000;
+  if (price >= 50000) return 500;
+  if (price >= 20000) return 250;
+  if (price >= 10000) return 100;
+  if (price >= 2000) return 50;
+  return 10;
+}
+
+function snapRound(value, inc) {
+  if (!Number.isFinite(value) || !Number.isFinite(inc) || inc <= 0) return value;
+  return Math.round(value / inc) * inc;
+}
+
 function liqPriceApprox({ side, entry, leverage, mmr, qtyBtc, extraMarginUsd }) {
   // Linear USDT perpetual approximation. Not exchange-accurate.
   if (!Number.isFinite(entry) || !Number.isFinite(leverage) || leverage <= 0) return null;
@@ -209,6 +303,13 @@ function confidenceLabel({ signal, inParity, d7, parityTh, corr30, atrNow, price
   return "BAJA";
 }
 
+function triggerLabel({ inParity, signal, usedBreakout }) {
+  if (!inParity) return "PARIDAD: NO";
+  if (signal === "NEUTRAL") return "SIN GATILLO";
+  if (usedBreakout) return "RUPTURA NIVEL";
+  return "SPREAD DIRECCIÓN";
+}
+
 function decideSignal({ iorb, sofr, corr30, spreadTrend }) {
   const spread = sofr - iorb;
   if (corr30 == null) {
@@ -245,29 +346,28 @@ function decideSignal({ iorb, sofr, corr30, spreadTrend }) {
 }
 
 async function fetchJson(url) {
-  const res = await fetch(url, { headers: { accept: "application/json" } });
-  if (!res.ok) {
-    const txt = await res.text().catch(() => "");
-    throw new Error(`HTTP ${res.status} ${res.statusText}: ${txt.slice(0, 120)}`);
-  }
-  return res.json();
+  return fetchWithBackoff(url, { headers: { accept: "application/json" }, parse: "json", retries: 2 });
 }
 
 async function fetchText(url) {
-  const res = await fetch(url, { headers: { accept: "text/plain,*/*" } });
-  if (!res.ok) {
-    const txt = await res.text().catch(() => "");
-    throw new Error(`HTTP ${res.status} ${res.statusText}: ${txt.slice(0, 120)}`);
-  }
-  return res.text();
-}
-
-function viaAllOrigins(url) {
-  return `${ALLORIGINS_RAW}${encodeURIComponent(url)}`;
+  return fetchWithBackoff(url, { headers: { accept: "text/plain,*/*" }, parse: "text", retries: 2 });
 }
 
 async function fetchNybSofrLatest() {
-  const data = await fetchJson(NYFED_SOFR_LAST);
+  let data;
+  try {
+    data = await fetchWithBackoff(`${NYFED_API}?kind=sofr_last`, {
+      headers: { accept: "application/json" },
+      parse: "json",
+      retries: 2,
+      cacheKey: "iorbsofr:cache:nyfed:last",
+      ttlMs: 6 * 60 * 60 * 1000,
+    });
+    markHealth("nyfed", true, "ok");
+  } catch (e) {
+    markHealth("nyfed", false, String(e?.message || e));
+    throw e;
+  }
   const rr = data?.refRates?.[0];
   const v = rr?.percentRate;
   const n = Number(v);
@@ -275,8 +375,21 @@ async function fetchNybSofrLatest() {
 }
 
 async function fetchNybSofrSeries({ startDate, endDate }) {
-  const url = `${NYFED_SOFR_SEARCH}?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
-  const data = await fetchJson(url);
+  const url = `${NYFED_API}?kind=sofr_search&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+  let data;
+  try {
+    data = await fetchWithBackoff(url, {
+      headers: { accept: "application/json" },
+      parse: "json",
+      retries: 2,
+      cacheKey: `iorbsofr:cache:nyfed:${startDate}:${endDate}`,
+      ttlMs: 12 * 60 * 60 * 1000,
+    });
+    markHealth("nyfed", true, "ok");
+  } catch (e) {
+    markHealth("nyfed", false, String(e?.message || e));
+    throw e;
+  }
   const rows = (data?.refRates ?? [])
     .map((r) => ({ date: r?.effectiveDate, value: Number(r?.percentRate) }))
     .filter((r) => typeof r.date === "string" && Number.isFinite(r.value));
@@ -309,14 +422,20 @@ function parseFredGraphCsv(csvText, valueColumnName) {
 }
 
 async function fetchIorbSeriesFromFredCsv({ startDate, endDate }) {
-  const url = `${FRED_GRAPH_CSV}?id=IORB&cosd=${encodeURIComponent(startDate)}&coed=${encodeURIComponent(endDate)}`;
+  const url = `${IORB_API}?cosd=${encodeURIComponent(startDate)}&coed=${encodeURIComponent(endDate)}`;
   try {
-    const csv = await fetchText(url);
+    const csv = await fetchWithBackoff(url, {
+      headers: { accept: "text/plain,*/*" },
+      parse: "text",
+      retries: 1,
+      cacheKey: `iorbsofr:cache:iorb:csv:${startDate}:${endDate}`,
+      ttlMs: 24 * 60 * 60 * 1000,
+    });
+    markHealth("iorb", true, "ok");
     return { series: parseFredGraphCsv(csv, "IORB"), source: "FRED CSV" };
   } catch (e) {
-    // Likely CORS in browser; retry through a simple CORS proxy.
-    const csv = await fetchText(viaAllOrigins(url));
-    return { series: parseFredGraphCsv(csv, "IORB"), source: "FRED CSV (proxy)" };
+    markHealth("iorb", false, String(e?.message || e));
+    throw e;
   }
 }
 
@@ -333,9 +452,22 @@ async function fetchIorbLatestFromFredCsv() {
 }
 
 async function fetchBtcMarket() {
-  const url =
-    `${CG_BASE}/coins/markets?vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=1&page=1&sparkline=false&price_change_percentage=24h`;
-  const [row] = await fetchJson(url);
+  const url = `${CG_BASE}?path=/coins/markets&vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=1&page=1&sparkline=false&price_change_percentage=24h`;
+  let row;
+  try {
+    const arr = await fetchWithBackoff(url, {
+      headers: { accept: "application/json" },
+      parse: "json",
+      retries: 2,
+      cacheKey: "iorbsofr:cache:cg:mkt",
+      ttlMs: 90 * 1000,
+    });
+    row = arr?.[0];
+    markHealth("cg", true, "ok");
+  } catch (e) {
+    markHealth("cg", false, String(e?.message || e));
+    throw e;
+  }
   return {
     price: row?.current_price ?? null,
     change24h: row?.price_change_percentage_24h ?? null,
@@ -343,8 +475,21 @@ async function fetchBtcMarket() {
 }
 
 async function fetchBtcDailyPrices(days) {
-  const url = `${CG_BASE}/coins/bitcoin/market_chart?vs_currency=usd&days=${days}&interval=daily`;
-  const data = await fetchJson(url);
+  const url = `${CG_BASE}?path=/coins/bitcoin/market_chart&vs_currency=usd&days=${days}&interval=daily`;
+  let data;
+  try {
+    data = await fetchWithBackoff(url, {
+      headers: { accept: "application/json" },
+      parse: "json",
+      retries: 2,
+      cacheKey: `iorbsofr:cache:cg:chart:${days}`,
+      ttlMs: 10 * 60 * 1000,
+    });
+    markHealth("cg", true, "ok");
+  } catch (e) {
+    markHealth("cg", false, String(e?.message || e));
+    throw e;
+  }
   const prices = (data?.prices ?? [])
     .map(([t, v]) => ({ t: new Date(t), v }))
     .filter((p) => Number.isFinite(p.v));
@@ -509,7 +654,7 @@ function setSignalUI({ signal, strength, sub, explanation }) {
   const sText = $("signalText");
   const sSub = $("signalSub");
   const sExp = $("signalExplain");
-  const sStrength = $("signalStrength");
+  const cond = $("conditionsText");
 
   const cls =
     signal === "LONG" ? "is-green" : signal === "SHORT" ? "is-red" : "is-amber";
@@ -521,9 +666,11 @@ function setSignalUI({ signal, strength, sub, explanation }) {
   sExp.style.display = explainOn ? "block" : "none";
   sExp.textContent = explanation || "—";
 
-  sStrength.textContent = strength || "—";
-  sStrength.className =
-    strength === "ALTA" ? "is-green" : strength === "MEDIA" ? "is-cyan" : "is-amber";
+  if (cond) {
+    cond.textContent = strength || "—";
+    cond.className =
+      strength === "ALTA" ? "is-green" : strength === "MEDIA" ? "is-cyan" : "is-amber";
+  }
 
   // tint the card border a bit
   if (signal === "LONG") {
@@ -713,8 +860,21 @@ function safeNumFromInput(v) {
 
 async function fetchBtcOhlc(days) {
   // returns [{date:"YYYY-MM-DD", t:Date, o,h,l,c}]
-  const url = `${CG_BASE}/coins/bitcoin/ohlc?vs_currency=usd&days=${days}`;
-  const data = await fetchJson(url);
+  const url = `${CG_BASE}?path=/coins/bitcoin/ohlc&vs_currency=usd&days=${days}`;
+  let data;
+  try {
+    data = await fetchWithBackoff(url, {
+      headers: { accept: "application/json" },
+      parse: "json",
+      retries: 2,
+      cacheKey: `iorbsofr:cache:cg:ohlc:${days}`,
+      ttlMs: 10 * 60 * 1000,
+    });
+    markHealth("cg", true, "ok");
+  } catch (e) {
+    markHealth("cg", false, String(e?.message || e));
+    throw e;
+  }
   const rows = (data ?? [])
     .map(([t, o, h, l, c]) => ({ t: new Date(t), o, h, l, c }))
     .filter((r) => [r.o, r.h, r.l, r.c].every(Number.isFinite));
@@ -1076,6 +1236,7 @@ async function computeAndRender({ rangeDays, fed }) {
   // If in parity => direction by 7d change in spread (improving => LONG, worsening => SHORT)
   let finalSignal = signal;
   let finalExplain = explanation;
+  let usedBreakout = false;
   if (!inParity) {
     finalSignal = "NEUTRAL";
     finalExplain =
@@ -1113,6 +1274,7 @@ async function computeAndRender({ rangeDays, fed }) {
     atrNow,
     priceNow,
   });
+  $("triggerText") && ($("triggerText").textContent = triggerLabel({ inParity, signal: finalSignal, usedBreakout }));
 
   const sub = `Ventana: ${rangeDays}d · spread ${fmtPct(spreadNow, 3)} · corr30 ${corr30 == null ? "—" : fmtNum(corr30, 3)}${corrNote}`;
   setSignalUI({ signal: finalSignal, strength, sub, explanation: finalExplain });
@@ -1154,8 +1316,10 @@ async function computeAndRender({ rangeDays, fed }) {
     const step = Number.isFinite(atrNow) && atrNow > 0 ? clamp((atrNow * 2) / priceNow, 0.01, 0.04) : 0.02;
     const n = 6;
     const zones = [];
+    const inc = snapIncrement(priceNow);
     for (let i = -n; i <= n; i++) {
-      const lv = priceNow * (1 + i * step);
+      const raw = priceNow * (1 + i * step);
+      const lv = snapRound(raw, inc);
       zones.push({ lo: lv, hi: lv, label: `${Math.round(lv).toLocaleString()} USD`, mid: lv, auto: true });
     }
     zones.sort((a, b) => a.mid - b.mid);
@@ -1189,11 +1353,13 @@ async function computeAndRender({ rangeDays, fed }) {
 
     if (brokeUp) {
       finalSignal = "LONG";
+      usedBreakout = true;
       finalExplain =
         `En paridad (±${parityBps} bps) y spread plano → gatillo por ruptura de nivel. ` +
         `Rompió arriba ${up.label} (+${(tolBreak * 100).toFixed(2)}% confirmación) → LONG.`;
     } else if (brokeDown) {
       finalSignal = "SHORT";
+      usedBreakout = true;
       finalExplain =
         `En paridad (±${parityBps} bps) y spread plano → gatillo por ruptura de nivel. ` +
         `Rompió abajo ${down.label} (-${(tolBreak * 100).toFixed(2)}% confirmación) → SHORT.`;
@@ -1267,21 +1433,22 @@ async function computeAndRender({ rangeDays, fed }) {
     localStorage.setItem(LS.lastPrice, String(priceNow));
     localStorage.setItem(LS.lastInParity, inParity ? "1" : "0");
 
-    if (prevPrice && Number.isFinite(prevPrice) && prevInParity !== inParity) {
+    if (Number.isFinite(prevPrice) && prevInParity !== inParity) {
       fireAlert(inParity ? `✅ Entró en paridad (±${parityBps} bps)` : `⛔ Salió de paridad (±${parityBps} bps)`);
     }
 
-    if (Number.isFinite(prevPrice) && activeLevels.length) {
-      // check crossings of the nearest level boundaries
+    // Confirm breakouts using DAILY close-to-close (less spam than realtime price).
+    const lastClose = btc[btc.length - 1];
+    const prevClose = btc.length >= 2 ? btc[btc.length - 2] : lastClose;
+    localStorage.setItem(LS.lastClose, String(lastClose));
+    if (Number.isFinite(prevClose) && Number.isFinite(lastClose) && activeLevels.length) {
       for (const z of activeLevels) {
-        // breakout up through hi
-        if (prevPrice < z.hi && priceNow >= z.hi) {
-          fireAlert(`📈 Ruptura arriba: ${z.label}`);
+        if (prevClose < z.hi && lastClose >= z.hi) {
+          fireAlert(`📈 Cierre rompe arriba: ${z.label}`);
           break;
         }
-        // breakdown down through lo
-        if (prevPrice > z.lo && priceNow <= z.lo) {
-          fireAlert(`📉 Ruptura abajo: ${z.label}`);
+        if (prevClose > z.lo && lastClose <= z.lo) {
+          fireAlert(`📉 Cierre rompe abajo: ${z.label}`);
           break;
         }
       }
@@ -1506,13 +1673,30 @@ function bindUI() {
   const openStatus = () => {
     const snapRaw = localStorage.getItem(LS.lastOkDataset);
     const snap = snapRaw ? JSON.parse(snapRaw) : null;
+    const h = loadHealth();
     const src = [];
+    src.push(`App version: ${APP_VERSION}`);
     if ($("iorbSource")?.textContent) src.push(`IORB: ${$("iorbSource").textContent}`);
     if ($("sofrSource")?.textContent) src.push(`SOFR: ${$("sofrSource").textContent}`);
     src.push("BTC: CoinGecko");
+    src.push(
+      `Health: CG=${h.cg?.ok ? "OK" : h.cg?.ok === false ? "FAIL" : "—"} (${h.cg?.at || "—"})`
+    );
+    src.push(
+      `Health: NYFed=${h.nyfed?.ok ? "OK" : h.nyfed?.ok === false ? "FAIL" : "—"} (${h.nyfed?.at || "—"})`
+    );
+    src.push(
+      `Health: IORB=${h.iorb?.ok ? "OK" : h.iorb?.ok === false ? "FAIL" : "—"} (${h.iorb?.at || "—"})`
+    );
     $("sourceStatus") && ($("sourceStatus").innerText = src.join("\n"));
     $("staleStatus") &&
       ($("staleStatus").textContent = snap?.at ? `Último OK: ${snap.at}` : "Sin snapshot aún.");
+    const hasSw = "serviceWorker" in navigator;
+    $("swStatus") &&
+      ($("swStatus").innerText =
+        `APP_VERSION: ${APP_VERSION}\n` +
+        `ServiceWorker: ${hasSw ? "sí" : "no"}\n` +
+        `Controller: ${hasSw && navigator.serviceWorker.controller ? "activo" : "—"}`);
     openModal("statusModal");
   };
   $("statusBtn")?.addEventListener("click", openStatus);
@@ -1527,6 +1711,15 @@ function bindUI() {
       if ("caches" in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map((k) => caches.delete(k)));
+      }
+    } catch {}
+    window.location.reload();
+  });
+  $("updateAppBtn")?.addEventListener("click", async () => {
+    try {
+      if ("serviceWorker" in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map((r) => r.update()));
       }
     } catch {}
     window.location.reload();

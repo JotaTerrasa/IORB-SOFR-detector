@@ -13,7 +13,7 @@
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260114_7" />
+    <link rel="stylesheet" href="./styles.css?v=20260114_9" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   </head>
   <body>
@@ -43,10 +43,12 @@
           <div class="signal-card__top">
             <div class="signal-chip" id="signalChip">SIGNAL</div>
             <div class="signal-meta">
-            <div class="signal-meta__label">Régimen</div>
-            <div class="signal-meta__value" id="regimeText">—</div>
-            <div class="signal-meta__label">Confianza</div>
-              <div class="signal-meta__value" id="signalStrength">—</div>
+              <div class="signal-meta__label">Régimen</div>
+              <div class="signal-meta__value" id="regimeText">—</div>
+              <div class="signal-meta__label">Condiciones</div>
+              <div class="signal-meta__value" id="conditionsText">—</div>
+              <div class="signal-meta__label">Gatillo</div>
+              <div class="signal-meta__value" id="triggerText">—</div>
             </div>
           </div>
           <div class="signal-card__main">
@@ -506,6 +508,13 @@
             <div class="modal__p" id="staleStatus">—</div>
           </div>
           <div class="modal__section">
+            <div class="modal__h">App</div>
+            <div class="modal__p" id="swStatus">—</div>
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn btn--ghost" id="updateAppBtn" type="button">Actualizar app</button>
+            </div>
+          </div>
+          <div class="modal__section">
             <div class="modal__h">PWA / Caché</div>
             <div class="modal__p">Si ves UI vieja, limpia el caché del service worker y recarga.</div>
             <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -523,7 +532,7 @@
       />
     </audio>
 
-    <script src="./app.js?v=20260114_7"></script>
+    <script src="./app.js?v=20260114_9"></script>
   </body>
 </html>
 
