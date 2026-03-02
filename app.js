@@ -4,7 +4,7 @@
    - Correlation: Pearson between BTC daily returns and spread (SOFR - IORB)
 */
 
-const APP_VERSION = "20260302_4";
+const APP_VERSION = "20260302_5";
 const CG_BASE = "/api/cg";
 const NYFED_API = "/api/nyfed";
 const IORB_API = "/api/iorb";
@@ -161,7 +161,7 @@ const $ = (id) => document.getElementById(id);
 const fmtMoney = (n) =>
   n == null || Number.isNaN(n)
     ? "—"
-    : n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+    : n.toLocaleString(undefined, { style: "currency", currency: "USD", minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const fmtPct = (n, digits = 2) =>
   n == null || Number.isNaN(n) ? "—" : `${n.toFixed(digits)}%`;
 const fmtNum = (n, digits = 3) => (n == null || Number.isNaN(n) ? "—" : n.toFixed(digits));
