@@ -4,7 +4,7 @@
    - Correlation: Pearson between BTC daily returns and spread (SOFR - IORB)
 */
 
-const APP_VERSION = "20260302_1";
+const APP_VERSION = "20260302_2";
 const CG_BASE = "/api/cg";
 const NYFED_API = "/api/nyfed";
 const IORB_API = "/api/iorb";
@@ -47,6 +47,9 @@ const AUTO_REFRESH_DEFAULT_SEC = 60;
 const AUTO_REFRESH_MIN_SEC = 15;
 const AUTO_REFRESH_MAX_SEC = 3600;
 let autoRefreshTimer = null;
+let autoRefreshCountdownTimer = null;
+let nextAutoRefreshAtMs = 0;
+let refreshInFlight = false;
 
 function loadHealth() {
   try {
@@ -653,6 +656,40 @@ function setStatus(kind, text) {
         : kind === "err"
           ? "0 0 10px rgba(255,55,107,.55)"
           : "0 0 10px rgba(0,255,213,.55)";
+}
+
+function renderRefreshIndicator() {
+  const label = $("autoRefreshStatus");
+  const refreshBtn = $("refreshBtn");
+  if (refreshBtn) {
+    refreshBtn.disabled = refreshInFlight;
+    refreshBtn.textContent = refreshInFlight ? "Actualizando..." : "Actualizar";
+  }
+  if (!label) return;
+  if (refreshInFlight) {
+    label.textContent = "Actualizando datos...";
+    return;
+  }
+  if (!nextAutoRefreshAtMs) {
+    label.textContent = "Auto-refresh: —";
+    return;
+  }
+  const secLeft = Math.max(0, Math.ceil((nextAutoRefreshAtMs - Date.now()) / 1000));
+  label.textContent = `Proxima actualizacion: ${secLeft}s`;
+}
+
+function setNextAutoRefreshInSeconds(sec) {
+  nextAutoRefreshAtMs = Date.now() + sec * 1000;
+  renderRefreshIndicator();
+}
+
+function startAutoRefreshCountdownTicker() {
+  if (autoRefreshCountdownTimer) {
+    clearInterval(autoRefreshCountdownTimer);
+    autoRefreshCountdownTimer = null;
+  }
+  autoRefreshCountdownTimer = setInterval(renderRefreshIndicator, 1000);
+  renderRefreshIndicator();
 }
 
 function setSignalUI({ signal, strength, sub, explanation }) {
@@ -1697,6 +1734,9 @@ async function resolveFedRates({ preferFred }) {
 }
 
 async function refresh({ preferFred }) {
+  if (refreshInFlight) return;
+  refreshInFlight = true;
+  renderRefreshIndicator();
   try {
     persistFedState();
     const rangeDays = Number(localStorage.getItem(LS.rangeDays) || "90");
@@ -1730,6 +1770,9 @@ async function refresh({ preferFred }) {
       sub: "Revisa tu conexión o rate limits",
       explanation: String(e?.message || e),
     });
+  } finally {
+    refreshInFlight = false;
+    renderRefreshIndicator();
   }
 }
 
@@ -2229,7 +2272,10 @@ function scheduleIntervalRefresh() {
   }
   const sec = getAutoRefreshSeconds();
   localStorage.setItem(LS.autoRefreshSec, String(sec));
+  setNextAutoRefreshInSeconds(sec);
+  startAutoRefreshCountdownTicker();
   autoRefreshTimer = setInterval(() => {
+    setNextAutoRefreshInSeconds(sec);
     if (document.visibilityState !== "visible") return;
     refresh({ preferFred: true });
   }, sec * 1000);
