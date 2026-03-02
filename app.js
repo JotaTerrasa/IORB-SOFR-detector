@@ -4,10 +4,12 @@
    - Correlation: Pearson between BTC daily returns and spread (SOFR - IORB)
 */
 
-const APP_VERSION = "20260302_2";
+const APP_VERSION = "20260302_3";
 const CG_BASE = "/api/cg";
 const NYFED_API = "/api/nyfed";
 const IORB_API = "/api/iorb";
+const BINGX_WS_URL = "wss://open-api-swap.bingx.com/swap-market";
+const BINGX_BTC_STREAM = "BTC-USDT@lastPrice";
 
 const LS = {
   fredKey: "iorbsofr:friedKey", // legacy (no longer used)
@@ -50,6 +52,12 @@ let autoRefreshTimer = null;
 let autoRefreshCountdownTimer = null;
 let nextAutoRefreshAtMs = 0;
 let refreshInFlight = false;
+let btcLastChange24h = null;
+let btcSourceLabel = "CoinGecko";
+let btcWs = null;
+let btcWsReconnectTimer = null;
+let btcWsRetryMs = 1500;
+let btcWsEnabled = false;
 
 function loadHealth() {
   try {
@@ -1211,13 +1219,147 @@ function setFedCards({ iorb, sofr, source }) {
   animateNumber($("spreadValue"), fmtPct(spread, 3));
 }
 
-function setBtcCards({ price, change24h }) {
-  animateNumber($("btcPrice"), fmtMoney(price));
-  const cls = change24h == null ? "" : change24h >= 0 ? "is-green" : "is-red";
-  const txt = change24h == null ? "—" : `${change24h.toFixed(2)}% (24h)`;
+function renderBtcSubline() {
   const el = $("btcChange24h");
+  if (!el) return;
+  const cls = btcLastChange24h == null ? "" : btcLastChange24h >= 0 ? "is-green" : "is-red";
+  const pctTxt = btcLastChange24h == null ? "—" : `${btcLastChange24h.toFixed(2)}% (24h)`;
   el.className = `card__sub ${cls}`;
-  el.textContent = txt;
+  el.textContent = `${pctTxt} · ${btcSourceLabel}`;
+}
+
+function setBtcCards({ price, change24h, sourceLabel }) {
+  if (Number.isFinite(price)) animateNumber($("btcPrice"), fmtMoney(price));
+  if (change24h !== undefined) btcLastChange24h = Number.isFinite(change24h) ? change24h : null;
+  if (sourceLabel) btcSourceLabel = sourceLabel;
+  renderBtcSubline();
+}
+
+function numericFromAny(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function extractBingxPrice(payload) {
+  const direct = [payload?.lastPrice, payload?.price, payload?.p, payload?.c];
+  for (const v of direct) {
+    const n = numericFromAny(v);
+    if (n != null && n > 0) return n;
+  }
+  const d = payload?.data;
+  const one =
+    Array.isArray(d) && d.length
+      ? d[0]
+      : d && typeof d === "object"
+        ? d
+        : null;
+  if (!one) return null;
+  const nested = [one.lastPrice, one.price, one.close, one.p, one.c];
+  for (const v of nested) {
+    const n = numericFromAny(v);
+    if (n != null && n > 0) return n;
+  }
+  return null;
+}
+
+async function decodeBingxWsMessage(raw) {
+  if (typeof raw === "string") return raw;
+  let ab = null;
+  if (raw instanceof Blob) ab = await raw.arrayBuffer();
+  else if (raw instanceof ArrayBuffer) ab = raw;
+  else if (ArrayBuffer.isView(raw)) {
+    const view = new Uint8Array(raw.buffer, raw.byteOffset, raw.byteLength);
+    ab = view.slice().buffer;
+  }
+  if (!ab) return "";
+
+  // BingX examples show gzip payloads. Try gzip first when available, then fallback to UTF-8 decode.
+  if ("DecompressionStream" in window) {
+    try {
+      const stream = new Blob([ab]).stream().pipeThrough(new DecompressionStream("gzip"));
+      const out = await new Response(stream).arrayBuffer();
+      return new TextDecoder().decode(out);
+    } catch {}
+  }
+  return new TextDecoder().decode(ab);
+}
+
+function scheduleBingxReconnect() {
+  if (!btcWsEnabled || btcWsReconnectTimer) return;
+  const wait = btcWsRetryMs;
+  btcWsReconnectTimer = setTimeout(() => {
+    btcWsReconnectTimer = null;
+    startBingxLivePrice();
+  }, wait);
+  btcWsRetryMs = Math.min(30_000, Math.round(wait * 1.8));
+}
+
+function stopBingxLivePrice() {
+  btcWsEnabled = false;
+  if (btcWsReconnectTimer) {
+    clearTimeout(btcWsReconnectTimer);
+    btcWsReconnectTimer = null;
+  }
+  if (btcWs) {
+    try {
+      btcWs.onopen = null;
+      btcWs.onclose = null;
+      btcWs.onerror = null;
+      btcWs.onmessage = null;
+      btcWs.close();
+    } catch {}
+    btcWs = null;
+  }
+}
+
+function startBingxLivePrice() {
+  btcWsEnabled = true;
+  if (btcWs && (btcWs.readyState === WebSocket.OPEN || btcWs.readyState === WebSocket.CONNECTING)) return;
+
+  try {
+    const ws = new WebSocket(BINGX_WS_URL);
+    btcWs = ws;
+    ws.onopen = () => {
+      btcWsRetryMs = 1500;
+      try {
+        ws.send(
+          JSON.stringify({
+            id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
+            reqType: "sub",
+            dataType: BINGX_BTC_STREAM,
+          })
+        );
+      } catch {}
+      setBtcCards({ sourceLabel: "BingX live" });
+    };
+    ws.onmessage = async (ev) => {
+      const text = await decodeBingxWsMessage(ev.data).catch(() => "");
+      if (!text) return;
+      if (text === "Ping") {
+        try {
+          ws.send("Pong");
+        } catch {}
+        return;
+      }
+      let payload = null;
+      try {
+        payload = JSON.parse(text);
+      } catch {
+        return;
+      }
+      const price = extractBingxPrice(payload);
+      if (price != null) setBtcCards({ price, sourceLabel: "BingX live" });
+    };
+    ws.onerror = () => {};
+    ws.onclose = () => {
+      if (btcWs === ws) btcWs = null;
+      setBtcCards({ sourceLabel: "CoinGecko (fallback)" });
+      scheduleBingxReconnect();
+    };
+  } catch {
+    setBtcCards({ sourceLabel: "CoinGecko (fallback)" });
+    scheduleBingxReconnect();
+  }
 }
 
 async function computeAndRender({ rangeDays, fed }) {
@@ -1228,7 +1370,7 @@ async function computeAndRender({ rangeDays, fed }) {
     fetchBtcOhlc(rangeDays).catch(() => []),
   ]);
 
-  setBtcCards(market);
+  setBtcCards({ ...market, sourceLabel: btcSourceLabel || "CoinGecko" });
 
   // Labels used to align everything
   const labels = prices.map((p) => isoDate(p.t));
@@ -1846,7 +1988,7 @@ function bindUI() {
     src.push(`App version: ${APP_VERSION}`);
     if ($("iorbSource")?.textContent) src.push(`IORB: ${$("iorbSource").textContent}`);
     if ($("sofrSource")?.textContent) src.push(`SOFR: ${$("sofrSource").textContent}`);
-    src.push("BTC: CoinGecko");
+    src.push(`BTC: ${btcSourceLabel}`);
     src.push(
       `Health: CG=${h.cg?.ok ? "OK" : h.cg?.ok === false ? "FAIL" : "—"} (${h.cg?.at || "—"})`
     );
@@ -2314,8 +2456,14 @@ function boot() {
   renderJournal();
   // Always refresh on load (simple, predictable).
   refresh({ preferFred: true }).then(markRefreshedToday).catch(() => {});
+  startBingxLivePrice();
   scheduleIntervalRefresh();
   scheduleDailyRefresh();
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") startBingxLivePrice();
+    else stopBingxLivePrice();
+  });
 
   // PWA
   if ("serviceWorker" in navigator) {

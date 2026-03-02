@@ -1,7 +1,7 @@
 # IORB × SOFR × BTC — Signal Dashboard (SPA)
 
 Web single-page estática que:
-- descarga **Bitcoin** desde **CoinGecko** (gratis, sin API key)
+- descarga snapshot de **Bitcoin** desde **CoinGecko** y actualiza en vivo por **WebSocket público de BingX** (sin API key)
 - usa **SOFR** desde el **New York Fed Markets API** (sin API key)
 - usa **IORB** desde un **CSV público de FRED** (sin API key). Si quieres, puedes override con manual o por tramos.
 - calcula correlación **Pearson** entre **retornos diarios de BTC** y el **spread (SOFR − IORB)**
