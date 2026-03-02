@@ -4,12 +4,12 @@
    - Correlation: Pearson between BTC daily returns and spread (SOFR - IORB)
 */
 
-const APP_VERSION = "20260302_3";
+const APP_VERSION = "20260302_4";
 const CG_BASE = "/api/cg";
 const NYFED_API = "/api/nyfed";
 const IORB_API = "/api/iorb";
 const BINGX_WS_URL = "wss://open-api-swap.bingx.com/swap-market";
-const BINGX_BTC_STREAM = "BTC-USDT@lastPrice";
+const BINGX_BTC_STREAMS = ["BTC-USDT@trade", "BTC-USDT@lastPrice"];
 
 const LS = {
   fredKey: "iorbsofr:friedKey", // legacy (no longer used)
@@ -1229,7 +1229,15 @@ function renderBtcSubline() {
 }
 
 function setBtcCards({ price, change24h, sourceLabel }) {
-  if (Number.isFinite(price)) animateNumber($("btcPrice"), fmtMoney(price));
+  if (Number.isFinite(price)) {
+    const priceText = fmtMoney(price);
+    const priceEl = $("btcPrice");
+    if (sourceLabel && sourceLabel.includes("BingX")) {
+      priceEl.textContent = priceText; // live ticks: no animation lag
+    } else {
+      animateNumber(priceEl, priceText);
+    }
+  }
   if (change24h !== undefined) btcLastChange24h = Number.isFinite(change24h) ? change24h : null;
   if (sourceLabel) btcSourceLabel = sourceLabel;
   renderBtcSubline();
@@ -1254,11 +1262,14 @@ function extractBingxPrice(payload) {
         ? d
         : null;
   if (!one) return null;
-  const nested = [one.lastPrice, one.price, one.close, one.p, one.c];
+  const nested = [one.lastPrice, one.price, one.close, one.tradePrice, one.p, one.c];
   for (const v of nested) {
     const n = numericFromAny(v);
     if (n != null && n > 0) return n;
   }
+  const bid = numericFromAny(one.b || one.bidPrice);
+  const ask = numericFromAny(one.a || one.askPrice);
+  if (bid != null && ask != null && bid > 0 && ask > 0) return (bid + ask) / 2;
   return null;
 }
 
@@ -1322,15 +1333,17 @@ function startBingxLivePrice() {
     ws.onopen = () => {
       btcWsRetryMs = 1500;
       try {
-        ws.send(
-          JSON.stringify({
-            id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
-            reqType: "sub",
-            dataType: BINGX_BTC_STREAM,
-          })
-        );
+        BINGX_BTC_STREAMS.forEach((stream) => {
+          ws.send(
+            JSON.stringify({
+              id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
+              reqType: "sub",
+              dataType: stream,
+            })
+          );
+        });
       } catch {}
-      setBtcCards({ sourceLabel: "BingX live" });
+      setBtcCards({ sourceLabel: "BingX live (trade)" });
     };
     ws.onmessage = async (ev) => {
       const text = await decodeBingxWsMessage(ev.data).catch(() => "");
@@ -1348,7 +1361,7 @@ function startBingxLivePrice() {
         return;
       }
       const price = extractBingxPrice(payload);
-      if (price != null) setBtcCards({ price, sourceLabel: "BingX live" });
+      if (price != null) setBtcCards({ price, sourceLabel: "BingX live (trade)" });
     };
     ws.onerror = () => {};
     ws.onclose = () => {
