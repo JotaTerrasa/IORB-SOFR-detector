@@ -72,6 +72,7 @@ Puedes override con:
 
 La web:
 - **refresca al cargar**
+- **refresca automáticamente cada X segundos** (configurable en Ajustes avanzados, default 60s)
 - **refresca 1 vez al día a las 00:05 (hora local)** si la pestaña queda abierta
 - refresca al volver a enfocar la pestaña si detecta que está “stale”
 

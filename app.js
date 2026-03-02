@@ -4,7 +4,7 @@
    - Correlation: Pearson between BTC daily returns and spread (SOFR - IORB)
 */
 
-const APP_VERSION = "20260114_10";
+const APP_VERSION = "20260302_1";
 const CG_BASE = "/api/cg";
 const NYFED_API = "/api/nyfed";
 const IORB_API = "/api/iorb";
@@ -40,7 +40,13 @@ const LS = {
   lastAlertAt: "iorbsofr:lastAlertAt",
   health: "iorbsofr:health",
   lastClose: "iorbsofr:lastClose",
+  autoRefreshSec: "iorbsofr:autoRefreshSec",
 };
+
+const AUTO_REFRESH_DEFAULT_SEC = 60;
+const AUTO_REFRESH_MIN_SEC = 15;
+const AUTO_REFRESH_MAX_SEC = 3600;
+let autoRefreshTimer = null;
 
 function loadHealth() {
   try {
@@ -1105,6 +1111,7 @@ function restoreUIState() {
   const savedFees = localStorage.getItem(LS.feeBps) || "12";
   const savedAlerts = localStorage.getItem(LS.alerts) || "0";
   const savedDetails = localStorage.getItem(LS.details) || "0";
+  const savedAutoRefresh = localStorage.getItem(LS.autoRefreshSec) || String(AUTO_REFRESH_DEFAULT_SEC);
   const sound = localStorage.getItem(LS.sound);
   const explain = localStorage.getItem(LS.explain);
   const rangeDays = localStorage.getItem(LS.rangeDays) || "90";
@@ -1124,6 +1131,7 @@ function restoreUIState() {
   $("marginExtraUsd") && ($("marginExtraUsd").value = savedExtra);
   $("feeBps") && ($("feeBps").value = savedFees);
   $("alertsToggle") && ($("alertsToggle").checked = savedAlerts === "1");
+  $("autoRefreshSec") && ($("autoRefreshSec").value = savedAutoRefresh);
   $("soundToggle").checked = sound === "1";
   $("explainToggle").checked = explain !== "0";
 
@@ -1933,6 +1941,19 @@ function bindUI() {
     localStorage.setItem(LS.alerts, on ? "1" : "0");
   });
 
+  $("autoRefreshSec")?.addEventListener("change", (e) => {
+    const n = safeNumFromInput(e.target.value);
+    if (n == null) {
+      localStorage.setItem(LS.autoRefreshSec, String(AUTO_REFRESH_DEFAULT_SEC));
+      e.target.value = String(AUTO_REFRESH_DEFAULT_SEC);
+    } else {
+      const clamped = Math.round(clamp(n, AUTO_REFRESH_MIN_SEC, AUTO_REFRESH_MAX_SEC));
+      localStorage.setItem(LS.autoRefreshSec, String(clamped));
+      e.target.value = String(clamped);
+    }
+    scheduleIntervalRefresh();
+  });
+
   // Presets BingX (simple)
   $("presetSelect")?.addEventListener("change", (e) => {
     const v = e.target.value;
@@ -2193,6 +2214,27 @@ function markRefreshedToday() {
   localStorage.setItem(LS.lastDailyRefresh, isoDate(new Date()));
 }
 
+function getAutoRefreshSeconds() {
+  const fromUi = $("autoRefreshSec")?.value;
+  const fromLs = localStorage.getItem(LS.autoRefreshSec);
+  const n = safeNumFromInput(fromUi ?? fromLs ?? String(AUTO_REFRESH_DEFAULT_SEC));
+  if (!Number.isFinite(n)) return AUTO_REFRESH_DEFAULT_SEC;
+  return Math.round(clamp(n, AUTO_REFRESH_MIN_SEC, AUTO_REFRESH_MAX_SEC));
+}
+
+function scheduleIntervalRefresh() {
+  if (autoRefreshTimer) {
+    clearInterval(autoRefreshTimer);
+    autoRefreshTimer = null;
+  }
+  const sec = getAutoRefreshSeconds();
+  localStorage.setItem(LS.autoRefreshSec, String(sec));
+  autoRefreshTimer = setInterval(() => {
+    if (document.visibilityState !== "visible") return;
+    refresh({ preferFred: true });
+  }, sec * 1000);
+}
+
 function msUntilNextLocalTime(hours, minutes) {
   const now = new Date();
   const next = new Date(now);
@@ -2226,6 +2268,7 @@ function boot() {
   renderJournal();
   // Always refresh on load (simple, predictable).
   refresh({ preferFred: true }).then(markRefreshedToday).catch(() => {});
+  scheduleIntervalRefresh();
   scheduleDailyRefresh();
 
   // PWA
