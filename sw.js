@@ -1,11 +1,11 @@
-const CACHE_NAME = "iorbsofr-btc-v18";
+const CACHE_NAME = "iorbsofr-btc-v19";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
   "./favicon.svg",
-  "./styles.css?v=20260205_resp",
+  "./styles.css?v=20260302_mobile1",
   "./app.js?v=20260302_6",
   "./manifest.webmanifest",
   "./icon.svg"

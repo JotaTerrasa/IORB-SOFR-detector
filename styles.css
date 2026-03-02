@@ -33,6 +33,7 @@ body{
     radial-gradient(900px 700px at 50% 100%, rgba(57,255,136,.06), transparent 60%),
     linear-gradient(180deg, var(--bg), var(--bg2));
   overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
 }
 
 .bg-grid{
@@ -384,6 +385,7 @@ body{
   justify-content:space-between;
   gap:10px;
 }
+.history-item button{min-height:40px;}
 .history-item__left{display:flex; flex-direction:column; gap:4px;}
 .history-item__sig{font-weight:800;}
 .history-item__meta{font-size:11px; color:var(--muted);}
@@ -506,7 +508,7 @@ body{
 /* Tablet / small laptop */
 @media (max-width: 960px){
   .header{ flex-wrap:wrap; padding:14px 16px 8px; }
-  .header__right{ flex-wrap:wrap; }
+  .header__right{ flex-wrap:wrap; width:100%; justify-content:flex-end; }
   .layout{ padding:12px 16px 40px; }
   .hero{ grid-template-columns:1fr; gap:14px; }
   .cards{ grid-template-columns:1fr 1fr; gap:12px; }
@@ -516,25 +518,53 @@ body{
 /* Large phone / foldable narrow / landscape */
 @media (max-width: 640px){
   .header{ padding:12px 14px 8px; gap:10px; }
+  .brand{ width:100%; }
+  .header__right{
+    width:100%;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .header__right .pill{
+    grid-column:1 / -1;
+    justify-content:center;
+    min-height:42px;
+  }
+  .header__right .btn{
+    width:100%;
+    min-height:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
   .layout{ padding:10px 14px 36px; gap:12px; }
   .cards{ grid-template-columns:1fr; gap:12px; }
   .fed-grid{ grid-template-columns:1fr; }
+  .signal-card__top{ flex-direction:column; align-items:flex-start; }
+  .signal-meta{ width:100%; display:grid; grid-template-columns:1fr 1fr; gap:8px 14px; }
+  .panel{ border-radius:18px; }
+  .history-item{ flex-direction:column; align-items:flex-start; }
+  .history-item > div:last-child{ width:100%; justify-content:flex-start !important; }
+  .field__input,.field__textarea,select{ font-size:16px; } /* avoid iOS zoom on focus */
+  .tip::after{ display:none; } /* hover tooltips are noisy on touch devices */
   .modal{ padding:14px; }
+  .modal__panel{ max-height:86vh; overflow:auto; }
   .modal__panel--chart{ width:94vw; }
   .chart-wrap--fullscreen{ height:72vh; min-height:300px; }
+  .footer{ flex-direction:column; align-items:flex-start; gap:8px; }
 }
 /* Phone portrait (393–430px typical 2026) */
 @media (max-width: 480px){
   .header{ padding:10px 12px 8px; gap:8px; }
   .brand__title{ font-size:18px; }
-  .brand__subtitle{ font-size:11px; }
+  .brand__subtitle{ font-size:11px; line-height:1.35; }
   .pill{ padding:8px 12px; }
   .pill__text{ font-size:12px; }
   .btn{ padding:12px 14px; font-size:13px; min-height:48px; }
   .layout{ padding:8px 12px 28px; gap:10px; }
   .signal-card{ padding:14px; }
   .signal-card__top{ flex-wrap:wrap; gap:8px; }
-  .signal-meta{ min-width:0; }
+  .signal-meta{ min-width:0; grid-template-columns:1fr; }
   .signal{ font-size:40px; }
   .signal-sub{ font-size:12px; }
   .signal-card__explain{ padding:12px; font-size:12px; }
@@ -551,6 +581,7 @@ body{
   .modal__panel{ width:min(100%, 96vw); padding:12px; }
   .chart-wrap--fullscreen{ height:76vh; min-height:320px; }
   .corr-grid{ grid-template-columns:1fr; }
+  .footer{ padding-bottom:max(18px, env(safe-area-inset-bottom)); }
 }
 /* Small phone (360px: SE, compact Android) */
 @media (max-width: 360px){
