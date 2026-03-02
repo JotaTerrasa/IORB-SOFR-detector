@@ -4,7 +4,7 @@
    - Correlation: Pearson between BTC daily returns and spread (SOFR - IORB)
 */
 
-const APP_VERSION = "20260302_5";
+const APP_VERSION = "20260302_6";
 const CG_BASE = "/api/cg";
 const NYFED_API = "/api/nyfed";
 const IORB_API = "/api/iorb";
@@ -43,11 +43,12 @@ const LS = {
   health: "iorbsofr:health",
   lastClose: "iorbsofr:lastClose",
   autoRefreshSec: "iorbsofr:autoRefreshSec",
+  autoRefreshPolicyVersion: "iorbsofr:autoRefreshPolicyVersion",
 };
 
-const AUTO_REFRESH_DEFAULT_SEC = 60;
+const AUTO_REFRESH_DEFAULT_SEC = 1800;
 const AUTO_REFRESH_MIN_SEC = 15;
-const AUTO_REFRESH_MAX_SEC = 3600;
+const AUTO_REFRESH_MAX_SEC = 86400;
 let autoRefreshTimer = null;
 let autoRefreshCountdownTimer = null;
 let nextAutoRefreshAtMs = 0;
@@ -1156,7 +1157,17 @@ function restoreUIState() {
   const savedFees = localStorage.getItem(LS.feeBps) || "12";
   const savedAlerts = localStorage.getItem(LS.alerts) || "0";
   const savedDetails = localStorage.getItem(LS.details) || "0";
-  const savedAutoRefresh = localStorage.getItem(LS.autoRefreshSec) || String(AUTO_REFRESH_DEFAULT_SEC);
+  const policyVersionRaw = Number(localStorage.getItem(LS.autoRefreshPolicyVersion) || "0");
+  let savedAutoRefresh = localStorage.getItem(LS.autoRefreshSec);
+  // Migrate old default (60s) to a saner macro default now that BTC is live via websocket.
+  if (policyVersionRaw < 2) {
+    if (!savedAutoRefresh || savedAutoRefresh === "60") {
+      savedAutoRefresh = String(AUTO_REFRESH_DEFAULT_SEC);
+      localStorage.setItem(LS.autoRefreshSec, savedAutoRefresh);
+    }
+    localStorage.setItem(LS.autoRefreshPolicyVersion, "2");
+  }
+  if (!savedAutoRefresh) savedAutoRefresh = String(AUTO_REFRESH_DEFAULT_SEC);
   const sound = localStorage.getItem(LS.sound);
   const explain = localStorage.getItem(LS.explain);
   const rangeDays = localStorage.getItem(LS.rangeDays) || "90";
