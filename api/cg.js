@@ -1,5 +1,21 @@
+import { enforceRateLimit } from "./_ratelimit.js";
+
 export default async function handler(req, res) {
   try {
+    if (req.method !== "GET") {
+      res.setHeader("Allow", "GET");
+      res.status(405).json({ error: "Method not allowed" });
+      return;
+    }
+    const rl = enforceRateLimit(req, { bucket: "cg", max: 90, windowMs: 60_000 });
+    res.setHeader("X-RateLimit-Limit", "90");
+    res.setHeader("X-RateLimit-Remaining", String(rl.remaining));
+    res.setHeader("Retry-After", String(rl.retryAfterSec));
+    if (!rl.ok) {
+      res.status(429).json({ error: "Too many requests" });
+      return;
+    }
+
     const path = String(req.query.path || "");
     if (!path.startsWith("/")) {
       res.status(400).json({ error: "Missing or invalid path" });

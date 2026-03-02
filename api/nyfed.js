@@ -1,5 +1,21 @@
+import { enforceRateLimit } from "./_ratelimit.js";
+
 export default async function handler(req, res) {
   try {
+    if (req.method !== "GET") {
+      res.setHeader("Allow", "GET");
+      res.status(405).json({ error: "Method not allowed" });
+      return;
+    }
+    const rl = enforceRateLimit(req, { bucket: "nyfed", max: 120, windowMs: 60_000 });
+    res.setHeader("X-RateLimit-Limit", "120");
+    res.setHeader("X-RateLimit-Remaining", String(rl.remaining));
+    res.setHeader("Retry-After", String(rl.retryAfterSec));
+    if (!rl.ok) {
+      res.status(429).json({ error: "Too many requests" });
+      return;
+    }
+
     const kind = String(req.query.kind || "");
     let url = null;
     if (kind === "sofr_last") {

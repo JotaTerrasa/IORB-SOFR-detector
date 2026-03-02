@@ -7,7 +7,8 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https:; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com data:; connect-src 'self' https://api.coingecko.com https://markets.newyorkfed.org https://fred.stlouisfed.org https://api.allorigins.win; manifest-src 'self'; worker-src 'self'; base-uri 'self'; frame-ancestors 'none'"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https:; media-src 'self' data:; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com data:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
 
 [[headers]]
   for = "/*.js"

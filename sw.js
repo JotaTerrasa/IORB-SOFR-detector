@@ -1,4 +1,4 @@
-const CACHE_NAME = "iorbsofr-btc-v12";
+const CACHE_NAME = "iorbsofr-btc-v13";
 const ASSETS = [
   "./",
   "./index.html",
