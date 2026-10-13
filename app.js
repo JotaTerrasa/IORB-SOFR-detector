@@ -588,7 +588,7 @@ function renderMacro() {
       ),
       node(
         "small",
-        `${definition} Observación: ${date(last?.date)}${health.macro?.stale ? " · copia antigua" : ""}`,
+        `${definition} Observación: ${date(last?.date)}${r?.sourceMode === "verified-snapshot" ? " · copia verificada" : ""}${health.macro?.stale ? " · copia antigua" : ""}`,
       ),
     );
     const a = node(

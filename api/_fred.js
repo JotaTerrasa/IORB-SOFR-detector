@@ -12,6 +12,22 @@ export function validateSnapshot(snapshot, now = Date.now()) {
     now - Date.parse(snapshot.generatedAt) > 72 * 3600000
   )
     throw new Error("La copia verificada de FRED necesita actualizarse.");
+  if (Date.parse(snapshot.generatedAt) - now > 5 * 60000)
+    throw new Error("Fecha de descarga inválida.");
+  for (const id of ["IORB", "WTREGEN", "WRESBAL", "RRPONTSYD"]) {
+    const rows = snapshot.series[id];
+    if (
+      !Array.isArray(rows) ||
+      !rows.length ||
+      rows.some(
+        (r, i) =>
+          !/^\d{4}-\d{2}-\d{2}$/.test(r.date) ||
+          !Number.isFinite(r.value) ||
+          (i > 0 && rows[i - 1].date >= r.date),
+      )
+    )
+      throw new Error("Estructura de copia FRED inválida.");
+  }
   return snapshot;
 }
 async function snapshot() {
