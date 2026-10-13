@@ -836,3 +836,8 @@ dialog::backdrop {
     animation: none !important;
   }
 }
+
+.macro-grid .text-button {
+  display: block;
+  margin-top: 8px;
+}
