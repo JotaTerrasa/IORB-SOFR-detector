@@ -36,6 +36,10 @@ El servidor local ejecuta las mismas funciones `api/*` que Vercel. Un servidor d
 
 Consulta general configurable cada 5, 15 o 30 minutos. La frecuencia de consulta no convierte una serie diaria/semanal en tiempo real. Las rutas tienen caché de servidor breve, validación de parámetros, timeout de fuente y limitación por IP **por instancia**, no global. Las APIs jamás entran en la caché del service worker. El shell usa red primero y copia local solo sin conexión. Los errores upstream no se cachean como respuestas correctas. Cada fuente falla independientemente; las copias del navegador se muestran como antiguas.
 
+### Respaldo verificable de FRED
+
+Si Vercel no puede acceder directamente al CSV de FRED, se usa una copia de las mismas series, con fecha de descarga visible. `scripts/update-fred.mjs` descarga las cuatro series oficiales; el workflow `fred-data.yml` las actualiza cada dos horas en la rama `data-feed`, que no genera despliegues de Vercel. Solo publica cuando cambian las observaciones. La API consulta esa copia y conserva una copia empaquetada para el arranque. Rechaza copias de más de 72 horas: nunca sustituye tasas por constantes inventadas. Los datos son públicos; el workflow solo escribe su snapshot de datos. La frecuencia de descarga y las fechas de observación permanecen visibles.
+
 ## Metodología y límites
 
 `lib/analytics.js` contiene funciones puras compartidas y comprobadas:

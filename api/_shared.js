@@ -33,7 +33,6 @@ export async function upstream(url, format = "json") {
     signal: AbortSignal.timeout(12000),
     headers: {
       accept: format === "json" ? "application/json" : "text/csv",
-      "User-Agent": "IORB-SOFR-Dashboard/2.0",
     },
   });
   if (!r.ok) throw new Error(`Fuente no disponible (HTTP ${r.status})`);
