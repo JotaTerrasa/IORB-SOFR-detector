@@ -1,11 +1,11 @@
 {
-  "name": "IORB × SOFR × BTC",
-  "short_name": "IORB/SOFR BTC",
+  "name": "IORB × SOFR × BTC — Liquidez",
+  "short_name": "Liquidez BTC",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#070A0F",
-  "theme_color": "#070A0F",
-  "description": "Dashboard de liquidez (IORB/SOFR) vs BTC con plan, paridad y toolkit de futures.",
+  "background_color": "#101820",
+  "theme_color": "#101820",
+  "description": "Monitor de SOFR, IORB, BTC y liquidez macro con fuentes y fechas verificables.",
   "icons": [
     {
       "src": "./icon.svg",
@@ -15,4 +15,3 @@
     }
   ]
 }
-

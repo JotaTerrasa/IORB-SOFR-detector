@@ -1,95 +1,59 @@
-# IORB × SOFR × BTC — Signal Dashboard (SPA)
+# IORB × SOFR × BTC — Monitor de liquidez
 
-Web single-page estática que:
-- descarga snapshot de **Bitcoin** desde **CoinGecko** y actualiza en vivo por **WebSocket público de BingX** (sin API key)
-- usa **SOFR** desde el **New York Fed Markets API** (sin API key)
-- usa **IORB** desde un **CSV público de FRED** (sin API key). Si quieres, puedes override con manual o por tramos.
-- calcula correlación **Pearson** entre **retornos diarios de BTC** y el **spread (SOFR − IORB)**
-- emite una señal **LONG / SHORT / NEUTRAL** y guarda un historial local
+Monitor público de financiación repo y Bitcoin, con fuentes fechadas, contexto macro y herramientas de análisis. V2 separa **datos observados**, **lectura de financiación**, **hipótesis experimentales** y **escenarios personales**.
 
-## Cómo correrla
+## Desarrollo y comprobaciones
 
-### Opción recomendada (local con API routes)
-Esta app usa rutas serverless locales (`/api/cg`, `/api/nyfed`, `/api/iorb`), así que para desarrollo local usa Vercel:
+Requiere Node 22 o posterior. No requiere claves de APIs.
 
 ```bash
-npm i -g vercel
-vercel dev
+npm ci
+npm run dev
+# http://127.0.0.1:4173
+npm test
 ```
 
-Luego abre `http://localhost:3000`.
+El servidor local ejecuta las mismas funciones `api/*` que Vercel. Un servidor de archivos o GitHub Pages no ejecutan estas rutas. Netlify no está configurado para ejecutar estas funciones: este proyecto se despliega en **Vercel**, preset Other, raíz del repositorio, sin comando de build.
 
-> Nota: abrir `index.html` directo o con servidor estático simple no ejecuta `api/*`.
+## Pantallas
 
-## Subir a producción (recomendado)
+- **Resumen:** cotización BTC-USD spot, IORB, SOFR, diferencial en puntos básicos calculado con tasas de la misma fecha, tendencia y gráficos. Banda orientativa configurable, nunca “permiso para operar”.
+- **Liquidez macro:** TGA, reservas bancarias y ON RRP con fuentes, unidades, frecuencia y fechas propias. No se mezclan en un supuesto indicador exacto de liquidez.
+- **Laboratorio BTC:** Pearson de retornos diarios frente al diferencial en 7/30/90 observaciones reales de SOFR; correlación móvil; hipótesis de variación del diferencial y simulación histórica.
+- **Riesgo y diario:** dirección elegida explícitamente por el usuario, dimensionamiento que incluye comisiones dentro del presupuesto, avisos de margen y liquidación, diario local y exportaciones CSV.
+- **Fuentes y ajustes:** consultas correctas/fallidas, copias antiguas, fechas, preferencias y escenarios manuales. Las entradas manuales solo modifican la lectura actual, no reescriben el histórico oficial.
 
-### Requisitos
-- **HTTPS** (necesario para PWA/service worker y notificaciones).
-- Hosting con funciones serverless para `api/*` (Vercel recomendado).
+## Fuentes y frecuencias
 
-### Opción A: Vercel (1 minuto)
-- Importa el repo en Vercel
-- Framework preset: **Other**
-- Output: root
-- Ya incluye `vercel.json` con headers de seguridad + caché.
+| Serie    | Fuente                    | Frecuencia / tratamiento                                                                                              |
+| -------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| SOFR     | NY Fed Markets API        | Observación del día de operaciones; se publica el siguiente día hábil aproximadamente a las 08:00 NY.                 |
+| IORB     | FRED CSV, IORB            | Tipo administrado. Se compara con SOFR usando el tipo vigente en la fecha observada.                                  |
+| BTC      | Coinbase Exchange BTC-USD | Spot USD; ticker WebSocket, fallback por consulta cada minuto. Histórico OHLC diario UTC; se excluye la vela abierta. |
+| TGA      | FRED WTREGEN              | **Media semanal**, millones USD convertidos a miles de millones. No es saldo diario.                                  |
+| Reservas | FRED WRESBAL              | **Media semanal**, millones USD convertidos a miles de millones.                                                      |
+| ON RRP   | FRED RRPONTSYD            | Diario, miles de millones USD.                                                                                        |
 
-### Opción B: Netlify
-- Deploy del repo
-- Publish directory: `.`
-- Ya incluye `netlify.toml` con headers de seguridad + caché.
+Consulta general configurable cada 5, 15 o 30 minutos. La frecuencia de consulta no convierte una serie diaria/semanal en tiempo real. Las rutas tienen caché de servidor breve, validación de parámetros, timeout de fuente y limitación por IP **por instancia**, no global. Las APIs jamás entran en la caché del service worker. El shell usa red primero y copia local solo sin conexión. Los errores upstream no se cachean como respuestas correctas. Cada fuente falla independientemente; las copias del navegador se muestran como antiguas.
 
-### Opción C: GitHub Pages
-- **No recomendado para esta versión**: GitHub Pages no ejecuta `api/*` serverless.
+## Metodología y límites
 
-## Checklist “production-ready”
-- **Cache busting**: ya usamos `?v=` en `app.js`/`styles.css` para evitar UI vieja por PWA cache.
-- **Observabilidad**: si quieres, se puede añadir Sentry/LogRocket (opcional).
-- **Rate limits backend**: `api/*` aplica límite por IP y devuelve `429` para abuso.
-- **Métodos permitidos**: `api/*` solo acepta `GET` (`405` para el resto).
-- **Headers de seguridad**: CSP, HSTS, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`.
-- **Dependencia CDN**: Chart.js carga con `integrity` (SRI) + `crossorigin`.
-- **Secrets**: no hay claves privadas en repo; `.gitignore` reforzado para `.env` y certificados.
+`lib/analytics.js` contiene funciones puras compartidas y comprobadas:
 
-## Estado de despliegue (go-live)
+- `spread = (SOFR − IORB) × 100` en pb. Banda ±5 pb por defecto, **parámetro exploratorio**, no umbral oficial de la Fed.
+- No se rellenan observaciones anteriores con tipos futuros. La correlación usa días con SOFR real y retorno BTC entre dos cierres UTC consecutivos. No duplica fines de semana ni usa la vela abierta. La asociación es contemporánea y no acredita causalidad.
+- Hipótesis experimental: dentro de la banda, caída en siete intervalos de observación → LONG, subida → SHORT; variación <0,5 pb → neutral. **Sin confianza predictiva estimada.**
+- Simulación: usa calendario habitual de publicación SOFR (incluidos festivos de títulos públicos), señal al cierre UTC, entrada en la siguiente apertura, stop 1,5×ATR14 (media simple), objetivo 2R y máximo siete velas. No hay operaciones simultáneas ni velas inventadas. Las posiciones todavía abiertas no cuentan como cerradas. Si stop y objetivo se tocan, se asume stop primero; gaps se ejecutan a apertura. Comisiones incluidas. No incluye funding, slippage intradía ni versiones históricas de revisiones. No es una validación fuera de muestra.
+- Liquidación: aproximación a margen aislado de contrato lineal; no sustituye reglas, mark price y tramos de mantenimiento del exchange. Comisiones estimadas al stop se incluyen en el presupuesto de riesgo.
 
-Antes de abrir al público:
-1. Haz commit/push de los cambios pendientes.
-2. Despliega en Vercel/Netlify.
-3. Verifica en producción:
-   - carga normal de la home
-   - respuestas `200` en `/api/cg`, `/api/nyfed`, `/api/iorb`
-   - `429` si haces flood (rate limit funcionando)
-   - encabezados de seguridad presentes
+Referencias: [metodología SOFR](https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates), [TGA y reservas](https://www.federalreserve.gov/econres/notes/feds-notes/fluctuations-in-the-treasury-general-account-and-their-effect-on-the-feds-balance-sheet-20250806.html), [repo y presión de financiación](https://www.newyorkfed.org/newsevents/speeches/2024/per240926).
 
-## SOFR (NY Fed Markets API)
+## Privacidad, migración y seguridad
 
-SOFR se descarga desde endpoints públicos (sin key), por ejemplo:
-- `https://markets.newyorkfed.org/api/rates/secured/sofr/last/1.json`
-- `https://markets.newyorkfed.org/api/rates/secured/sofr/search.json?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD`
+Preferencias, escenarios y diario viven solo en `localStorage`; no se envían al backend. El diario de v1 se migra automáticamente y los registros originales se conservan. No se importan automáticamente señales antiguas ni una dirección implícita. Exporta tu diario para conservar una copia fuera del navegador.
 
-Si la descarga falla, puedes setear SOFR manualmente como override.
+Chart.js 4.4.1 se sirve localmente con su licencia. No hay dependencias CDN, fuentes remotas ni analítica de terceros. CSP restringe scripts/estilos al origen y WebSocket al proveedor de precio. No hay credenciales en Git. El proxy CoinGecko antiguo devuelve 410; los endpoints están acotados a fuentes y productos concretos.
 
-## IORB
+## Release y recuperación
 
-IORB se descarga automáticamente desde CSV público:
-- `https://fred.stlouisfed.org/graph/fredgraph.csv?id=IORB`
-
-Puedes override con:
-- **IORB manual (%)**
-- **IORB por tramos (fecha → valor)** (forward-fill)
-
-## Auto-refresh diario
-
-La web:
-- **refresca al cargar**
-- **refresca automáticamente cada X segundos** (configurable en Ajustes avanzados, default 1800s con BTC live)
-- **refresca 1 vez al día a las 00:05 (hora local)** si la pestaña queda abierta
-- refresca al volver a enfocar la pestaña si detecta que está “stale”
-
-## Señales (reglas)
-- Si **SOFR > IORB** y la **corr30 > 0** → **LONG**
-- Si **SOFR < IORB** y la **corr30 < 0** → **SHORT**
-- Si no → **NEUTRAL**
-
-Disclaimer: demo educativa, no asesoría financiera.
-
+Los cambios se revisan por PR y CI (`npm test`). Vercel mantiene despliegues versionados. Antes de publicar, comprobar escritorio/móvil, las cinco pantallas, gráficos, fuentes, escenarios, cálculo, diario y CSV. Ver `docs/releases/2026-10-13.md` para la evidencia de esta actualización. La versión anterior es el commit `437d052`; se puede restaurar con un revert del PR o promoviendo su despliegue anterior en Vercel.

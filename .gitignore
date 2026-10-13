@@ -31,3 +31,5 @@ __pycache__/
 *.crt
 *.cer
 
+
+node_modules/
