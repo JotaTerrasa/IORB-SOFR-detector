@@ -617,8 +617,11 @@
             <h2>Datos y funcionamiento</h2>
             <p class="muted">
               Tasas: NY Fed y FRED. BTC: Coinbase Exchange, par BTC-USD spot.
-              Macro: FRED WTREGEN, WRESBAL y RRPONTSYD. Cada fuente puede fallar
-              de forma independiente; no se inventan valores de sustitución.
+              Macro: FRED WTREGEN, WRESBAL y RRPONTSYD. Si FRED no responde, se
+              utiliza una copia verificada, descargada cada dos horas. La tabla
+              muestra la fecha de descarga; se rechazan copias de más de 72
+              horas. Cada fuente puede fallar de forma independiente; no se
+              inventan valores de sustitución.
             </p>
             <p class="small">
               La aplicación y la ayuda están disponibles sin conexión. Las APIs
