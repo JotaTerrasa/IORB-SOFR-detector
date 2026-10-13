@@ -142,7 +142,11 @@ async function request(url, format = "json") {
         e.retryable = r.status >= 500;
         throw e;
       }
-      return format === "text" ? r.text() : r.json();
+      return {
+        payload: await (format === "text" ? r.text() : r.json()),
+        sourceMode: r.headers.get("X-Data-Source"),
+        sourceFetchedAt: r.headers.get("X-Data-Fetched-At"),
+      };
     } catch (e) {
       if (attempt || e.retryable === false) throw e;
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -151,10 +155,17 @@ async function request(url, format = "json") {
 }
 async function source(key, url, parser = (x) => x, format = "json") {
   try {
-    const result = parser(await request(url, format));
+    const response = await request(url, format);
+    const result = parser(response.payload);
     if (result == null) throw new Error("Datos vacíos");
     data[key] = result;
-    health[key] = { ok: true, at: new Date().toISOString(), stale: false };
+    health[key] = {
+      ok: true,
+      at: new Date().toISOString(),
+      stale: false,
+      sourceMode: response.sourceMode,
+      sourceFetchedAt: response.sourceFetchedAt,
+    };
     storage.set("cache:" + key, { value: result, at: health[key].at });
   } catch (e) {
     const cached = storage.get("cache:" + key);
@@ -266,7 +277,7 @@ function renderRates() {
   );
   text(
     "iorbDate",
-    `FRED · vigente el ${date(latestI?.date)}${health.iorb?.stale ? " · copia antigua" : ""}`,
+    `${health.iorb?.sourceMode === "verified-snapshot" ? "FRED · copia verificada" : "FRED"} · vigente el ${date(latestI?.date)}${health.iorb?.stale ? " · copia antigua" : ""}`,
   );
   text("spreadValue", Number.isFinite(spread) ? `${sign(spread)} pb` : "—");
   text(
@@ -577,7 +588,7 @@ function renderMacro() {
       ),
       node(
         "small",
-        `${definition} Observación: ${date(last?.date)}${health.macro?.stale ? " · copia antigua" : ""}`,
+        `${definition} Observación: ${date(last?.date)}${r?.sourceMode === "verified-snapshot" ? " · copia verificada" : ""}${health.macro?.stale ? " · copia antigua" : ""}`,
       ),
     );
     const a = node(
@@ -666,14 +677,27 @@ function renderSources() {
         ? key === "macro" &&
           ["tga", "reserves", "rrp"].some((k) => data.macro?.[k]?.error)
           ? "Consulta parcial"
-          : "Consulta correcta"
+          : h.sourceMode === "verified-snapshot" ||
+              (key === "macro" &&
+                ["tga", "reserves", "rrp"].some(
+                  (k) => data.macro?.[k]?.sourceMode === "verified-snapshot",
+                ))
+            ? "Copia verificada de FRED"
+            : "Consulta correcta"
         : h?.stale
           ? "Copia antigua"
           : "No disponible",
       h?.ok ? "positive" : "negative",
     );
     cell(tr, key === "macro" ? "Ver fecha de cada serie" : date(latest[key]));
-    cell(tr, time(h?.at));
+    const copied =
+      key === "macro"
+        ? ["tga", "reserves", "rrp"]
+            .map((k) => data.macro?.[k]?.sourceFetchedAt)
+            .filter(Boolean)
+            .sort()[0]
+        : h?.sourceFetchedAt;
+    cell(tr, `${time(h?.at)}${copied ? " · FRED: " + time(copied) : ""}`);
     $("sourceRows").append(tr);
   }
 }

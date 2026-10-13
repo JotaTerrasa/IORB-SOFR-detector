@@ -48,7 +48,17 @@
       "maxDuration": 30
     },
     "api/macro.js": {
-      "maxDuration": 30
+      "maxDuration": 30,
+      "includeFiles": "data/fred-snapshot.json"
+    },
+    "api/iorb.js": {
+      "maxDuration": 30,
+      "includeFiles": "data/fred-snapshot.json"
+    }
+  },
+  "git": {
+    "deploymentEnabled": {
+      "data-feed": false
     }
   }
 }

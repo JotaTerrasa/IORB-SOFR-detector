@@ -50,7 +50,7 @@ test("upstream failures are 502 and never cached as successful data", async () =
   global.fetch = async () => ({ ok: false, status: 429 });
   try {
     const r = response();
-    await iorb(req({ cosd: "2026-10-01", coed: "2026-10-13" }), r);
+    await nyfed(req({ kind: "sofr_last" }), r);
     assert.equal(r.code, 502);
     assert.equal(r.headers["Cache-Control"], "no-store");
     assert.ok(!JSON.stringify(r.body).includes("fredgraph"));
