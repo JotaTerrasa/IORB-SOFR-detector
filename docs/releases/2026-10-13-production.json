@@ -1,0 +1,126 @@
+{
+  "verifiedAt": "2026-10-13T14:18:52.564Z",
+  "url": "https://iorb-sofr-detector.vercel.app",
+  "commit": "7e2e412f74ad5f15b8a973b414f899384dd51a1e",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "sha256": "8356ddaa790711ae6e2a796225fdf7ae6009260eeb82dfd515e2cdf5ca79f780",
+      "newTitle": true,
+      "csp": "default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self'; connect-src 'self' wss://ws-feed.exchange.coinbase.com; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'"
+    },
+    {
+      "path": "/api/market?kind=quote",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "cacheControl": "public",
+      "sha256": "41c473f1c9bc4b08378cdc8f1b8334e534efe33733e8060348e9293a45c2910b",
+      "price": 83635.22,
+      "source": "Coinbase BTC-USD spot"
+    },
+    {
+      "path": "/api/market?kind=history&days=365",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "cacheControl": "public",
+      "sha256": "3fc9382e0de7879c5d27c82f9f24a9feb2d6fd6bbedff8af92845e6d1bd62249",
+      "candles": 515,
+      "lastClosedDay": "2026-10-12"
+    },
+    {
+      "path": "/api/nyfed?kind=sofr_last",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "cacheControl": "public",
+      "sha256": "e17890469aaeb06cef67fc8f6ebd253585b8e956d3ec4278af3e94377d8ad8d5",
+      "latest": {
+        "effectiveDate": "2026-10-09",
+        "type": "SOFR",
+        "percentRate": 3.87,
+        "percentPercentile1": 3.82,
+        "percentPercentile25": 3.85,
+        "percentPercentile75": 3.92,
+        "percentPercentile99": 3.95,
+        "volumeInBillions": 2961,
+        "revisionIndicator": ""
+      }
+    },
+    {
+      "path": "/api/iorb?cosd=2026-10-01&coed=2026-10-13",
+      "status": 200,
+      "contentType": "text/csv; charset=utf-8",
+      "cacheControl": "public",
+      "sha256": "9d0d94c2d563b5a602e606aca6c7a2a9a8022ded8248567c6df855330b276f95",
+      "lastRow": "2026-10-13,3.9",
+      "sourceMode": "direct",
+      "sourceFetchedAt": "2026-10-13T14:18:52.028Z"
+    },
+    {
+      "path": "/api/macro",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "cacheControl": "public",
+      "sha256": "fd51716e8cb18fe57f399f048d67784b4509306a817f95f39916f8a5dc7cc934",
+      "series": {
+        "tga": {
+          "observations": 71,
+          "latest": {
+            "date": "2026-10-07",
+            "value": 880.253
+          },
+          "sourceMode": "direct",
+          "sourceFetchedAt": "2026-10-13T14:18:52.168Z"
+        },
+        "reserves": {
+          "observations": 71,
+          "latest": {
+            "date": "2026-10-07",
+            "value": 3029.659
+          },
+          "sourceMode": "direct",
+          "sourceFetchedAt": "2026-10-13T14:18:52.145Z"
+        },
+        "rrp": {
+          "observations": 340,
+          "latest": {
+            "date": "2026-10-09",
+            "value": 0.3
+          },
+          "sourceMode": "direct",
+          "sourceFetchedAt": "2026-10-13T14:18:52.481Z"
+        }
+      }
+    },
+    {
+      "path": "/lib/analytics.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "sha256": "208ee1169f8e184f015a553e1f1c57e2f956dec5d666829dd6842a4c0976f9da"
+    },
+    {
+      "path": "/vendor/chart.umd.js?v=4.4.1",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "sha256": "74401d738dd3e03ee5dfb3b6841210fe2c4ead8a960c4011ca4ba0b78a9fd8f3"
+    },
+    {
+      "path": "/sw.js",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "cacheControl": "no-store",
+      "sha256": "21e98b47422f80c45e94458155f99c741b2f471932a7f77ec5ad068cf7695d2c"
+    },
+    {
+      "path": "/app.js?v=20261013_1",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "sha256": "a093b571fb6d53b9d4e96662845dc09f2815c0886b5f3482be326c1621c2526b"
+    }
+  ]
+}
