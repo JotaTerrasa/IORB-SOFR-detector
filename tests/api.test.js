@@ -1,8 +1,83 @@
-import {test} from 'node:test';import assert from 'node:assert/strict';
-import iorb from '../api/iorb.js';import nyfed from '../api/nyfed.js';import market from '../api/market.js';import {range} from '../api/_shared.js';
-function response(){return {headers:{},code:200,setHeader(k,v){this.headers[k]=v;},status(n){this.code=n;return this;},json(v){this.body=v;},send(v){this.body=v;}};}
-const req=query=>({method:'GET',query,headers:{},socket:{remoteAddress:'test'}});
-test('strict date range blocks invalid days and unbounded queries',()=>{assert.equal(range('2026-02-30','2026-03-01'),false);assert.equal(range('2026-10-14','2026-10-13'),false);assert.equal(range('2020-01-01','2026-10-13'),false);});
-test('APIs enforce GET and validate parameters before upstream fetch',async()=>{for(const handler of [iorb,nyfed,market]){const r=response();await handler({...req({}),method:'POST'},r);assert.equal(r.code,405);assert.equal(r.headers.Allow,'GET');const invalid=response();await handler(req({}),invalid);assert.equal(invalid.code,400);}});
-test('upstream failures are 502 and never cached as successful data',async()=>{const old=global.fetch;global.fetch=async()=>({ok:false,status:429});try{const r=response();await iorb(req({cosd:'2026-10-01',coed:'2026-10-13'}),r);assert.equal(r.code,502);assert.equal(r.headers['Cache-Control'],'no-store');assert.ok(!JSON.stringify(r.body).includes('fredgraph'));}finally{global.fetch=old;}});
-test('market history deduplicates real candles and excludes unfinished UTC day',async()=>{const old=global.fetch;const today=new Date();today.setUTCHours(0,0,0,0);const t=today.getTime()/1000;global.fetch=async()=>({ok:true,json:async()=>[[t,99,102,100,101,1],[t-86400,99,102,100,101,2],[t-86400,99,102,100,101,2]]});try{const r=response();await market(req({kind:'history',days:'365'}),r);assert.equal(r.code,200);assert.equal(r.body.candles.length,1);assert.equal(r.body.candles[0].v,2);}finally{global.fetch=old;}});
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import iorb from "../api/iorb.js";
+import nyfed from "../api/nyfed.js";
+import market from "../api/market.js";
+import { range } from "../api/_shared.js";
+function response() {
+  return {
+    headers: {},
+    code: 200,
+    setHeader(k, v) {
+      this.headers[k] = v;
+    },
+    status(n) {
+      this.code = n;
+      return this;
+    },
+    json(v) {
+      this.body = v;
+    },
+    send(v) {
+      this.body = v;
+    },
+  };
+}
+const req = (query) => ({
+  method: "GET",
+  query,
+  headers: {},
+  socket: { remoteAddress: "test" },
+});
+test("strict date range blocks invalid days and unbounded queries", () => {
+  assert.equal(range("2026-02-30", "2026-03-01"), false);
+  assert.equal(range("2026-10-14", "2026-10-13"), false);
+  assert.equal(range("2020-01-01", "2026-10-13"), false);
+});
+test("APIs enforce GET and validate parameters before upstream fetch", async () => {
+  for (const handler of [iorb, nyfed, market]) {
+    const r = response();
+    await handler({ ...req({}), method: "POST" }, r);
+    assert.equal(r.code, 405);
+    assert.equal(r.headers.Allow, "GET");
+    const invalid = response();
+    await handler(req({}), invalid);
+    assert.equal(invalid.code, 400);
+  }
+});
+test("upstream failures are 502 and never cached as successful data", async () => {
+  const old = global.fetch;
+  global.fetch = async () => ({ ok: false, status: 429 });
+  try {
+    const r = response();
+    await iorb(req({ cosd: "2026-10-01", coed: "2026-10-13" }), r);
+    assert.equal(r.code, 502);
+    assert.equal(r.headers["Cache-Control"], "no-store");
+    assert.ok(!JSON.stringify(r.body).includes("fredgraph"));
+  } finally {
+    global.fetch = old;
+  }
+});
+test("market history deduplicates real candles and excludes unfinished UTC day", async () => {
+  const old = global.fetch;
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  const t = today.getTime() / 1000;
+  global.fetch = async () => ({
+    ok: true,
+    json: async () => [
+      [t, 99, 102, 100, 101, 1],
+      [t - 86400, 99, 102, 100, 101, 2],
+      [t - 86400, 99, 102, 100, 101, 2],
+    ],
+  });
+  try {
+    const r = response();
+    await market(req({ kind: "history", days: "365" }), r);
+    assert.equal(r.code, 200);
+    assert.equal(r.body.candles.length, 1);
+    assert.equal(r.body.candles[0].v, 2);
+  } finally {
+    global.fetch = old;
+  }
+});

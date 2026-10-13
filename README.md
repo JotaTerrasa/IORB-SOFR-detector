@@ -25,14 +25,14 @@ El servidor local ejecuta las mismas funciones `api/*` que Vercel. Un servidor d
 
 ## Fuentes y frecuencias
 
-| Serie | Fuente | Frecuencia / tratamiento |
-|---|---|---|
-| SOFR | NY Fed Markets API | Observación del día de operaciones; se publica el siguiente día hábil aproximadamente a las 08:00 NY. |
-| IORB | FRED CSV, IORB | Tipo administrado. Se compara con SOFR usando el tipo vigente en la fecha observada. |
-| BTC | Coinbase Exchange BTC-USD | Spot USD; ticker WebSocket, fallback por consulta cada minuto. Histórico OHLC diario UTC; se excluye la vela abierta. |
-| TGA | FRED WTREGEN | **Media semanal**, millones USD convertidos a miles de millones. No es saldo diario. |
-| Reservas | FRED WRESBAL | **Media semanal**, millones USD convertidos a miles de millones. |
-| ON RRP | FRED RRPONTSYD | Diario, miles de millones USD. |
+| Serie    | Fuente                    | Frecuencia / tratamiento                                                                                              |
+| -------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| SOFR     | NY Fed Markets API        | Observación del día de operaciones; se publica el siguiente día hábil aproximadamente a las 08:00 NY.                 |
+| IORB     | FRED CSV, IORB            | Tipo administrado. Se compara con SOFR usando el tipo vigente en la fecha observada.                                  |
+| BTC      | Coinbase Exchange BTC-USD | Spot USD; ticker WebSocket, fallback por consulta cada minuto. Histórico OHLC diario UTC; se excluye la vela abierta. |
+| TGA      | FRED WTREGEN              | **Media semanal**, millones USD convertidos a miles de millones. No es saldo diario.                                  |
+| Reservas | FRED WRESBAL              | **Media semanal**, millones USD convertidos a miles de millones.                                                      |
+| ON RRP   | FRED RRPONTSYD            | Diario, miles de millones USD.                                                                                        |
 
 Consulta general configurable cada 5, 15 o 30 minutos. La frecuencia de consulta no convierte una serie diaria/semanal en tiempo real. Las rutas tienen caché de servidor breve, validación de parámetros, timeout de fuente y limitación por IP **por instancia**, no global. Las APIs jamás entran en la caché del service worker. El shell usa red primero y copia local solo sin conexión. Los errores upstream no se cachean como respuestas correctas. Cada fuente falla independientemente; las copias del navegador se muestran como antiguas.
 

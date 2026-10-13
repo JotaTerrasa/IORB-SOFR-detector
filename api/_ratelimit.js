@@ -13,7 +13,10 @@ function getStore() {
   return globalThis[RATE_LIMIT_STORE_KEY];
 }
 
-export function enforceRateLimit(req, { bucket, max = 120, windowMs = 60_000 }) {
+export function enforceRateLimit(
+  req,
+  { bucket, max = 120, windowMs = 60_000 },
+) {
   const ip = getClientIp(req);
   const now = Date.now();
   const key = `${bucket}:${ip}`;
@@ -28,7 +31,11 @@ export function enforceRateLimit(req, { bucket, max = 120, windowMs = 60_000 }) 
   if (!current || current.resetAt <= now) {
     const next = { count: 1, resetAt: now + windowMs };
     store.set(key, next);
-    return { ok: true, remaining: Math.max(0, max - 1), retryAfterSec: Math.ceil(windowMs / 1000) };
+    return {
+      ok: true,
+      remaining: Math.max(0, max - 1),
+      retryAfterSec: Math.ceil(windowMs / 1000),
+    };
   }
 
   current.count += 1;

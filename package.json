@@ -4,7 +4,9 @@
   "description": "Monitor de liquidez SOFR–IORB, BTC y contexto macro con fuentes fechadas y simulaciones transparentes",
   "scripts": {
     "test": "node --test",
-    "dev": "node scripts/dev.mjs"
+    "dev": "node scripts/dev.mjs",
+    "format": "prettier --write app.js lib api scripts tests index.html styles.css sw.js vercel.json package.json README.md docs",
+    "format:check": "prettier --check app.js lib api scripts tests index.html styles.css sw.js vercel.json package.json README.md docs"
   },
   "repository": {
     "type": "git",
@@ -17,5 +19,8 @@
   "type": "module",
   "dependencies": {
     "chart.js": "4.4.1"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
   }
 }

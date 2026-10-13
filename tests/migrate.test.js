@@ -1,2 +1,23 @@
-import {test} from 'node:test';import assert from 'node:assert/strict';import {legacyNumber,migrateJournal} from '../lib/migrate.js';
-test('v1 Spanish journal numbers are migrated without modifying original records',()=>{const input=[{id:'a',when:'2026-10-13 12:30:00Z',side:'LONG',entry:'83.000,50',stop:'81.000,00',target:'87.000,00',qtyBtc:'0.1234',r:2}];const output=migrateJournal(input);assert.equal(output[0].entry,83000.5);assert.equal(output[0].qty,.1234);assert.equal(output[0].result,2);assert.equal(input[0].entry,'83.000,50');assert.equal(legacyNumber('—'),null);});
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { legacyNumber, migrateJournal } from "../lib/migrate.js";
+test("v1 Spanish journal numbers are migrated without modifying original records", () => {
+  const input = [
+    {
+      id: "a",
+      when: "2026-10-13 12:30:00Z",
+      side: "LONG",
+      entry: "83.000,50",
+      stop: "81.000,00",
+      target: "87.000,00",
+      qtyBtc: "0.1234",
+      r: 2,
+    },
+  ];
+  const output = migrateJournal(input);
+  assert.equal(output[0].entry, 83000.5);
+  assert.equal(output[0].qty, 0.1234);
+  assert.equal(output[0].result, 2);
+  assert.equal(input[0].entry, "83.000,50");
+  assert.equal(legacyNumber("—"), null);
+});

@@ -1,34 +1,687 @@
 <!doctype html>
 <html lang="es">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#101820">
-<title>IORB × SOFR × BTC — Monitor de liquidez</title><meta name="description" content="Sigue el diferencial SOFR–IORB, Bitcoin, TGA y reservas bancarias con fuentes verificables y herramientas de análisis.">
-<link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css?v=20261013_1">
-<script defer src="./vendor/chart.umd.js?v=4.4.1"></script><script type="module" src="./app.js?v=20261013_1"></script>
-</head>
-<body>
-<a class="skip" href="#main">Saltar al contenido</a>
-<header class="header"><a class="brand" href="./"><span class="brand-mark">≈</span><span><strong>IORB × SOFR <span class="brand-btc">× BTC</span></strong><small>MONITOR DE LIQUIDEZ</small></span></a><div class="header-actions"><span class="connection" id="status" role="status">Conectando fuentes…</span><button id="refresh" class="button primary">Actualizar</button><button id="help" class="button ghost" aria-label="Abrir ayuda">?</button></div></header>
-<div class="shell"><nav class="nav" aria-label="Secciones"><button class="nav-item active" data-page="overview" aria-current="page">Resumen</button><button class="nav-item" data-page="macro">Liquidez macro</button><button class="nav-item" data-page="lab">Laboratorio BTC</button><button class="nav-item" data-page="risk">Riesgo y diario</button><button class="nav-item" data-page="settings">Fuentes y ajustes</button></nav>
-<main id="main" tabindex="-1">
-<div id="banner" class="banner" role="status" hidden></div>
-<section id="overview" class="page">
-<div class="page-heading"><div><p class="eyebrow">EL PULSO DEL MERCADO</p><h1>Liquidez, con contexto.</h1><p class="muted">Una lectura del mercado monetario para entender el entorno de Bitcoin.</p></div><div class="refresh-note" id="refreshNote">Las tasas se publican diariamente; BTC cotiza continuamente.</div></div>
-<div class="kpi-grid">
-<article class="card kpi"><div class="kpi-title">Bitcoin <span class="tag">USD · spot</span></div><strong id="btcPrice">—</strong><p id="btcChange">Esperando cotización</p><small id="btcDate">Coinbase BTC-USD</small></article>
-<article class="card kpi"><div class="kpi-title"><abbr title="Tipo que paga la Fed sobre las reservas bancarias">IORB</abbr> <span class="tag">Fed</span></div><strong id="iorbValue">—</strong><p>Remuneración de reservas</p><small id="iorbDate">Esperando fuente</small></article>
-<article class="card kpi"><div class="kpi-title"><abbr title="Coste de financiación a un día, con bonos del Tesoro como garantía">SOFR</abbr> <span class="tag">NY Fed</span></div><strong id="sofrValue">—</strong><p>Financiación repo a un día</p><small id="sofrDate">Esperando fuente</small></article>
-<article class="card kpi spread-kpi"><div class="kpi-title">SOFR − IORB <span class="tag">puntos básicos</span></div><strong id="spreadValue">—</strong><p id="spreadChange">Comparación en la misma fecha</p><small id="spreadDate">1 pb = 0,01 puntos porcentuales</small></article>
-</div>
-<article class="card reading"><div><p class="eyebrow">LECTURA DE FINANCIACIÓN</p><h2 id="readingTitle">Esperando tasas verificadas</h2><p id="readingDetail" class="muted">El diferencial describe condiciones de financiación; no determina el próximo movimiento de BTC.</p></div><div class="reading-side"><span id="readingBadge" class="badge">SIN DATOS</span><p id="readingTrend">—</p></div></article>
-<article class="card chart-card"><div class="card-heading"><div><h2>Bitcoin y el diferencial</h2><p class="muted">Cierre diario UTC de BTC · SOFR − IORB en puntos básicos</p></div><div class="chart-actions"><div class="segments" aria-label="Ventana histórica"><button data-range="90" aria-pressed="true">90 días</button><button data-range="180" aria-pressed="false">180 días</button><button data-range="365" aria-pressed="false">1 año</button></div><button class="button ghost" id="export" disabled>Descargar CSV</button></div></div><div class="chart-box"><canvas id="mainChart" role="img" aria-label="Histórico de Bitcoin y diferencial SOFR menos IORB"></canvas><p id="chartEmpty" class="chart-empty" hidden>Histórico no disponible. Las tarjetas de tasas pueden seguir funcionando.</p></div><p class="chart-foot" id="chartNote">Los fines de semana no tienen una nueva observación de SOFR.</p></article>
-<div class="bottom-grid"><article class="card"><p class="eyebrow">RELACIÓN CON BTC</p><h2 id="corrValue">—</h2><p id="corrDetail" class="muted">Correlación descriptiva de 30 observaciones.</p><p class="small">Una correlación pequeña o variable no respalda una señal de compra o venta.</p><button class="text-button" data-jump="lab">Explorar el laboratorio →</button></article><article class="card"><p class="eyebrow">MÁS ALLÁ DEL SOFR</p><div class="mini-grid"><div><small>TGA</small><strong id="miniTga">—</strong></div><div><small>Reservas bancarias</small><strong id="miniReserves">—</strong></div></div><p id="miniMacroNote" class="muted">Datos semanales de la Fed, en miles de millones de USD.</p><button class="text-button" data-jump="macro">Ver contexto de liquidez →</button></article></div>
-</section>
-<section id="macro" class="page" hidden><div class="page-heading"><div><p class="eyebrow">EL CONTEXTO COMPLETO</p><h1>¿Dónde está la liquidez?</h1><p class="muted">TGA, reservas y reverse repo tienen funciones y frecuencias distintas.</p></div></div><div class="macro-grid" id="macroCards"></div><article class="card chart-card"><div class="card-heading"><div><h2>TGA y reservas bancarias</h2><p class="muted">Media semanal · miles de millones de USD · ejes separados</p></div></div><div class="chart-box"><canvas id="macroChart" role="img" aria-label="TGA y reservas bancarias semanales"></canvas></div><p id="macroNote" class="chart-foot">—</p></article><div class="bottom-grid"><article class="card"><h2>Si el TGA aumenta</h2><p class="muted">El Tesoro acumula efectivo por recaudación y emisiones. Si el resto del balance de la Fed no cambia, puede reducir las reservas bancarias. Los flujos desde reverse repo pueden amortiguar ese efecto.</p></article><article class="card"><h2>Si el TGA disminuye</h2><p class="muted">El gasto del Tesoro devuelve fondos al sistema bancario. El efecto neto depende de las emisiones, otros pasivos y las operaciones de la Fed. Un nivel alto no fija una fecha de giro ni un objetivo para BTC.</p></article></div><p class="source-note">Metodología: <a href="https://www.federalreserve.gov/econres/notes/feds-notes/fluctuations-in-the-treasury-general-account-and-their-effect-on-the-feds-balance-sheet-20250806.html" target="_blank" rel="noopener">Reserva Federal: TGA y reservas ↗</a>. WTREGEN y WRESBAL son medias semanales, no saldos diarios. El cambio mostrado compara las dos últimas observaciones de cada serie.</p></section>
-<section id="lab" class="page" hidden><div class="page-heading"><div><p class="eyebrow">EXPLORAR, MEDIR, CONTRASTAR</p><h1>Laboratorio BTC</h1><p class="muted">Hipótesis experimentales con reglas visibles y resultados reproducibles.</p></div><span class="badge warn">SIN VALIDACIÓN PREDICTIVA</span></div><div class="correlation-grid" id="correlations"></div><article class="card chart-card"><div class="card-heading"><div><h2>Correlación móvil</h2><p class="muted">Retorno de BTC del día observado frente al nivel del diferencial · últimas 30 observaciones reales de SOFR</p></div></div><div class="chart-box"><canvas id="corrChart" role="img" aria-label="Correlación móvil de 30 observaciones"></canvas></div><p class="chart-foot">Relación contemporánea, no un pronóstico. No se duplican observaciones de SOFR en fines de semana.</p></article><article class="card"><div class="card-heading"><div><h2>Hipótesis del diferencial</h2><p class="muted">Dentro de la banda: caída en 7 intervalos de observación → LONG; aumento → SHORT. Un cambio menor de 0,5 pb deja la hipótesis neutral.</p></div><span class="badge" id="hypothesis">—</span></div><p id="hypothesisDetail">—</p><p class="small">Estos términos identifican escenarios de simulación. El diferencial contenido no autoriza una operación y no se asigna una “confianza alta” sin evidencia.</p></article><article class="card"><div class="card-heading"><div><h2>Simulación histórica</h2><p class="muted">Sin optimización de parámetros · comisiones incluidas</p></div><button class="button ghost" id="exportTrades" disabled>Descargar operaciones</button></div><div class="simulation-grid" id="backtestStats"></div><p id="backtestNote" class="small">—</p><details><summary>Reglas, disponibilidad y límites de la simulación</summary><p>La señal se evalúa al cierre UTC usando SOFR de días anteriores que ya habría sido publicado según el calendario habitual de NY Fed. Entrada en la apertura de la siguiente vela; stop a 1,5 × ATR14 (media simple de rango verdadero); objetivo a 2R; salida tras 7 velas como máximo. No hay posiciones simultáneas. Si stop y objetivo se alcanzan en la misma vela, se asume stop primero; los saltos de apertura se ejecutan al precio de apertura.</p><p>Se usan velas OHLC diarias reales. No se reconstruyen máximos y mínimos desde cierres. La comisión configurada se reparte entre entrada y salida. No se incluyen financiación, deslizamiento intradía ni la publicación exacta de revisiones históricas. Se usa la última versión disponible de las series. Esta simulación no constituye una prueba fuera de muestra ni garantiza resultados.</p></details><div class="table-wrap"><table><caption>Últimas operaciones simuladas</caption><thead><tr><th>Entrada</th><th>Escenario</th><th>Salida</th><th>Resultado neto</th><th>Motivo</th></tr></thead><tbody id="backtestRows"></tbody></table></div></article></section>
-<section id="risk" class="page" hidden><div class="page-heading"><div><p class="eyebrow">PLANIFICACIÓN PERSONAL</p><h1>Riesgo y diario</h1><p class="muted">Elige tu escenario. Tus datos se guardan solo en este navegador.</p></div></div><div class="risk-grid"><article class="card"><h2>Calculadora de posición</h2><form id="riskForm" class="form-grid"><label>Escenario<select id="side"><option value="">Seleccionar</option><option>LONG</option><option>SHORT</option></select></label><label>Saldo (USDT)<input id="equity" type="number" min="0" step="any" placeholder="Ej. 1000"></label><label>Riesgo total (%)<input id="riskPct" type="number" value="0.5" min="0.01" max="100" step="any"></label><label>Apalancamiento (×)<input id="leverage" type="number" value="1" min="1" max="125" step="1"></label><label>Entrada (USD)<input id="entry" type="number" min="0" step="any" placeholder="Introduce tu precio"></label><label>Stop (USD)<input id="stop" type="number" min="0" step="any"></label><label>Objetivo (USD)<input id="target" type="number" min="0" step="any"></label><label>Comisión ida + vuelta (pb)<input id="fees" type="number" value="12" min="0" max="1000" step="any"></label><label>Margen de mantenimiento (%)<input id="mmr" type="number" value="0.5" min="0" step="any"></label><label>Margen adicional (USDT)<input id="extra" type="number" value="0" min="0" step="any"></label></form><button id="usePrice" class="text-button">Usar última cotización como entrada</button><p class="small">El riesgo total incluye comisiones estimadas hasta el stop. No incluye financiación ni deslizamiento.</p></article><article class="card"><p class="eyebrow">TU ESCENARIO</p><div id="riskOutput" aria-live="polite">Completa los precios y elige LONG o SHORT.</div><p class="small">Liquidación aproximada para margen aislado en un contrato lineal. Los tramos de mantenimiento, el mark price y las reglas de tu plataforma pueden cambiar el resultado.</p><div class="button-row"><button class="button primary" id="saveTrade" disabled>Guardar escenario</button><button class="button ghost" id="copyRisk" disabled>Copiar cálculo</button></div></article></div><article class="card"><div class="card-heading"><div><h2>Diario local</h2><p class="muted">Escenarios guardados y resultados introducidos por ti.</p></div><div class="button-row"><button id="exportJournal" class="button ghost">Exportar diario</button><button id="clearJournal" class="button ghost">Vaciar diario</button></div></div><p id="journalStats" class="small">—</p><div class="table-wrap"><table><caption>Escenarios guardados</caption><thead><tr><th>Fecha</th><th>Escenario</th><th>Entrada / stop / objetivo</th><th>Cantidad</th><th>Resultado (R)</th></tr></thead><tbody id="journalRows"></tbody></table></div></article></section>
-<section id="settings" class="page" hidden><div class="page-heading"><div><p class="eyebrow">TRANSPARENCIA Y CONTROL</p><h1>Fuentes y ajustes</h1><p class="muted">Distingue fecha de observación, última consulta y entradas manuales.</p></div></div><article class="card"><h2>Estado de las fuentes</h2><div class="table-wrap"><table><caption>Disponibilidad y fecha de los datos</caption><thead><tr><th>Fuente</th><th>Estado</th><th>Observación</th><th>Última consulta correcta</th></tr></thead><tbody id="sourceRows"></tbody></table></div><p class="small">SOFR refleja el día de operaciones indicado y se publica el siguiente día hábil, alrededor de las 08:00 de Nueva York. Los festivos de EE. UU. pueden ampliar el intervalo. La cotización BTC, los cierres UTC y las series macro no son simultáneos.</p></article><div class="bottom-grid"><article class="card"><h2>Preferencias</h2><div class="form-grid"><label>Banda orientativa (pb)<input id="band" type="number" value="5" min="1" max="100" step="1"></label><label>Consulta de datos<select id="refreshSeconds"><option value="300">Cada 5 minutos</option><option value="900">Cada 15 minutos</option><option value="1800">Cada 30 minutos</option></select></label></div><p class="small">La banda es un parámetro exploratorio. BTC se actualiza por WebSocket; al desconectarse, se consulta cada minuto.</p><label class="check"><input id="alerts" type="checkbox"> Aviso en pantalla y sonido al cambiar el régimen</label><p id="preferencesFeedback" class="small" role="status"></p></article><article class="card"><h2>Escenario manual</h2><p class="muted">Modifica solo la lectura actual. Los gráficos y la simulación conservan las series oficiales.</p><div class="form-grid"><label>IORB manual (%)<input id="manualIorb" type="number" min="0" max="30" step="any" placeholder="Automático"></label><label>SOFR manual (%)<input id="manualSofr" type="number" min="0" max="30" step="any" placeholder="Automático"></label></div><div class="button-row"><button class="button ghost" id="applyManual">Aplicar escenario</button><button class="button ghost" id="resetManual">Volver a fuentes oficiales</button></div><p id="manualFeedback" class="small" role="status"></p></article></div><article class="card"><h2>Datos y funcionamiento</h2><p class="muted">Tasas: NY Fed y FRED. BTC: Coinbase Exchange, par BTC-USD spot. Macro: FRED WTREGEN, WRESBAL y RRPONTSYD. Cada fuente puede fallar de forma independiente; no se inventan valores de sustitución.</p><p class="small">La aplicación y la ayuda están disponibles sin conexión. Las APIs nunca se guardan en el service worker. La última copia del navegador se marca como antigua y no se presenta como una señal actual. El diario y las preferencias no se envían al servidor.</p><div class="button-row"><button id="clearCache" class="button ghost">Borrar copia de datos y recargar</button><a class="button ghost" href="https://github.com/JotaTerrasa/IORB-SOFR-detector" target="_blank" rel="noopener">Código y metodología ↗</a></div></article></section>
-</main><footer><span>Datos para investigar. Hipótesis para contrastar.</span><span id="lastUpdated">—</span><span>v2 · 13/10/2026</span></footer></div>
-<dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">Cómo leer este monitor</h2><button id="closeHelp" class="button ghost">Cerrar</button></div><p><strong>IORB</strong> es la remuneración de las reservas bancarias en la Fed. <strong>SOFR</strong> mide el coste de financiación repo a un día respaldada por bonos del Tesoro.</p><p>El diferencial se expresa en puntos básicos: SOFR 3,87 % menos IORB 3,90 % equivale a <strong>−3 pb</strong>. Un SOFR persistentemente superior a IORB puede indicar presión en la financiación, pero se necesitan más indicadores para valorar el sistema.</p><p>El <strong>resumen</strong> muestra datos y contexto; <strong>liquidez macro</strong> añade TGA, reservas y reverse repo; el <strong>laboratorio</strong> examina relaciones históricas e hipótesis; <strong>riesgo y diario</strong> permite calcular y guardar escenarios propios.</p><p>El gasto neto desde el TGA puede aumentar reservas, pero alcanzar un máximo no obliga al Tesoro a gastar ni garantiza una subida de BTC. La banda, la correlación y la simulación tienen límites visibles.</p><p><a href="https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates" target="_blank" rel="noopener">Calendario y metodología de SOFR ↗</a></p></dialog>
-<div id="toast" class="toast" role="status" hidden></div>
-</body></html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#101820" />
+    <title>IORB × SOFR × BTC — Monitor de liquidez</title>
+    <meta
+      name="description"
+      content="Sigue el diferencial SOFR–IORB, Bitcoin, TGA y reservas bancarias con fuentes verificables y herramientas de análisis."
+    />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./styles.css?v=20261013_1" />
+    <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
+    <script type="module" src="./app.js?v=20261013_1"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Saltar al contenido</a>
+    <header class="header">
+      <a class="brand" href="./"
+        ><span class="brand-mark">≈</span
+        ><span
+          ><strong>IORB × SOFR <span class="brand-btc">× BTC</span></strong
+          ><small>MONITOR DE LIQUIDEZ</small></span
+        ></a
+      >
+      <div class="header-actions">
+        <span class="connection" id="status" role="status"
+          >Conectando fuentes…</span
+        ><button id="refresh" class="button primary">Actualizar</button
+        ><button id="help" class="button ghost" aria-label="Abrir ayuda">
+          ?
+        </button>
+      </div>
+    </header>
+    <div class="shell">
+      <nav class="nav" aria-label="Secciones">
+        <button
+          class="nav-item active"
+          data-page="overview"
+          aria-current="page"
+        >
+          Resumen</button
+        ><button class="nav-item" data-page="macro">Liquidez macro</button
+        ><button class="nav-item" data-page="lab">Laboratorio BTC</button
+        ><button class="nav-item" data-page="risk">Riesgo y diario</button
+        ><button class="nav-item" data-page="settings">
+          Fuentes y ajustes
+        </button>
+      </nav>
+      <main id="main" tabindex="-1">
+        <div id="banner" class="banner" role="status" hidden></div>
+        <section id="overview" class="page">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">EL PULSO DEL MERCADO</p>
+              <h1>Liquidez, con contexto.</h1>
+              <p class="muted">
+                Una lectura del mercado monetario para entender el entorno de
+                Bitcoin.
+              </p>
+            </div>
+            <div class="refresh-note" id="refreshNote">
+              Las tasas se publican diariamente; BTC cotiza continuamente.
+            </div>
+          </div>
+          <div class="kpi-grid">
+            <article class="card kpi">
+              <div class="kpi-title">
+                Bitcoin <span class="tag">USD · spot</span>
+              </div>
+              <strong id="btcPrice">—</strong>
+              <p id="btcChange">Esperando cotización</p>
+              <small id="btcDate">Coinbase BTC-USD</small>
+            </article>
+            <article class="card kpi">
+              <div class="kpi-title">
+                <abbr title="Tipo que paga la Fed sobre las reservas bancarias"
+                  >IORB</abbr
+                >
+                <span class="tag">Fed</span>
+              </div>
+              <strong id="iorbValue">—</strong>
+              <p>Remuneración de reservas</p>
+              <small id="iorbDate">Esperando fuente</small>
+            </article>
+            <article class="card kpi">
+              <div class="kpi-title">
+                <abbr
+                  title="Coste de financiación a un día, con bonos del Tesoro como garantía"
+                  >SOFR</abbr
+                >
+                <span class="tag">NY Fed</span>
+              </div>
+              <strong id="sofrValue">—</strong>
+              <p>Financiación repo a un día</p>
+              <small id="sofrDate">Esperando fuente</small>
+            </article>
+            <article class="card kpi spread-kpi">
+              <div class="kpi-title">
+                SOFR − IORB <span class="tag">puntos básicos</span>
+              </div>
+              <strong id="spreadValue">—</strong>
+              <p id="spreadChange">Comparación en la misma fecha</p>
+              <small id="spreadDate">1 pb = 0,01 puntos porcentuales</small>
+            </article>
+          </div>
+          <article class="card reading">
+            <div>
+              <p class="eyebrow">LECTURA DE FINANCIACIÓN</p>
+              <h2 id="readingTitle">Esperando tasas verificadas</h2>
+              <p id="readingDetail" class="muted">
+                El diferencial describe condiciones de financiación; no
+                determina el próximo movimiento de BTC.
+              </p>
+            </div>
+            <div class="reading-side">
+              <span id="readingBadge" class="badge">SIN DATOS</span>
+              <p id="readingTrend">—</p>
+            </div>
+          </article>
+          <article class="card chart-card">
+            <div class="card-heading">
+              <div>
+                <h2>Bitcoin y el diferencial</h2>
+                <p class="muted">
+                  Cierre diario UTC de BTC · SOFR − IORB en puntos básicos
+                </p>
+              </div>
+              <div class="chart-actions">
+                <div class="segments" aria-label="Ventana histórica">
+                  <button data-range="90" aria-pressed="true">90 días</button
+                  ><button data-range="180" aria-pressed="false">
+                    180 días</button
+                  ><button data-range="365" aria-pressed="false">1 año</button>
+                </div>
+                <button class="button ghost" id="export" disabled>
+                  Descargar CSV
+                </button>
+              </div>
+            </div>
+            <div class="chart-box">
+              <canvas
+                id="mainChart"
+                role="img"
+                aria-label="Histórico de Bitcoin y diferencial SOFR menos IORB"
+              ></canvas>
+              <p id="chartEmpty" class="chart-empty" hidden>
+                Histórico no disponible. Las tarjetas de tasas pueden seguir
+                funcionando.
+              </p>
+            </div>
+            <p class="chart-foot" id="chartNote">
+              Los fines de semana no tienen una nueva observación de SOFR.
+            </p>
+          </article>
+          <div class="bottom-grid">
+            <article class="card">
+              <p class="eyebrow">RELACIÓN CON BTC</p>
+              <h2 id="corrValue">—</h2>
+              <p id="corrDetail" class="muted">
+                Correlación descriptiva de 30 observaciones.
+              </p>
+              <p class="small">
+                Una correlación pequeña o variable no respalda una señal de
+                compra o venta.
+              </p>
+              <button class="text-button" data-jump="lab">
+                Explorar el laboratorio →
+              </button>
+            </article>
+            <article class="card">
+              <p class="eyebrow">MÁS ALLÁ DEL SOFR</p>
+              <div class="mini-grid">
+                <div><small>TGA</small><strong id="miniTga">—</strong></div>
+                <div>
+                  <small>Reservas bancarias</small
+                  ><strong id="miniReserves">—</strong>
+                </div>
+              </div>
+              <p id="miniMacroNote" class="muted">
+                Datos semanales de la Fed, en miles de millones de USD.
+              </p>
+              <button class="text-button" data-jump="macro">
+                Ver contexto de liquidez →
+              </button>
+            </article>
+          </div>
+        </section>
+        <section id="macro" class="page" hidden>
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">EL CONTEXTO COMPLETO</p>
+              <h1>¿Dónde está la liquidez?</h1>
+              <p class="muted">
+                TGA, reservas y reverse repo tienen funciones y frecuencias
+                distintas.
+              </p>
+            </div>
+          </div>
+          <div class="macro-grid" id="macroCards"></div>
+          <article class="card chart-card">
+            <div class="card-heading">
+              <div>
+                <h2>TGA y reservas bancarias</h2>
+                <p class="muted">
+                  Media semanal · miles de millones de USD · ejes separados
+                </p>
+              </div>
+            </div>
+            <div class="chart-box">
+              <canvas
+                id="macroChart"
+                role="img"
+                aria-label="TGA y reservas bancarias semanales"
+              ></canvas>
+            </div>
+            <p id="macroNote" class="chart-foot">—</p>
+          </article>
+          <div class="bottom-grid">
+            <article class="card">
+              <h2>Si el TGA aumenta</h2>
+              <p class="muted">
+                El Tesoro acumula efectivo por recaudación y emisiones. Si el
+                resto del balance de la Fed no cambia, puede reducir las
+                reservas bancarias. Los flujos desde reverse repo pueden
+                amortiguar ese efecto.
+              </p>
+            </article>
+            <article class="card">
+              <h2>Si el TGA disminuye</h2>
+              <p class="muted">
+                El gasto del Tesoro devuelve fondos al sistema bancario. El
+                efecto neto depende de las emisiones, otros pasivos y las
+                operaciones de la Fed. Un nivel alto no fija una fecha de giro
+                ni un objetivo para BTC.
+              </p>
+            </article>
+          </div>
+          <p class="source-note">
+            Metodología:
+            <a
+              href="https://www.federalreserve.gov/econres/notes/feds-notes/fluctuations-in-the-treasury-general-account-and-their-effect-on-the-feds-balance-sheet-20250806.html"
+              target="_blank"
+              rel="noopener"
+              >Reserva Federal: TGA y reservas ↗</a
+            >. WTREGEN y WRESBAL son medias semanales, no saldos diarios. El
+            cambio mostrado compara las dos últimas observaciones de cada serie.
+          </p>
+        </section>
+        <section id="lab" class="page" hidden>
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">EXPLORAR, MEDIR, CONTRASTAR</p>
+              <h1>Laboratorio BTC</h1>
+              <p class="muted">
+                Hipótesis experimentales con reglas visibles y resultados
+                reproducibles.
+              </p>
+            </div>
+            <span class="badge warn">SIN VALIDACIÓN PREDICTIVA</span>
+          </div>
+          <div class="correlation-grid" id="correlations"></div>
+          <article class="card chart-card">
+            <div class="card-heading">
+              <div>
+                <h2>Correlación móvil</h2>
+                <p class="muted">
+                  Retorno de BTC del día observado frente al nivel del
+                  diferencial · últimas 30 observaciones reales de SOFR
+                </p>
+              </div>
+            </div>
+            <div class="chart-box">
+              <canvas
+                id="corrChart"
+                role="img"
+                aria-label="Correlación móvil de 30 observaciones"
+              ></canvas>
+            </div>
+            <p class="chart-foot">
+              Relación contemporánea, no un pronóstico. No se duplican
+              observaciones de SOFR en fines de semana.
+            </p>
+          </article>
+          <article class="card">
+            <div class="card-heading">
+              <div>
+                <h2>Hipótesis del diferencial</h2>
+                <p class="muted">
+                  Dentro de la banda: caída en 7 intervalos de observación →
+                  LONG; aumento → SHORT. Un cambio menor de 0,5 pb deja la
+                  hipótesis neutral.
+                </p>
+              </div>
+              <span class="badge" id="hypothesis">—</span>
+            </div>
+            <p id="hypothesisDetail">—</p>
+            <p class="small">
+              Estos términos identifican escenarios de simulación. El
+              diferencial contenido no autoriza una operación y no se asigna una
+              “confianza alta” sin evidencia.
+            </p>
+          </article>
+          <article class="card">
+            <div class="card-heading">
+              <div>
+                <h2>Simulación histórica</h2>
+                <p class="muted">
+                  Sin optimización de parámetros · comisiones incluidas
+                </p>
+              </div>
+              <button class="button ghost" id="exportTrades" disabled>
+                Descargar operaciones
+              </button>
+            </div>
+            <div class="simulation-grid" id="backtestStats"></div>
+            <p id="backtestNote" class="small">—</p>
+            <details>
+              <summary>
+                Reglas, disponibilidad y límites de la simulación
+              </summary>
+              <p>
+                La señal se evalúa al cierre UTC usando SOFR de días anteriores
+                que ya habría sido publicado según el calendario habitual de NY
+                Fed. Entrada en la apertura de la siguiente vela; stop a 1,5 ×
+                ATR14 (media simple de rango verdadero); objetivo a 2R; salida
+                tras 7 velas como máximo. No hay posiciones simultáneas. Si stop
+                y objetivo se alcanzan en la misma vela, se asume stop primero;
+                los saltos de apertura se ejecutan al precio de apertura.
+              </p>
+              <p>
+                Se usan velas OHLC diarias reales. No se reconstruyen máximos y
+                mínimos desde cierres. La comisión configurada se reparte entre
+                entrada y salida. No se incluyen financiación, deslizamiento
+                intradía ni la publicación exacta de revisiones históricas. Se
+                usa la última versión disponible de las series. Esta simulación
+                no constituye una prueba fuera de muestra ni garantiza
+                resultados.
+              </p>
+            </details>
+            <div class="table-wrap">
+              <table>
+                <caption>
+                  Últimas operaciones simuladas
+                </caption>
+                <thead>
+                  <tr>
+                    <th>Entrada</th>
+                    <th>Escenario</th>
+                    <th>Salida</th>
+                    <th>Resultado neto</th>
+                    <th>Motivo</th>
+                  </tr>
+                </thead>
+                <tbody id="backtestRows"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+        <section id="risk" class="page" hidden>
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">PLANIFICACIÓN PERSONAL</p>
+              <h1>Riesgo y diario</h1>
+              <p class="muted">
+                Elige tu escenario. Tus datos se guardan solo en este navegador.
+              </p>
+            </div>
+          </div>
+          <div class="risk-grid">
+            <article class="card">
+              <h2>Calculadora de posición</h2>
+              <form id="riskForm" class="form-grid">
+                <label
+                  >Escenario<select id="side">
+                    <option value="">Seleccionar</option>
+                    <option>LONG</option>
+                    <option>SHORT</option>
+                  </select></label
+                ><label
+                  >Saldo (USDT)<input
+                    id="equity"
+                    type="number"
+                    min="0"
+                    step="any"
+                    placeholder="Ej. 1000" /></label
+                ><label
+                  >Riesgo total (%)<input
+                    id="riskPct"
+                    type="number"
+                    value="0.5"
+                    min="0.01"
+                    max="100"
+                    step="any" /></label
+                ><label
+                  >Apalancamiento (×)<input
+                    id="leverage"
+                    type="number"
+                    value="1"
+                    min="1"
+                    max="125"
+                    step="1" /></label
+                ><label
+                  >Entrada (USD)<input
+                    id="entry"
+                    type="number"
+                    min="0"
+                    step="any"
+                    placeholder="Introduce tu precio" /></label
+                ><label
+                  >Stop (USD)<input
+                    id="stop"
+                    type="number"
+                    min="0"
+                    step="any" /></label
+                ><label
+                  >Objetivo (USD)<input
+                    id="target"
+                    type="number"
+                    min="0"
+                    step="any" /></label
+                ><label
+                  >Comisión ida + vuelta (pb)<input
+                    id="fees"
+                    type="number"
+                    value="12"
+                    min="0"
+                    max="1000"
+                    step="any" /></label
+                ><label
+                  >Margen de mantenimiento (%)<input
+                    id="mmr"
+                    type="number"
+                    value="0.5"
+                    min="0"
+                    step="any" /></label
+                ><label
+                  >Margen adicional (USDT)<input
+                    id="extra"
+                    type="number"
+                    value="0"
+                    min="0"
+                    step="any"
+                /></label>
+              </form>
+              <button id="usePrice" class="text-button">
+                Usar última cotización como entrada
+              </button>
+              <p class="small">
+                El riesgo total incluye comisiones estimadas hasta el stop. No
+                incluye financiación ni deslizamiento.
+              </p>
+            </article>
+            <article class="card">
+              <p class="eyebrow">TU ESCENARIO</p>
+              <div id="riskOutput" aria-live="polite">
+                Completa los precios y elige LONG o SHORT.
+              </div>
+              <p class="small">
+                Liquidación aproximada para margen aislado en un contrato
+                lineal. Los tramos de mantenimiento, el mark price y las reglas
+                de tu plataforma pueden cambiar el resultado.
+              </p>
+              <div class="button-row">
+                <button class="button primary" id="saveTrade" disabled>
+                  Guardar escenario</button
+                ><button class="button ghost" id="copyRisk" disabled>
+                  Copiar cálculo
+                </button>
+              </div>
+            </article>
+          </div>
+          <article class="card">
+            <div class="card-heading">
+              <div>
+                <h2>Diario local</h2>
+                <p class="muted">
+                  Escenarios guardados y resultados introducidos por ti.
+                </p>
+              </div>
+              <div class="button-row">
+                <button id="exportJournal" class="button ghost">
+                  Exportar diario</button
+                ><button id="clearJournal" class="button ghost">
+                  Vaciar diario
+                </button>
+              </div>
+            </div>
+            <p id="journalStats" class="small">—</p>
+            <div class="table-wrap">
+              <table>
+                <caption>
+                  Escenarios guardados
+                </caption>
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Escenario</th>
+                    <th>Entrada / stop / objetivo</th>
+                    <th>Cantidad</th>
+                    <th>Resultado (R)</th>
+                  </tr>
+                </thead>
+                <tbody id="journalRows"></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+        <section id="settings" class="page" hidden>
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">TRANSPARENCIA Y CONTROL</p>
+              <h1>Fuentes y ajustes</h1>
+              <p class="muted">
+                Distingue fecha de observación, última consulta y entradas
+                manuales.
+              </p>
+            </div>
+          </div>
+          <article class="card">
+            <h2>Estado de las fuentes</h2>
+            <div class="table-wrap">
+              <table>
+                <caption>
+                  Disponibilidad y fecha de los datos
+                </caption>
+                <thead>
+                  <tr>
+                    <th>Fuente</th>
+                    <th>Estado</th>
+                    <th>Observación</th>
+                    <th>Última consulta correcta</th>
+                  </tr>
+                </thead>
+                <tbody id="sourceRows"></tbody>
+              </table>
+            </div>
+            <p class="small">
+              SOFR refleja el día de operaciones indicado y se publica el
+              siguiente día hábil, alrededor de las 08:00 de Nueva York. Los
+              festivos de EE. UU. pueden ampliar el intervalo. La cotización
+              BTC, los cierres UTC y las series macro no son simultáneos.
+            </p>
+          </article>
+          <div class="bottom-grid">
+            <article class="card">
+              <h2>Preferencias</h2>
+              <div class="form-grid">
+                <label
+                  >Banda orientativa (pb)<input
+                    id="band"
+                    type="number"
+                    value="5"
+                    min="1"
+                    max="100"
+                    step="1" /></label
+                ><label
+                  >Consulta de datos<select id="refreshSeconds">
+                    <option value="300">Cada 5 minutos</option>
+                    <option value="900">Cada 15 minutos</option>
+                    <option value="1800">Cada 30 minutos</option>
+                  </select></label
+                >
+              </div>
+              <p class="small">
+                La banda es un parámetro exploratorio. BTC se actualiza por
+                WebSocket; al desconectarse, se consulta cada minuto.
+              </p>
+              <label class="check"
+                ><input id="alerts" type="checkbox" /> Aviso en pantalla y
+                sonido al cambiar el régimen</label
+              >
+              <p id="preferencesFeedback" class="small" role="status"></p>
+            </article>
+            <article class="card">
+              <h2>Escenario manual</h2>
+              <p class="muted">
+                Modifica solo la lectura actual. Los gráficos y la simulación
+                conservan las series oficiales.
+              </p>
+              <div class="form-grid">
+                <label
+                  >IORB manual (%)<input
+                    id="manualIorb"
+                    type="number"
+                    min="0"
+                    max="30"
+                    step="any"
+                    placeholder="Automático" /></label
+                ><label
+                  >SOFR manual (%)<input
+                    id="manualSofr"
+                    type="number"
+                    min="0"
+                    max="30"
+                    step="any"
+                    placeholder="Automático"
+                /></label>
+              </div>
+              <div class="button-row">
+                <button class="button ghost" id="applyManual">
+                  Aplicar escenario</button
+                ><button class="button ghost" id="resetManual">
+                  Volver a fuentes oficiales
+                </button>
+              </div>
+              <p id="manualFeedback" class="small" role="status"></p>
+            </article>
+          </div>
+          <article class="card">
+            <h2>Datos y funcionamiento</h2>
+            <p class="muted">
+              Tasas: NY Fed y FRED. BTC: Coinbase Exchange, par BTC-USD spot.
+              Macro: FRED WTREGEN, WRESBAL y RRPONTSYD. Cada fuente puede fallar
+              de forma independiente; no se inventan valores de sustitución.
+            </p>
+            <p class="small">
+              La aplicación y la ayuda están disponibles sin conexión. Las APIs
+              nunca se guardan en el service worker. La última copia del
+              navegador se marca como antigua y no se presenta como una señal
+              actual. El diario y las preferencias no se envían al servidor.
+            </p>
+            <div class="button-row">
+              <button id="clearCache" class="button ghost">
+                Borrar copia de datos y recargar</button
+              ><a
+                class="button ghost"
+                href="https://github.com/JotaTerrasa/IORB-SOFR-detector"
+                target="_blank"
+                rel="noopener"
+                >Código y metodología ↗</a
+              >
+            </div>
+          </article>
+        </section>
+      </main>
+      <footer>
+        <span>Datos para investigar. Hipótesis para contrastar.</span
+        ><span id="lastUpdated">—</span><span>v2 · 13/10/2026</span>
+      </footer>
+    </div>
+    <dialog id="helpDialog" aria-labelledby="helpTitle">
+      <div class="dialog-head">
+        <h2 id="helpTitle">Cómo leer este monitor</h2>
+        <button id="closeHelp" class="button ghost">Cerrar</button>
+      </div>
+      <p>
+        <strong>IORB</strong> es la remuneración de las reservas bancarias en la
+        Fed. <strong>SOFR</strong> mide el coste de financiación repo a un día
+        respaldada por bonos del Tesoro.
+      </p>
+      <p>
+        El diferencial se expresa en puntos básicos: SOFR 3,87 % menos IORB 3,90
+        % equivale a <strong>−3 pb</strong>. Un SOFR persistentemente superior a
+        IORB puede indicar presión en la financiación, pero se necesitan más
+        indicadores para valorar el sistema.
+      </p>
+      <p>
+        El <strong>resumen</strong> muestra datos y contexto;
+        <strong>liquidez macro</strong> añade TGA, reservas y reverse repo; el
+        <strong>laboratorio</strong> examina relaciones históricas e hipótesis;
+        <strong>riesgo y diario</strong> permite calcular y guardar escenarios
+        propios.
+      </p>
+      <p>
+        El gasto neto desde el TGA puede aumentar reservas, pero alcanzar un
+        máximo no obliga al Tesoro a gastar ni garantiza una subida de BTC. La
+        banda, la correlación y la simulación tienen límites visibles.
+      </p>
+      <p>
+        <a
+          href="https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates"
+          target="_blank"
+          rel="noopener"
+          >Calendario y metodología de SOFR ↗</a
+        >
+      </p>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+  </body>
+</html>
