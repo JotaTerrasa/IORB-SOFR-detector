@@ -18,6 +18,11 @@ export function enforceRateLimit(req, { bucket, max = 120, windowMs = 60_000 }) 
   const now = Date.now();
   const key = `${bucket}:${ip}`;
   const store = getStore();
+  // Best effort per instance; purge expired entries and bound memory.
+  if (store.size > 5000) {
+    for (const [k, v] of store) if (v.resetAt <= now) store.delete(k);
+    if (store.size > 10000) store.delete(store.keys().next().value);
+  }
   const current = store.get(key);
 
   if (!current || current.resetAt <= now) {
