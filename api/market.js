@@ -8,17 +8,15 @@ export default async function handler(req, res) {
       if (!Number.isFinite(Number(stats.last)) || Number(stats.last) <= 0)
         throw new Error("Precio inválido");
       res.setHeader("Cache-Control", "public, s-maxage=15");
-      res
-        .status(200)
-        .json({
-          price: Number(stats.last),
-          change24h:
-            Number(stats.open) > 0
-              ? (Number(stats.last) / Number(stats.open) - 1) * 100
-              : null,
-          fetchedAt: new Date().toISOString(),
-          source: "Coinbase BTC-USD spot",
-        });
+      res.status(200).json({
+        price: Number(stats.last),
+        change24h:
+          Number(stats.open) > 0
+            ? (Number(stats.last) / Number(stats.open) - 1) * 100
+            : null,
+        fetchedAt: new Date().toISOString(),
+        source: "Coinbase BTC-USD spot",
+      });
       return;
     }
     const days = Number(req.query.days);
@@ -73,13 +71,11 @@ export default async function handler(req, res) {
       "Cache-Control",
       "public, s-maxage=300, stale-while-revalidate=300",
     );
-    res
-      .status(200)
-      .json({
-        candles,
-        source: "Coinbase BTC-USD · velas diarias UTC cerradas",
-        fetchedAt: new Date().toISOString(),
-      });
+    res.status(200).json({
+      candles,
+      source: "Coinbase BTC-USD · velas diarias UTC cerradas",
+      fetchedAt: new Date().toISOString(),
+    });
   } catch {
     fail(res);
   }

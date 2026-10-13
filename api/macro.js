@@ -44,10 +44,8 @@ export default async function handler(req, res) {
       ? "public, s-maxage=900, stale-while-revalidate=300"
       : "no-store",
   );
-  res
-    .status(200)
-    .json({
-      generatedAt: new Date().toISOString(),
-      ...Object.fromEntries(entries),
-    });
+  res.status(200).json({
+    generatedAt: new Date().toISOString(),
+    ...Object.fromEntries(entries),
+  });
 }
