@@ -1138,13 +1138,7 @@ window.addEventListener("offline", () => {
   toast("Sin conexión. Las fechas de los datos siguen visibles.");
 });
 if ("serviceWorker" in navigator) {
-  const wasControlled = Boolean(navigator.serviceWorker.controller);
-  let refreshingVersion = false;
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (!wasControlled || refreshingVersion) return;
-    refreshingVersion = true;
-    location.reload();
-  });
+  // Prepare updates without reloading an active page or interrupting gestures.
   navigator.serviceWorker
     .register(`./sw.js?v=${VERSION}`, { updateViaCache: "none" })
     .then((reg) => reg.update())
