@@ -79,3 +79,101 @@ test("Vertical swipes and small finger movements do not move chart dates", async
   assert.equal(isHorizontalDrag(start, { x: 160, y: 110 }), true);
   assert.equal(isHorizontalDrag(start, { x: 40, y: 110 }), true);
 });
+
+test("Rotation cancels active touches and fresh gestures use the new chart dimensions", async (t) => {
+  const { attachChartRange, resetChartRanges } = await import(
+    "../lib/chart-range.js"
+  );
+  const viewport = new EventTarget();
+  const previousWindow = globalThis.window;
+  globalThis.window = viewport;
+  t.after(() => {
+    if (previousWindow === undefined) delete globalThis.window;
+    else globalThis.window = previousWindow;
+  });
+  const controls = new Map();
+  const panel = {
+    querySelector(selector) {
+      if (!controls.has(selector)) controls.set(selector, {});
+      return controls.get(selector);
+    },
+  };
+  const captured = new Set();
+  const classes = new Set();
+  const canvas = Object.assign(new EventTarget(), {
+    classList: {
+      add: (...names) => names.forEach((name) => classes.add(name)),
+      remove: (...names) => names.forEach((name) => classes.delete(name)),
+    },
+    parentElement: { parentElement: { querySelector: () => panel } },
+    getBoundingClientRect: () => ({
+      left: 0,
+      top: 0,
+      width: chart.width,
+      height: chart.height,
+    }),
+    setPointerCapture: (id) => captured.add(id),
+    hasPointerCapture: (id) => captured.has(id),
+    releasePointerCapture: (id) => captured.delete(id),
+  });
+  const labels = Array.from({ length: 100 }, (_, i) =>
+    new Date(Date.UTC(2026, 0, i + 1)).toISOString().slice(0, 10),
+  );
+  const chart = {
+    width: 300,
+    height: 420,
+    chartArea: { left: 0, right: 300, top: 0, bottom: 420 },
+    data: { labels, datasets: [{ data: labels.map((_, i) => i) }] },
+    update() {},
+  };
+  const touch = (type, id, x, y) =>
+    canvas.dispatchEvent(
+      Object.assign(new Event(type), {
+        pointerId: id,
+        pointerType: "touch",
+        button: 0,
+        clientX: x,
+        clientY: y,
+      }),
+    );
+  attachChartRange("rotation-test", chart, canvas);
+  touch("pointerdown", 1, 100, 100);
+  touch("pointerdown", 2, 200, 100);
+  chart.width = 700;
+  chart.height = 300;
+  chart.chartArea.right = 700;
+  chart.chartArea.bottom = 300;
+  viewport.dispatchEvent(new Event("resize"));
+  assert.equal(captured.size, 0);
+  assert.equal(classes.has("chart-dragging"), false);
+  touch("pointermove", 1, 20, 100);
+  assert.deepEqual(chart.data.labels, labels);
+  touch("pointerdown", 3, 250, 100);
+  touch("pointerdown", 4, 450, 100);
+  touch("pointermove", 3, 150, 100);
+  touch("pointermove", 4, 550, 100);
+  assert.equal(chart.data.labels.length, 50);
+  touch("pointerup", 3, 150, 100);
+  touch("pointerup", 4, 550, 100);
+  const zoomed = [...chart.data.labels];
+  touch("pointerdown", 5, 350, 100);
+  touch("pointermove", 5, 355, 200);
+  assert.deepEqual(chart.data.labels, zoomed);
+  touch("pointercancel", 5, 355, 200);
+  touch("pointerdown", 6, 350, 100);
+  touch("pointermove", 6, 420, 100);
+  assert.equal(chart.data.labels.length, 50);
+  assert.equal(
+    labels.indexOf(chart.data.labels[0]),
+    labels.indexOf(zoomed[0]) - 5,
+  );
+  touch("pointerup", 6, 420, 100);
+  const panned = [...chart.data.labels];
+  chart.width = 300;
+  chart.height = 420;
+  chart.chartArea.right = 300;
+  chart.chartArea.bottom = 420;
+  viewport.dispatchEvent(new Event("resize"));
+  assert.deepEqual(chart.data.labels, panned);
+  resetChartRanges();
+});
