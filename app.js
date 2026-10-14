@@ -1,3 +1,4 @@
+import { initCalendar } from "./lib/calendar-view.js";
 import { initDesk, renderDesk } from "./lib/desk-view.js";
 import {
   day,
@@ -9,7 +10,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_4",
+const VERSION = "20261014_5",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -721,6 +722,7 @@ function savePrefs() {
   storage.set("prefs", prefs);
   text("preferencesFeedback", "Preferencias guardadas en este navegador.");
 }
+initCalendar();
 $("refresh").addEventListener("click", refresh);
 for (const b of document.querySelectorAll("[data-page]"))
   b.addEventListener("click", () => switchPage(b.dataset.page));

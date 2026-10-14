@@ -11,6 +11,7 @@ const apiNames = new Set([
   "desk",
   "quotes",
   "projects",
+  "calendar",
 ]);
 const types = {
   ".html": "text/html; charset=utf-8",

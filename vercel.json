@@ -66,6 +66,9 @@
     "api/projects.js": {
       "maxDuration": 30,
       "includeFiles": "data/*-snapshot.json"
+    },
+    "api/calendar.js": {
+      "maxDuration": 30
     }
   },
   "git": {

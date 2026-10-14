@@ -15,9 +15,9 @@
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_4" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_5" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
-    <script type="module" src="./app.js?v=20261014_4"></script>
+    <script type="module" src="./app.js?v=20261014_5"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -240,34 +240,53 @@
           <article class="card">
             <h2>Próximos catalizadores</h2>
             <p class="muted">
-              Comprueba el calendario oficial antes de una publicación. Horarios
-              del BLS en Nueva York; la diferencia con Madrid cambia en las
-              semanas de ajuste de horario.
+              Selecciona un evento para ver sus próximas fechas aquí mismo.
             </p>
-            <div class="button-row">
-              <a
+            <div class="button-row" aria-label="Calendarios económicos">
+              <button
                 class="button ghost"
-                href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
-                target="_blank"
-                rel="noopener"
-                >Reuniones de la Fed</a
-              ><a
-                class="button ghost"
-                href="https://www.bls.gov/schedule/news_release/cpi.htm"
-                target="_blank"
-                rel="noopener"
-                >Inflación · CPI</a
-              ><a
-                class="button ghost"
-                href="https://www.bls.gov/schedule/news_release/empsit.htm"
-                target="_blank"
-                rel="noopener"
-                >Empleo · NFP</a
+                data-calendar="fed"
+                aria-expanded="false"
+                aria-controls="calendarPanel"
               >
+                Reuniones de la Fed
+              </button>
+              <button
+                class="button ghost"
+                data-calendar="cpi"
+                aria-expanded="false"
+                aria-controls="calendarPanel"
+              >
+                Inflación · CPI
+              </button>
+              <button
+                class="button ghost"
+                data-calendar="jobs"
+                aria-expanded="false"
+                aria-controls="calendarPanel"
+              >
+                Empleo · NFP
+              </button>
             </div>
-            <p class="note">
-              Datos de fuentes públicas para analizar el mercado.
-            </p>
+            <section
+              id="calendarPanel"
+              class="calendar-panel"
+              aria-labelledby="calendarTitle"
+              hidden
+            >
+              <div class="card-heading">
+                <h3 id="calendarTitle"></h3>
+                <a id="calendarSource" target="_blank" rel="noopener"
+                  >Ver fuente oficial ↗</a
+                >
+              </div>
+              <p id="calendarExplanation" class="muted"></p>
+              <p id="calendarStatus" class="muted" role="status"></p>
+              <ul id="calendarRows" class="calendar-list"></ul>
+              <button id="calendarRetry" class="button ghost" hidden>
+                Reintentar calendario
+              </button>
+            </section>
           </article>
         </section>
         <section id="projects" class="page" hidden>
