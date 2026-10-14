@@ -1,0 +1,446 @@
+{
+  "generatedAt": "2026-10-14T18:40:36.979Z",
+  "sources": {
+    "fed": {
+      "title": "Reuniones de la Fed",
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "rows": [
+        {
+          "start": "2021-01-26",
+          "date": "2021-01-27",
+          "projections": false
+        },
+        {
+          "start": "2021-03-16",
+          "date": "2021-03-17",
+          "projections": true
+        },
+        {
+          "start": "2021-04-27",
+          "date": "2021-04-28",
+          "projections": false
+        },
+        {
+          "start": "2021-06-15",
+          "date": "2021-06-16",
+          "projections": true
+        },
+        {
+          "start": "2021-07-27",
+          "date": "2021-07-28",
+          "projections": false
+        },
+        {
+          "start": "2021-09-21",
+          "date": "2021-09-22",
+          "projections": true
+        },
+        {
+          "start": "2021-11-02",
+          "date": "2021-11-03",
+          "projections": false
+        },
+        {
+          "start": "2021-12-14",
+          "date": "2021-12-15",
+          "projections": true
+        },
+        {
+          "start": "2022-01-25",
+          "date": "2022-01-26",
+          "projections": false
+        },
+        {
+          "start": "2022-03-15",
+          "date": "2022-03-16",
+          "projections": true
+        },
+        {
+          "start": "2022-05-03",
+          "date": "2022-05-04",
+          "projections": false
+        },
+        {
+          "start": "2022-06-14",
+          "date": "2022-06-15",
+          "projections": true
+        },
+        {
+          "start": "2022-07-26",
+          "date": "2022-07-27",
+          "projections": false
+        },
+        {
+          "start": "2022-09-20",
+          "date": "2022-09-21",
+          "projections": true
+        },
+        {
+          "start": "2022-11-01",
+          "date": "2022-11-02",
+          "projections": false
+        },
+        {
+          "start": "2022-12-13",
+          "date": "2022-12-14",
+          "projections": true
+        },
+        {
+          "start": "2023-01-31",
+          "date": "2023-02-01",
+          "projections": false
+        },
+        {
+          "start": "2023-03-21",
+          "date": "2023-03-22",
+          "projections": true
+        },
+        {
+          "start": "2023-05-02",
+          "date": "2023-05-03",
+          "projections": false
+        },
+        {
+          "start": "2023-06-13",
+          "date": "2023-06-14",
+          "projections": true
+        },
+        {
+          "start": "2023-07-25",
+          "date": "2023-07-26",
+          "projections": false
+        },
+        {
+          "start": "2023-09-19",
+          "date": "2023-09-20",
+          "projections": true
+        },
+        {
+          "start": "2023-10-31",
+          "date": "2023-11-01",
+          "projections": false
+        },
+        {
+          "start": "2023-12-12",
+          "date": "2023-12-13",
+          "projections": true
+        },
+        {
+          "start": "2024-01-30",
+          "date": "2024-01-31",
+          "projections": false
+        },
+        {
+          "start": "2024-03-19",
+          "date": "2024-03-20",
+          "projections": true
+        },
+        {
+          "start": "2024-04-30",
+          "date": "2024-05-01",
+          "projections": false
+        },
+        {
+          "start": "2024-06-11",
+          "date": "2024-06-12",
+          "projections": true
+        },
+        {
+          "start": "2024-07-30",
+          "date": "2024-07-31",
+          "projections": false
+        },
+        {
+          "start": "2024-09-17",
+          "date": "2024-09-18",
+          "projections": true
+        },
+        {
+          "start": "2024-11-06",
+          "date": "2024-11-07",
+          "projections": false
+        },
+        {
+          "start": "2024-12-17",
+          "date": "2024-12-18",
+          "projections": true
+        },
+        {
+          "start": "2025-01-28",
+          "date": "2025-01-29",
+          "projections": false
+        },
+        {
+          "start": "2025-03-18",
+          "date": "2025-03-19",
+          "projections": true
+        },
+        {
+          "start": "2025-05-06",
+          "date": "2025-05-07",
+          "projections": false
+        },
+        {
+          "start": "2025-06-17",
+          "date": "2025-06-18",
+          "projections": true
+        },
+        {
+          "start": "2025-07-29",
+          "date": "2025-07-30",
+          "projections": false
+        },
+        {
+          "start": "2025-09-16",
+          "date": "2025-09-17",
+          "projections": true
+        },
+        {
+          "start": "2025-10-28",
+          "date": "2025-10-29",
+          "projections": false
+        },
+        {
+          "start": "2025-12-09",
+          "date": "2025-12-10",
+          "projections": true
+        },
+        {
+          "start": "2026-01-27",
+          "date": "2026-01-28",
+          "projections": false
+        },
+        {
+          "start": "2026-03-17",
+          "date": "2026-03-18",
+          "projections": true
+        },
+        {
+          "start": "2026-04-28",
+          "date": "2026-04-29",
+          "projections": false
+        },
+        {
+          "start": "2026-06-16",
+          "date": "2026-06-17",
+          "projections": true
+        },
+        {
+          "start": "2026-07-28",
+          "date": "2026-07-29",
+          "projections": false
+        },
+        {
+          "start": "2026-09-15",
+          "date": "2026-09-16",
+          "projections": true
+        },
+        {
+          "start": "2026-10-27",
+          "date": "2026-10-28",
+          "projections": false
+        },
+        {
+          "start": "2026-12-08",
+          "date": "2026-12-09",
+          "projections": true
+        },
+        {
+          "start": "2027-01-26",
+          "date": "2027-01-27",
+          "projections": false
+        },
+        {
+          "start": "2027-03-16",
+          "date": "2027-03-17",
+          "projections": true
+        },
+        {
+          "start": "2027-04-27",
+          "date": "2027-04-28",
+          "projections": false
+        },
+        {
+          "start": "2027-06-08",
+          "date": "2027-06-09",
+          "projections": true
+        },
+        {
+          "start": "2027-07-27",
+          "date": "2027-07-28",
+          "projections": false
+        },
+        {
+          "start": "2027-09-14",
+          "date": "2027-09-15",
+          "projections": true
+        },
+        {
+          "start": "2027-10-26",
+          "date": "2027-10-27",
+          "projections": false
+        },
+        {
+          "start": "2027-12-07",
+          "date": "2027-12-08",
+          "projections": true
+        }
+      ],
+      "fetchedAt": "2026-10-14T18:40:36.620Z"
+    },
+    "cpi": {
+      "title": "Inflación · CPI",
+      "url": "https://www.bls.gov/schedule/news_release/cpi.htm",
+      "rows": [
+        {
+          "date": "2026-11-10",
+          "period": "October 2026",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2026-12-10",
+          "period": "November 2026",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-01-13",
+          "period": "December 2026",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-02-11",
+          "period": "January 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-03-10",
+          "period": "February 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-04-13",
+          "period": "March 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-05-12",
+          "period": "April 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-06-10",
+          "period": "May 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-07-14",
+          "period": "June 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-08-11",
+          "period": "July 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-09-14",
+          "period": "August 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-10-14",
+          "period": "September 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-11-10",
+          "period": "October 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-12-10",
+          "period": "November 2027",
+          "time": "08:30 AM"
+        }
+      ],
+      "fetchedAt": "2026-10-14T10:06:48.977Z"
+    },
+    "jobs": {
+      "title": "Empleo · NFP",
+      "url": "https://www.bls.gov/schedule/news_release/empsit.htm",
+      "rows": [
+        {
+          "date": "2026-11-06",
+          "period": "October 2026",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2026-12-04",
+          "period": "November 2026",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-01-08",
+          "period": "December 2026",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-02-05",
+          "period": "January 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-03-05",
+          "period": "February 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-04-02",
+          "period": "March 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-05-07",
+          "period": "April 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-06-04",
+          "period": "May 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-07-02",
+          "period": "June 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-08-06",
+          "period": "July 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-09-03",
+          "period": "August 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-10-08",
+          "period": "September 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-11-05",
+          "period": "October 2027",
+          "time": "08:30 AM"
+        },
+        {
+          "date": "2027-12-03",
+          "period": "November 2027",
+          "time": "08:30 AM"
+        }
+      ],
+      "fetchedAt": "2026-10-14T10:06:48.990Z"
+    }
+  }
+}
