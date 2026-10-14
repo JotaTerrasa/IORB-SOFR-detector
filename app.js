@@ -21,7 +21,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_31",
+const VERSION = "20261014_32",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -190,7 +190,7 @@ async function source(key, url, parser = (x) => x, format = "json") {
     }
   }
 }
-function switchPage(id) {
+function switchPage(id, addHistory = false) {
   if (!$(id)?.classList.contains("page")) id = "desk";
   document.querySelectorAll(".page").forEach((p) => (p.hidden = p.id !== id));
   document.querySelectorAll("[data-page]").forEach((b) => {
@@ -198,7 +198,9 @@ function switchPage(id) {
     if (b.dataset.page === id) b.setAttribute("aria-current", "page");
     else b.removeAttribute("aria-current");
   });
-  history.replaceState(null, "", "#/" + id);
+  const route = "#/" + id;
+  if (addHistory && location.hash !== route) history.pushState(null, "", route);
+  else history.replaceState(null, "", route);
   window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   Object.values(charts).forEach((c) => c.resize());
 }
@@ -978,9 +980,9 @@ function savePrefs() {
 initCalendar();
 $("refresh").addEventListener("click", refresh);
 for (const b of document.querySelectorAll("[data-page]"))
-  b.addEventListener("click", () => switchPage(b.dataset.page));
+  b.addEventListener("click", () => switchPage(b.dataset.page, true));
 for (const b of document.querySelectorAll("[data-jump]"))
-  b.addEventListener("click", () => switchPage(b.dataset.jump));
+  b.addEventListener("click", () => switchPage(b.dataset.jump, true));
 window.addEventListener("hashchange", () =>
   switchPage(location.hash.slice(1).replace(/^\//, "") || "desk"),
 );
