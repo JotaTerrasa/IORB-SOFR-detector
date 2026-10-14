@@ -70,3 +70,12 @@ test("Two fingers expand and contract the visible interval without changing data
   );
   assert.deepEqual(touchWindow(100, 25, 74, [], [], 500, 0.5), [25, 74]);
 });
+
+test("Vertical swipes and small finger movements do not move chart dates", async () => {
+  const { isHorizontalDrag } = await import("../lib/chart-range.js");
+  const start = { x: 100, y: 100 };
+  assert.equal(isHorizontalDrag(start, { x: 105, y: 180 }), false);
+  assert.equal(isHorizontalDrag(start, { x: 104, y: 102 }), false);
+  assert.equal(isHorizontalDrag(start, { x: 160, y: 110 }), true);
+  assert.equal(isHorizontalDrag(start, { x: 40, y: 110 }), true);
+});
