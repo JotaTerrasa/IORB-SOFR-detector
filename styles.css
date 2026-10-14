@@ -1103,3 +1103,10 @@ code {
 #projects > details {
   margin-bottom: 20px;
 }
+#desk > details {
+  margin-bottom: 20px;
+}
+.presentation #presentation {
+  border-color: var(--accent);
+  color: var(--accent);
+}

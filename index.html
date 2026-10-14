@@ -15,9 +15,9 @@
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_8" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_9" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
-    <script type="module" src="./app.js?v=20261014_8"></script>
+    <script type="module" src="./app.js?v=20261014_9"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -32,6 +32,8 @@
       <div class="header-actions">
         <span class="connection" id="status" role="status"
           >Conectando fuentes…</span
+        ><button id="presentation" class="button ghost" aria-pressed="false">
+          Modo presentación</button
         ><button id="refresh" class="button primary">Actualizar</button
         ><button id="help" class="button ghost" aria-label="Abrir ayuda">
           ?
@@ -72,12 +74,23 @@
               <button id="deskCopy" class="button primary">
                 Copiar parte diario</button
               ><button id="deskExport" class="button ghost">
-                Descargar CSV</button
-              ><button id="presentation" class="button ghost">
-                Modo presentación
+                Descargar CSV
               </button>
             </div>
           </div>
+          <details id="deskReportDetails" class="card">
+            <summary>Revisar parte diario antes de compartir</summary>
+            <p class="muted">
+              Revisa las fechas y los avisos de consulta antes de usar estas
+              cifras.
+            </p>
+            <button id="deskReportDownload" class="button ghost" disabled>
+              Descargar parte TXT
+            </button>
+            <pre id="deskReport" class="report-text">
+Esperando observaciones…</pre
+            >
+          </details>
           <div
             id="marketBrief"
             class="brief-grid"
@@ -410,6 +423,18 @@
             <button id="projectCopy" class="button primary" disabled>
               Copiar resumen de proyectos
             </button>
+            <button id="projectExport" class="button ghost" disabled>
+              Descargar datos de proyectos CSV
+            </button>
+            <button id="projectReportDownload" class="button ghost" disabled>
+              Descargar resumen TXT
+            </button>
+            <p class="note">
+              El CSV incluye todo el histórico disponible y las ventanas
+              publicadas, sin aplicar el buscador ni el rango del gráfico.
+              Celdas de observación vacías indican ventanas móviles sin fecha
+              diaria publicada.
+            </p>
             <pre id="projectReport" class="report-text">
 Esperando datos de proyectos…</pre
             >
