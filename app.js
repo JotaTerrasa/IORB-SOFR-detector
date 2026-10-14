@@ -1,5 +1,9 @@
-import { readChartView, saveChartView } from "./lib/chart-preferences.js";
-import { attachChartRange } from "./lib/chart-range.js";
+import {
+  readChartView,
+  saveChartView,
+  clearChartViews,
+} from "./lib/chart-preferences.js";
+import { attachChartRange, resetChartRanges } from "./lib/chart-range.js";
 import { chartUnit, chartValue, chartDate } from "./lib/chart-format.js";
 import { initCalendar } from "./lib/calendar-view.js";
 import { initDesk, renderDesk } from "./lib/desk-view.js";
@@ -13,7 +17,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_20",
+const VERSION = "20261014_21",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -1153,3 +1157,28 @@ for (const wrapper of document.querySelectorAll(".table-wrap")) {
   if (wrapper.querySelector("table"))
     observer.observe(wrapper.querySelector("table"));
 }
+
+$("resetCharts").addEventListener("click", () => {
+  const cleared = clearChartViews();
+  resetChartRanges();
+  document
+    .querySelectorAll(".chart-expanded")
+    .forEach((box) => box.classList.remove("chart-expanded"));
+  document
+    .querySelectorAll(".chart-tools button[aria-pressed]")
+    .forEach((button) => {
+      button.textContent = "Ampliar";
+      button.setAttribute("aria-pressed", "false");
+    });
+  $("projectRange").value = "90";
+  renderHistory();
+  renderMacro();
+  renderDesk(data, health);
+  Object.values(charts).forEach((c) => c.resize());
+  text(
+    "resetChartsFeedback",
+    cleared
+      ? "Gráficas restablecidas. Se han borrado las fechas y ampliaciones guardadas."
+      : "Gráficas restablecidas en esta sesión. El navegador no ha permitido borrar las preferencias guardadas.",
+  );
+});

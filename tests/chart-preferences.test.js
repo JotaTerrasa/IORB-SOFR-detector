@@ -38,3 +38,31 @@ test("Invalid saved data and unavailable storage do not prevent rendering", () =
     ),
   );
 });
+
+test("Reset removes only chart preferences and the project history selection", async () => {
+  const { clearChartViews } = await import("../lib/chart-preferences.js");
+  const data = new Map([
+    ["market-chart-view:v1:a", "{}"],
+    ["market-chart-view:v1:b", "{}"],
+    ["market-project-range:v1", "all"],
+    ["other-setting", "keep"],
+    ["cached-data", "keep"],
+  ]);
+  const storage = {
+    get length() {
+      return data.size;
+    },
+    key: (i) => [...data.keys()][i],
+    removeItem: (k) => data.delete(k),
+  };
+  assert.equal(clearChartViews(storage), true);
+  assert.deepEqual([...data.keys()], ["other-setting", "cached-data"]);
+  assert.equal(
+    clearChartViews({
+      get length() {
+        throw Error("blocked");
+      },
+    }),
+    false,
+  );
+});
