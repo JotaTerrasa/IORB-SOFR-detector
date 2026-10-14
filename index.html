@@ -15,12 +15,12 @@
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_20" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_21" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
     <link rel="modulepreload" href="./lib/desk-view.js" />
     <link rel="modulepreload" href="./lib/desk-analytics.js" />
     <link rel="modulepreload" href="./lib/analytics.js" />
-    <script type="module" src="./app.js?v=20261014_20"></script>
+    <script type="module" src="./app.js?v=20261014_21"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -968,6 +968,17 @@ Esperando datos de proyectos…</pre
               <p id="manualFeedback" class="small" role="status"></p>
             </article>
           </div>
+          <article class="card">
+            <h2>Preferencias de las gráficas</h2>
+            <p class="muted">
+              Borra las fechas y ampliaciones guardadas de todas las gráficas.
+              El histórico de proyectos volverá a 90 días.
+            </p>
+            <button id="resetCharts" class="button ghost">
+              Restablecer todas las gráficas
+            </button>
+            <p id="resetChartsFeedback" class="small" role="status"></p>
+          </article>
           <article class="card">
             <h2>Datos y funcionamiento</h2>
             <p class="muted">
