@@ -12,7 +12,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_17",
+const VERSION = "20261014_18",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -193,7 +193,42 @@ function switchPage(id) {
   window.scrollTo({ top: 0 });
   Object.values(charts).forEach((c) => c.resize());
 }
+const pendingCharts = new Map();
+const chartFrames = new Map();
+const chartObserver = new IntersectionObserver(
+  (entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) paintChart(entry.target.id);
+    }
+  },
+  { rootMargin: "200px" },
+);
+function paintChart(id) {
+  if (chartFrames.has(id) || !pendingCharts.has(id)) return;
+  chartFrames.set(
+    id,
+    requestAnimationFrame(() => {
+      chartFrames.delete(id);
+      const args = pendingCharts.get(id);
+      if (!args) return;
+      pendingCharts.delete(id);
+      drawChartNow(id, ...args);
+    }),
+  );
+}
 function chart(id, labels, datasets, scales = {}) {
+  pendingCharts.set(id, [labels, datasets, scales]);
+  const canvas = $(id);
+  chartObserver.observe(canvas);
+  const rect = canvas.getBoundingClientRect();
+  if (
+    !canvas.closest("[hidden]") &&
+    rect.bottom >= -200 &&
+    rect.top <= innerHeight + 200
+  )
+    paintChart(id);
+}
+function drawChartNow(id, labels, datasets, scales = {}) {
   if (typeof Chart === "undefined") {
     toast("No se ha podido cargar el motor de gráficos.");
     return;
@@ -273,6 +308,7 @@ function chart(id, labels, datasets, scales = {}) {
     ],
     options: {
       responsive: true,
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
       maintainAspectRatio: false,
       animation: false,
       layout: { padding: { top: 8, right: 8 } },
