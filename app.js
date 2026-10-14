@@ -1,3 +1,4 @@
+import { readChartView, saveChartView } from "./lib/chart-preferences.js";
 import { attachChartRange } from "./lib/chart-range.js";
 import { chartUnit, chartValue, chartDate } from "./lib/chart-format.js";
 import { initCalendar } from "./lib/calendar-view.js";
@@ -12,7 +13,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_19",
+const VERSION = "20261014_20",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -195,6 +196,10 @@ function switchPage(id) {
 }
 for (const canvas of document.querySelectorAll(".chart-box canvas")) {
   const box = canvas.parentElement;
+  box.classList.toggle(
+    "chart-expanded",
+    readChartView(canvas.id).expanded === true,
+  );
   if (canvas.id !== "curveChart") {
     const slot = document.createElement("div");
     slot.className = "chart-range-slot";
@@ -379,7 +384,13 @@ function drawChartNow(id, labels, datasets, scales = {}) {
     const tools = box.nextElementSibling;
     const expand = node("button", "Ampliar", "button ghost");
     expand.type = "button";
-    expand.setAttribute("aria-pressed", "false");
+    expand.textContent = box.classList.contains("chart-expanded")
+      ? "Reducir"
+      : "Ampliar";
+    expand.setAttribute(
+      "aria-pressed",
+      String(box.classList.contains("chart-expanded")),
+    );
     expand.setAttribute(
       "aria-label",
       "Ampliar " + canvas.getAttribute("aria-label"),
@@ -388,6 +399,7 @@ function drawChartNow(id, labels, datasets, scales = {}) {
       const active = box.classList.toggle("chart-expanded");
       expand.textContent = active ? "Reducir" : "Ampliar";
       expand.setAttribute("aria-pressed", String(active));
+      saveChartView(id, { expanded: active });
       charts[id]?.resize();
     });
     const save = node("button", "Descargar PNG", "button ghost");
