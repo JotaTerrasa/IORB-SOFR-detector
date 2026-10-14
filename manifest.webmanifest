@@ -1,6 +1,6 @@
 {
-  "name": "IORB × SOFR × BTC — Liquidez",
-  "short_name": "Liquidez BTC",
+  "name": "Market Desk — Liquidez y DeFi",
+  "short_name": "Market Desk",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#101820",

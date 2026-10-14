@@ -5,6 +5,7 @@ import {
   repoRows,
   yieldDeltaBp,
   commonDate,
+  calendarWindow,
 } from "../lib/desk-analytics.js";
 import { collectQuotes, collectProjects } from "../api/_desk-data.js";
 test("Daily TGA closing record uses modern closing-balance field, without turning null into zero", () => {
@@ -145,4 +146,29 @@ test("STONK contract must match StonkFun, even when an impostor uses the same ti
   } finally {
     globalThis.fetch = old;
   }
+});
+
+test("Calendar window uses dates rather than observation counts and keeps gaps", () => {
+  const rows = [
+    { date: "2026-09-14", value: 1 },
+    { date: "2026-09-15", value: 2 },
+    { date: "2026-10-14", value: 3 },
+  ];
+  assert.deepEqual(calendarWindow(rows, 30), rows.slice(1));
+  assert.deepEqual(calendarWindow(rows, "all"), rows);
+  assert.deepEqual(calendarWindow([], 30), []);
+  assert.deepEqual(calendarWindow(rows, "bad"), []);
+});
+
+test("Calendar charts keep the last published observation for each day", () => {
+  assert.deepEqual(
+    calendarWindow(
+      [
+        { date: "2026-10-14", value: 1 },
+        { date: "2026-10-14", value: 2 },
+      ],
+      30,
+    ),
+    [{ date: "2026-10-14", value: 2 }],
+  );
 });

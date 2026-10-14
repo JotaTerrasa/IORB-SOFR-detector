@@ -15,9 +15,9 @@
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_3" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_4" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
-    <script type="module" src="./app.js?v=20261014_3"></script>
+    <script type="module" src="./app.js?v=20261014_4"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -25,8 +25,8 @@
       <a class="brand" href="./"
         ><span class="brand-mark">≈</span
         ><span
-          ><strong>IORB × SOFR <span class="brand-btc">× BTC</span></strong
-          ><small>MONITOR DE LIQUIDEZ</small></span
+          ><strong>Market <span class="brand-btc">Desk</span></strong
+          ><small>LIQUIDEZ · MACRO · DEFI</small></span
         ></a
       >
       <div class="header-actions">
@@ -62,7 +62,7 @@
               <p class="eyebrow">
                 FINANCIACIÓN · BONOS · DIVISAS · VOLATILIDAD
               </p>
-              <h1>Todo el contexto, en una mesa.</h1>
+              <h1>Lee el mercado con contexto.</h1>
               <p class="muted">
                 Financiación, bonos, divisas y volatilidad con fuentes y fechas
                 verificables.
@@ -78,6 +78,25 @@
               </button>
             </div>
           </div>
+          <div
+            id="marketBrief"
+            class="brief-grid"
+            aria-label="Lectura rápida del mercado"
+          ></div>
+          <div class="section-tools">
+            <span class="eyebrow">EXPLORAR LA MESA</span>
+            <div class="button-row">
+              <button class="button ghost" data-scroll="quotesBlock">
+                Cotizaciones</button
+              ><button class="button ghost" data-scroll="curveBlock">
+                Tipos y curva</button
+              ><button class="button ghost" data-scroll="tgaBlock">
+                TGA y repos</button
+              ><button class="button ghost" data-jump="projects">
+                Actividad DeFi →
+              </button>
+            </div>
+          </div>
           <article class="card reading">
             <div>
               <p class="eyebrow">ANTES DE INTERPRETAR</p>
@@ -87,7 +106,9 @@
           </article>
           <article class="card">
             <div class="card-heading">
-              <h2>Bonos, divisas y volatilidad</h2>
+              <h2 id="quotesBlock" tabindex="-1">
+                Bonos, divisas y volatilidad
+              </h2>
               <span class="tag">Fuente: TradingView</span>
             </div>
             <p id="deskQuoteStatus" class="muted">Consultando cotizaciones…</p>
@@ -114,7 +135,7 @@
           </article>
           <div class="macro-grid">
             <article class="card chart-card">
-              <h2>Curva del Tesoro</h2>
+              <h2 id="curveBlock" tabindex="-1">Curva del Tesoro</h2>
               <p id="curveDate" class="muted">Esperando cierres comunes.</p>
               <div class="chart-box">
                 <canvas
@@ -139,7 +160,7 @@
           <div class="macro-grid">
             <article class="card chart-card">
               <div class="card-heading">
-                <h2>TGA · saldo al cierre</h2>
+                <h2 id="tgaBlock" tabindex="-1">TGA · saldo al cierre</h2>
                 <strong id="dailyTga">—</strong>
               </div>
               <p id="dailyTgaDate" class="muted">Esperando Tesoro.</p>
@@ -253,7 +274,7 @@
           <div class="page-heading">
             <div>
               <p class="eyebrow">DEFiLLAMA · ACTIVIDAD DE PROYECTOS</p>
-              <h1>Los proyectos y su actividad.</h1>
+              <h1>Actividad real. Contexto DeFi.</h1>
               <p class="muted">
                 Contrasta actividad, capital bloqueado y liquidez de cada
                 ecosistema.
@@ -267,8 +288,37 @@
               >Documentación DeFiLlama</a
             >
           </div>
+          <div class="section-tools">
+            <div>
+              <p class="eyebrow">EXPLORAR PROYECTOS</p>
+              <div class="button-row">
+                <button class="button ghost" data-scroll="tvlBlock">TVL</button
+                ><button class="button ghost" data-scroll="stonkBlock">
+                  STONK</button
+                ><button class="button ghost" data-scroll="activityBlock">
+                  Actividad</button
+                ><button class="button ghost" data-scroll="chainBlock">
+                  Ecosistemas
+                </button>
+              </div>
+            </div>
+            <label class="range-label"
+              >Histórico desde último dato<select id="projectRange">
+                <option value="30">30 días</option>
+                <option value="90" selected>90 días</option>
+                <option value="all">Todo disponible</option>
+              </select></label
+            >
+          </div>
+          <div
+            id="projectBrief"
+            class="brief-grid"
+            aria-label="Resumen de proyectos"
+          ></div>
           <article class="card">
-            <h2>Aster y Pump · capital bloqueado</h2>
+            <h2 id="tvlBlock" tabindex="-1">
+              Aster y Pump · capital bloqueado
+            </h2>
             <p id="projectStatus" class="muted">Consultando DeFiLlama…</p>
             <p id="projectErrors" class="negative" role="status"></p>
             <div class="table-wrap">
@@ -294,6 +344,7 @@
           <div class="macro-grid">
             <article class="card chart-card">
               <h2>Aster · TVL</h2>
+              <p id="asterRangeNote" class="muted"></p>
               <div class="chart-box">
                 <canvas
                   id="asterTvlChart"
@@ -304,6 +355,7 @@
             </article>
             <article class="card chart-card">
               <h2>Pump · TVL</h2>
+              <p id="pumpRangeNote" class="muted"></p>
               <div class="chart-box">
                 <canvas
                   id="pumpTvlChart"
@@ -315,7 +367,7 @@
           </div>
           <article class="card">
             <div class="card-heading">
-              <h2>STONK · StonkFun en Solana</h2>
+              <h2 id="stonkBlock" tabindex="-1">STONK · StonkFun en Solana</h2>
               <a
                 class="button ghost"
                 href="https://stonkfun.xyz/revenue"
@@ -354,6 +406,7 @@
                 aria-label="Ingresos y recompras diarias declaradas por StonkFun en días UTC cerrados"
               ></canvas>
             </div>
+            <p id="stonkRangeNote" class="muted"></p>
             <p id="stonkPartial" class="note"></p>
             <p class="note">
               Fuente oficial: ingresos en USD reclamados al tesoro y gasto en
@@ -389,7 +442,22 @@
             </details>
           </article>
           <article class="card">
-            <h2>Actividad por producto</h2>
+            <div class="card-heading">
+              <div>
+                <h2 id="activityBlock" tabindex="-1">Actividad por producto</h2>
+                <p class="muted">
+                  Compara las métricas que publica cada protocolo.
+                </p>
+              </div>
+              <label class="search-label"
+                >Buscar producto<input
+                  id="projectSearch"
+                  type="search"
+                  placeholder="Aster, Pump, Stonk…"
+                  autocomplete="off"
+              /></label>
+            </div>
+            <p id="activityCount" class="muted" role="status"></p>
             <div class="table-wrap">
               <table>
                 <thead>
@@ -416,7 +484,7 @@
             </p>
           </article>
           <article class="card">
-            <h2>Liquidez del ecosistema</h2>
+            <h2 id="chainBlock" tabindex="-1">Liquidez del ecosistema</h2>
             <div class="table-wrap">
               <table>
                 <thead>
@@ -437,6 +505,40 @@
               participación en los ingresos de Hyperliquid.
             </p>
           </article>
+          <details class="card glossary">
+            <summary>Cómo leer estas métricas</summary>
+            <div class="glossary-grid">
+              <div>
+                <h3>TVL</h3>
+                <p>
+                  Valor de los activos depositados en un protocolo. Puede variar
+                  por entradas, salidas y por el precio de esos activos.
+                </p>
+              </div>
+              <div>
+                <h3>Comisiones e ingresos</h3>
+                <p>
+                  Las comisiones las pagan los usuarios. Los ingresos son la
+                  parte retenida según la metodología de cada producto.
+                </p>
+              </div>
+              <div>
+                <h3>Liquidez y volumen</h3>
+                <p>
+                  La liquidez describe los activos disponibles en un pool. El
+                  volumen mide cuánto se negoció durante una ventana.
+                </p>
+              </div>
+              <div>
+                <h3>Fechas y datos ausentes</h3>
+                <p>
+                  Consulta indica cuándo se obtuvo el dato; observación, a qué
+                  día corresponde. Un guion es ausencia de dato. Las copias
+                  conservan su fecha.
+                </p>
+              </div>
+            </div>
+          </details>
         </section>
         <section id="overview" class="page">
           <div class="page-heading">
@@ -767,7 +869,7 @@
       </main>
       <footer>
         <span>Mercado, liquidez y proyectos.</span
-        ><span id="lastUpdated">—</span><span>v3 · 14/10/2026</span>
+        ><span id="lastUpdated">—</span><span>v3.1 · 14/10/2026</span>
       </footer>
     </div>
     <dialog id="helpDialog" aria-labelledby="helpTitle">

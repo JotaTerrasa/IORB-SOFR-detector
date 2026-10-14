@@ -9,7 +9,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_3",
+const VERSION = "20261014_4",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -207,7 +207,10 @@ function chart(id, labels, datasets, scales = {}) {
         },
         tooltip: {
           callbacks: {
-            title: (items) => date(items[0]?.label),
+            title: (items) =>
+              /^\d{4}-\d{2}-\d{2}$/.test(items[0]?.label)
+                ? date(items[0]?.label)
+                : items[0]?.label,
             label: (ctx) =>
               `${ctx.dataset.label}: ${fmt(ctx.parsed.y, ctx.dataset.yAxisID === "corr" ? 3 : 1)}`,
           },
@@ -220,7 +223,10 @@ function chart(id, labels, datasets, scales = {}) {
             color: "#8296a6",
             maxTicksLimit: 7,
             font: { size: 10 },
-            callback: (v, i) => date(labels[i]).slice(0, 5),
+            callback: (v, i) =>
+              /^\d{4}-\d{2}-\d{2}$/.test(labels[i])
+                ? date(labels[i]).slice(0, 5)
+                : labels[i],
           },
         },
         ...scales,
