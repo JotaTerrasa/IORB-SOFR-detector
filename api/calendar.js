@@ -1,3 +1,4 @@
+import { readSnapshot } from "./_snapshot.js";
 import { begin } from "./_shared.js";
 import { calendarSources, parseCalendar } from "../lib/calendar-data.js";
 const cache = new Map();
@@ -25,6 +26,11 @@ export default async function handler(req, res) {
     res.status(200).json(value);
   } catch {
     if (old) return res.status(200).json({ ...old, stale: true });
+    try {
+      const copy = (await readSnapshot("calendar")).sources?.[key];
+      if (copy?.rows?.length && Number.isFinite(Date.parse(copy.fetchedAt)))
+        return res.status(200).json({ ...copy, stale: true });
+    } catch {}
     res.status(502).json({
       error:
         "No se ha podido consultar el calendario oficial. Reintenta o abre la fuente.",

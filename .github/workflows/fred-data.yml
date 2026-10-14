@@ -33,6 +33,8 @@ jobs:
         working-directory: app
       - run: node scripts/update-desk.mjs
         working-directory: app
+      - run: node scripts/update-calendar.mjs
+        working-directory: app
       - name: Publish only data files
         working-directory: feed
         run: |
