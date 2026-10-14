@@ -1225,3 +1225,10 @@ code {
   margin: 8px 0;
   font-size: 11px;
 }
+
+canvas.chart-interactive {
+  cursor: grab;
+}
+canvas.chart-dragging {
+  cursor: grabbing;
+}

@@ -18,3 +18,10 @@ test("Zoom and pan remain within history, including small series", () => {
   assert.deepEqual(zoomWindow(100, 0, 49, 1, -0.5), [0, 49]);
   assert.deepEqual(zoomWindow(1, 0, 0, 0.5), [0, 0]);
 });
+
+test("Wheel zoom preserves the date under the pointer and clamps at history limits", async () => {
+  const { anchoredWindow } = await import("../lib/chart-range.js");
+  assert.deepEqual(anchoredWindow(100, 0, 99, 0.5, 0), [0, 49]);
+  assert.deepEqual(anchoredWindow(100, 0, 99, 0.5, 1), [50, 99]);
+  assert.deepEqual(anchoredWindow(100, 50, 99, 2, 1), [0, 99]);
+});
