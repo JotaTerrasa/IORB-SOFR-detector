@@ -68,7 +68,8 @@
       "includeFiles": "data/*-snapshot.json"
     },
     "api/calendar.js": {
-      "maxDuration": 30
+      "maxDuration": 30,
+      "includeFiles": "data/calendar-snapshot.json"
     }
   },
   "git": {
