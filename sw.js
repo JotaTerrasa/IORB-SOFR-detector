@@ -1,9 +1,9 @@
-const CACHE = "liquidity-shell-20261014-28";
+const CACHE = "liquidity-shell-20261014-29";
 const SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=20261014_28",
-  "./app.js?v=20261014_28",
+  "./styles.css?v=20261014_29",
+  "./app.js?v=20261014_29",
   "./lib/page-start.js",
   "./lib/analytics.js",
   "./lib/chart-range.js",
@@ -23,7 +23,9 @@ self.addEventListener("install", (e) =>
   e.waitUntil(
     caches
       .open(CACHE)
-      .then((c) => c.addAll(SHELL))
+      .then((c) =>
+        c.addAll(SHELL.map((url) => new Request(url, { cache: "reload" }))),
+      )
       .then(() => self.skipWaiting()),
   ),
 );
@@ -60,7 +62,7 @@ self.addEventListener("fetch", (e) => {
         const cached = await caches.match(r);
         if (cached) return cached;
       }
-      return fetch(r);
+      return fetch(r, { cache: "no-store" });
     })()
       .then((res) => {
         if (
