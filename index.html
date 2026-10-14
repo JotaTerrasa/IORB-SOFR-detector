@@ -15,9 +15,9 @@
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_1" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_2" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
-    <script type="module" src="./app.js?v=20261014_1"></script>
+    <script type="module" src="./app.js?v=20261014_2"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -49,8 +49,6 @@
         >
           Resumen</button
         ><button class="nav-item" data-page="macro">Liquidez macro</button
-        ><button class="nav-item" data-page="lab">Laboratorio BTC</button
-        ><button class="nav-item" data-page="risk">Riesgo y diario</button
         ><button class="nav-item" data-page="settings">
           Fuentes y ajustes
         </button>
@@ -652,9 +650,6 @@
                 Una correlación pequeña o variable no respalda una señal de
                 compra o venta.
               </p>
-              <button class="text-button" data-jump="lab">
-                Explorar el laboratorio →
-              </button>
             </article>
             <article class="card">
               <p class="eyebrow">MÁS ALLÁ DEL SOFR</p>
@@ -735,265 +730,7 @@
             cambio mostrado compara las dos últimas observaciones de cada serie.
           </p>
         </section>
-        <section id="lab" class="page" hidden>
-          <div class="page-heading">
-            <div>
-              <p class="eyebrow">EXPLORAR, MEDIR, CONTRASTAR</p>
-              <h1>Laboratorio BTC</h1>
-              <p class="muted">
-                Hipótesis experimentales con reglas visibles y resultados
-                reproducibles.
-              </p>
-            </div>
-            <span class="badge warn">SIN VALIDACIÓN PREDICTIVA</span>
-          </div>
-          <div class="correlation-grid" id="correlations"></div>
-          <article class="card chart-card">
-            <div class="card-heading">
-              <div>
-                <h2>Correlación móvil</h2>
-                <p class="muted">
-                  Retorno de BTC del día observado frente al nivel del
-                  diferencial · últimas 30 observaciones reales de SOFR
-                </p>
-              </div>
-            </div>
-            <div class="chart-box">
-              <canvas
-                id="corrChart"
-                role="img"
-                aria-label="Correlación móvil de 30 observaciones"
-              ></canvas>
-            </div>
-            <p class="chart-foot">
-              Relación contemporánea, no un pronóstico. No se duplican
-              observaciones de SOFR en fines de semana.
-            </p>
-          </article>
-          <article class="card">
-            <div class="card-heading">
-              <div>
-                <h2>Hipótesis del diferencial</h2>
-                <p class="muted">
-                  Dentro de la banda: caída en 7 intervalos de observación →
-                  LONG; aumento → SHORT. Un cambio menor de 0,5 pb deja la
-                  hipótesis neutral.
-                </p>
-              </div>
-              <span class="badge" id="hypothesis">—</span>
-            </div>
-            <p id="hypothesisDetail">—</p>
-            <p class="small">
-              Estos términos identifican escenarios de simulación. El
-              diferencial contenido no autoriza una operación y no se asigna una
-              “confianza alta” sin evidencia.
-            </p>
-          </article>
-          <article class="card">
-            <div class="card-heading">
-              <div>
-                <h2>Simulación histórica</h2>
-                <p class="muted">
-                  Sin optimización de parámetros · comisiones incluidas
-                </p>
-              </div>
-              <button class="button ghost" id="exportTrades" disabled>
-                Descargar operaciones
-              </button>
-            </div>
-            <div class="simulation-grid" id="backtestStats"></div>
-            <p id="backtestNote" class="small">—</p>
-            <details>
-              <summary>
-                Reglas, disponibilidad y límites de la simulación
-              </summary>
-              <p>
-                La señal se evalúa al cierre UTC usando SOFR de días anteriores
-                que ya habría sido publicado según el calendario habitual de NY
-                Fed. Entrada en la apertura de la siguiente vela; stop a 1,5 ×
-                ATR14 (media simple de rango verdadero); objetivo a 2R; salida
-                tras 7 velas como máximo. No hay posiciones simultáneas. Si stop
-                y objetivo se alcanzan en la misma vela, se asume stop primero;
-                los saltos de apertura se ejecutan al precio de apertura.
-              </p>
-              <p>
-                Se usan velas OHLC diarias reales. No se reconstruyen máximos y
-                mínimos desde cierres. La comisión configurada se reparte entre
-                entrada y salida. No se incluyen financiación, deslizamiento
-                intradía ni la publicación exacta de revisiones históricas. Se
-                usa la última versión disponible de las series. Esta simulación
-                no constituye una prueba fuera de muestra ni garantiza
-                resultados.
-              </p>
-            </details>
-            <div class="table-wrap">
-              <table>
-                <caption>
-                  Últimas operaciones simuladas
-                </caption>
-                <thead>
-                  <tr>
-                    <th>Entrada</th>
-                    <th>Escenario</th>
-                    <th>Salida</th>
-                    <th>Resultado neto</th>
-                    <th>Motivo</th>
-                  </tr>
-                </thead>
-                <tbody id="backtestRows"></tbody>
-              </table>
-            </div>
-          </article>
-        </section>
-        <section id="risk" class="page" hidden>
-          <div class="page-heading">
-            <div>
-              <p class="eyebrow">PLANIFICACIÓN PERSONAL</p>
-              <h1>Riesgo y diario</h1>
-              <p class="muted">
-                Elige tu escenario. Tus datos se guardan solo en este navegador.
-              </p>
-            </div>
-          </div>
-          <div class="risk-grid">
-            <article class="card">
-              <h2>Calculadora de posición</h2>
-              <form id="riskForm" class="form-grid">
-                <label
-                  >Escenario<select id="side">
-                    <option value="">Seleccionar</option>
-                    <option>LONG</option>
-                    <option>SHORT</option>
-                  </select></label
-                ><label
-                  >Saldo (USDT)<input
-                    id="equity"
-                    type="number"
-                    min="0"
-                    step="any"
-                    placeholder="Ej. 1000" /></label
-                ><label
-                  >Riesgo total (%)<input
-                    id="riskPct"
-                    type="number"
-                    value="0.5"
-                    min="0.01"
-                    max="100"
-                    step="any" /></label
-                ><label
-                  >Apalancamiento (×)<input
-                    id="leverage"
-                    type="number"
-                    value="1"
-                    min="1"
-                    max="125"
-                    step="1" /></label
-                ><label
-                  >Entrada (USD)<input
-                    id="entry"
-                    type="number"
-                    min="0"
-                    step="any"
-                    placeholder="Introduce tu precio" /></label
-                ><label
-                  >Stop (USD)<input
-                    id="stop"
-                    type="number"
-                    min="0"
-                    step="any" /></label
-                ><label
-                  >Objetivo (USD)<input
-                    id="target"
-                    type="number"
-                    min="0"
-                    step="any" /></label
-                ><label
-                  >Comisión ida + vuelta (pb)<input
-                    id="fees"
-                    type="number"
-                    value="12"
-                    min="0"
-                    max="1000"
-                    step="any" /></label
-                ><label
-                  >Margen de mantenimiento (%)<input
-                    id="mmr"
-                    type="number"
-                    value="0.5"
-                    min="0"
-                    step="any" /></label
-                ><label
-                  >Margen adicional (USDT)<input
-                    id="extra"
-                    type="number"
-                    value="0"
-                    min="0"
-                    step="any"
-                /></label>
-              </form>
-              <button id="usePrice" class="text-button">
-                Usar última cotización como entrada
-              </button>
-              <p class="small">
-                El riesgo total incluye comisiones estimadas hasta el stop. No
-                incluye financiación ni deslizamiento.
-              </p>
-            </article>
-            <article class="card">
-              <p class="eyebrow">TU ESCENARIO</p>
-              <div id="riskOutput" aria-live="polite">
-                Completa los precios y elige LONG o SHORT.
-              </div>
-              <p class="small">
-                Liquidación aproximada para margen aislado en un contrato
-                lineal. Los tramos de mantenimiento, el mark price y las reglas
-                de tu plataforma pueden cambiar el resultado.
-              </p>
-              <div class="button-row">
-                <button class="button primary" id="saveTrade" disabled>
-                  Guardar escenario</button
-                ><button class="button ghost" id="copyRisk" disabled>
-                  Copiar cálculo
-                </button>
-              </div>
-            </article>
-          </div>
-          <article class="card">
-            <div class="card-heading">
-              <div>
-                <h2>Diario local</h2>
-                <p class="muted">
-                  Escenarios guardados y resultados introducidos por ti.
-                </p>
-              </div>
-              <div class="button-row">
-                <button id="exportJournal" class="button ghost">
-                  Exportar diario</button
-                ><button id="clearJournal" class="button ghost">
-                  Vaciar diario
-                </button>
-              </div>
-            </div>
-            <p id="journalStats" class="small">—</p>
-            <div class="table-wrap">
-              <table>
-                <caption>
-                  Escenarios guardados
-                </caption>
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Escenario</th>
-                    <th>Entrada / stop / objetivo</th>
-                    <th>Cantidad</th>
-                    <th>Resultado (R)</th>
-                  </tr>
-                </thead>
-                <tbody id="journalRows"></tbody>
-              </table>
-            </div>
-          </article>
-        </section>
+
         <section id="settings" class="page" hidden>
           <div class="page-heading">
             <div>
@@ -1126,7 +863,7 @@
         </section>
       </main>
       <footer>
-        <span>Datos para investigar. Hipótesis para contrastar.</span
+        <span>Mercado, liquidez y proyectos.</span
         ><span id="lastUpdated">—</span><span>v3 · 14/10/2026</span>
       </footer>
     </div>
@@ -1147,16 +884,15 @@
         indicadores para valorar el sistema.
       </p>
       <p>
-        El <strong>resumen</strong> muestra datos y contexto;
-        <strong>liquidez macro</strong> añade TGA, reservas y reverse repo; el
-        <strong>laboratorio</strong> examina relaciones históricas e hipótesis;
-        <strong>riesgo y diario</strong> permite calcular y guardar escenarios
-        propios.
+        La <strong>mesa de mercado</strong> reúne financiación, bonos, divisas y
+        volatilidad. <strong>Proyectos y spot</strong> añade actividad de
+        DeFiLlama y tu cartera local. El <strong>resumen</strong> sigue BTC y
+        SOFR–IORB; <strong>liquidez macro</strong> muestra reservas y ON RRP.
       </p>
       <p>
         El gasto neto desde el TGA puede aumentar reservas, pero alcanzar un
         máximo no obliga al Tesoro a gastar ni garantiza una subida de BTC. La
-        banda, la correlación y la simulación tienen límites visibles.
+        banda, la correlación tienen límites visibles.
       </p>
       <p>
         <a

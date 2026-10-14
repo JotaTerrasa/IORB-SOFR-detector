@@ -7,13 +7,9 @@ import {
   correlations,
   liquidity,
   spreadRows,
-  hypothesis,
-  riskPosition,
-  backtest,
   staleSofr,
 } from "./lib/analytics.js";
-import { migrateJournal } from "./lib/migrate.js";
-const VERSION = "20261014_1",
+const VERSION = "20261014_2",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -70,8 +66,6 @@ let prefs = storage.get("prefs", {
   charts = {},
   busy = false,
   lastRefresh = 0,
-  position = null,
-  journal = storage.get("journal", []),
   ws = null,
   reconnect = null,
   liveAt = 0,
@@ -81,20 +75,7 @@ if (![90, 180, 365].includes(prefs.range)) prefs.range = 90;
 if (![300, 900, 1800].includes(prefs.refresh)) prefs.refresh = 300;
 if (!Number.isFinite(prefs.band) || prefs.band < 1 || prefs.band > 100)
   prefs.band = 5;
-if (!Array.isArray(journal)) journal = [];
-if (storage.get("journal") == null) {
-  try {
-    const legacy = JSON.parse(localStorage.getItem("iorbsofr:journal") || "[]");
-    if (legacy.length) {
-      journal = migrateJournal(legacy);
-      storage.set("journal", journal);
-    }
-  } catch {}
-}
-
-let manual = { iorb: null, sofr: null },
-  riskText = "",
-  currentSimulation = null;
+let manual = { iorb: null, sofr: null };
 function text(id, value) {
   $(id).textContent = value;
 }
@@ -180,7 +161,7 @@ async function source(key, url, parser = (x) => x, format = "json") {
   }
 }
 function switchPage(id) {
-  if (!$(id)?.classList.contains("page")) return;
+  if (!$(id)?.classList.contains("page")) id = "desk";
   document.querySelectorAll(".page").forEach((p) => (p.hidden = p.id !== id));
   document.querySelectorAll("[data-page]").forEach((b) => {
     b.classList.toggle("active", b.dataset.page === id);
@@ -429,129 +410,7 @@ function renderHistory() {
     "corrDetail",
     `${corr.n}/30 observaciones de SOFR comparadas con el retorno diario de BTC. ${corr.value == null ? "Muestra insuficiente o diferencial constante." : Math.abs(corr.value) < 0.3 ? "Relación lineal débil en esta ventana." : "La asociación histórica no demuestra causalidad."}`,
   );
-  $("correlations").replaceChildren();
-  for (const n of [7, 30, 90]) {
-    const c = correlations(
-      data.history?.candles || [],
-      data.sofr || [],
-      data.iorb || [],
-      n,
-    );
-    const card = node("article", null, "card");
-    card.append(
-      node("p", `${n} observaciones`, "eyebrow"),
-      node("strong", fmt(c.value, 3)),
-      node(
-        "p",
-        `${c.n}/${n} pares · ${c.value == null ? "sin cálculo fiable" : "Pearson"}`,
-        "muted",
-      ),
-    );
-    $("correlations").append(card);
-  }
-  const corrLabels = [],
-    corrData = [];
-  const availableSofr = (data.sofr || []).filter(
-    (s) => labels.length && s.date >= labels[0] && s.date <= labels.at(-1),
-  );
-  for (const r of availableSofr) {
-    corrLabels.push(r.date);
-    corrData.push(
-      correlations(
-        data.history?.candles || [],
-        (data.sofr || []).filter((s) => s.date <= r.date),
-        data.iorb || [],
-        30,
-      ).value,
-    );
-  }
-  chart(
-    "corrChart",
-    corrLabels,
-    [
-      {
-        label: "Correlación 30 observaciones",
-        data: corrData,
-        borderColor: "#78dec6",
-        yAxisID: "corr",
-      },
-    ],
-    { corr: axis("Pearson", "left", { min: -1, max: 1 }) },
-  );
-  const h = hypothesis(rows, prefs.band);
-  text("hypothesis", h.side);
-  text(
-    "hypothesisDetail",
-    `${h.reason} ${h.delta == null ? "" : `Cambio de 7 intervalos: ${sign(h.delta)} pb.`}`,
-  );
-  const old = health.sofr?.stale || health.iorb?.stale || health.history?.stale;
-  if (old)
-    text(
-      "hypothesisDetail",
-      `Datos guardados o fuente fallida: hipótesis suspendida. ${h.reason}`,
-    );
-  if (old) text("hypothesis", "SIN DATOS ACTUALES");
-  const fees = Math.max(0, Math.min(1000, number($("fees").value) ?? 12));
-  currentSimulation = backtest(
-    data.history?.candles || [],
-    data.sofr || [],
-    data.iorb || [],
-    { band: prefs.band, fees },
-  );
-  currentSimulation.trades = currentSimulation.trades.filter(
-    (t) => labels.length && t.date >= labels[0],
-  );
-  // Recompute statistics after restricting entries to the selected visible window.
-  const ts = currentSimulation.trades;
-  let sum = 0,
-    peak = 0,
-    dd = 0;
-  for (const t of ts) {
-    sum += t.netR;
-    peak = Math.max(peak, sum);
-    dd = Math.max(dd, peak - sum);
-  }
-  const stats = [
-    ["Operaciones", String(ts.length)],
-    [
-      "Aciertos",
-      ts.length
-        ? pct((ts.filter((t) => t.netR > 0).length / ts.length) * 100)
-        : "—",
-    ],
-    ["Media neta", ts.length ? `${fmt(sum / ts.length, 2)} R` : "—"],
-    ["Caída máxima", `${fmt(dd, 2)} R`],
-  ];
-  $("backtestStats").replaceChildren(
-    ...stats.map(([label, value]) => {
-      const e = node("div", null, "stat");
-      e.append(node("small", label), node("strong", value));
-      return e;
-    }),
-  );
-  text(
-    "backtestNote",
-    `Ventana ${prefs.range} días · banda ±${prefs.band} pb · comisión ${fmt(fees, 1)} pb ida y vuelta. ${ts.length < 20 ? "Muestra pequeña: resultados poco concluyentes." : ""} ${old ? "Simulación sobre copia histórica antigua." : ""} Las reservas y el TGA no forman parte de esta regla.`,
-  );
-  $("backtestRows").replaceChildren();
-  for (const t of ts.slice(-20).reverse()) {
-    const tr = node("tr");
-    cell(tr, date(t.date));
-    cell(tr, t.side);
-    cell(tr, date(t.exitDate));
-    cell(tr, `${sign(t.netR)} R`, t.netR >= 0 ? "positive" : "negative");
-    cell(tr, t.reason);
-    $("backtestRows").append(tr);
-  }
-  if (!ts.length) {
-    const tr = node("tr");
-    const td = node("td", "Sin operaciones o sin datos suficientes.");
-    td.colSpan = 5;
-    tr.append(td);
-    $("backtestRows").append(tr);
-  }
   $("export").disabled = !candles.length;
-  $("exportTrades").disabled = !ts.length;
 }
 function renderMacro() {
   $("macroCards").replaceChildren();
@@ -754,7 +613,6 @@ async function refresh() {
     renderHistory();
     renderMacro();
     renderSources();
-    renderRisk();
     renderDesk(data, health);
     lastRefresh = Date.now();
     text("lastUpdated", `Última consulta: ${time(lastRefresh)}`);
@@ -853,108 +711,6 @@ function connectLive() {
     reconnect = setTimeout(connectLive, 10000);
   }
 }
-function riskInputs() {
-  return Object.fromEntries(
-    [
-      "equity",
-      "riskPct",
-      "leverage",
-      "entry",
-      "stop",
-      "target",
-      "fees",
-      "mmr",
-      "extra",
-    ].map((k) => [k, number($(k).value)]),
-  );
-}
-function renderRisk() {
-  const v = riskInputs();
-  position = riskPosition({
-    side: $("side").value,
-    equity: v.equity,
-    risk: v.riskPct,
-    leverage: v.leverage,
-    entry: v.entry,
-    stop: v.stop,
-    target: v.target,
-    fees: v.fees,
-    mmr: v.mmr,
-    extra: v.extra,
-  });
-  const out = $("riskOutput");
-  out.replaceChildren();
-  $("saveTrade").disabled = !!position.error;
-  $("copyRisk").disabled = !!position.error;
-  if (position.error) {
-    out.append(node("p", position.error, "muted"));
-    riskText = "";
-    return;
-  }
-  const metrics = [
-    ["Cantidad", `${fmt(position.qty, 6)} BTC`],
-    ["Riesgo total al stop", `${fmt(position.budget, 2)} USDT`],
-    ["Margen inicial", `${fmt(position.margin, 2)} USDT`],
-    ["Beneficio neto al objetivo", `${fmt(position.reward, 2)} USDT`],
-    ["Relación beneficio / riesgo", `${fmt(position.rr, 2)} R`],
-    [
-      "Liquidación estimada",
-      position.liq ? usd(position.liq) : "Fuera de rango positivo",
-    ],
-  ];
-  const grid = node("div", null, "risk-details");
-  for (const [label, value] of metrics) {
-    const s = node("div", null, "stat");
-    s.append(node("small", label), node("strong", value));
-    grid.append(s);
-  }
-  out.append(grid);
-  out.append(
-    node(
-      "p",
-      `Comisiones estimadas al stop: ${fmt(position.feeCost, 2)} USDT.`,
-      "small",
-    ),
-  );
-  if (position.warnings.length)
-    out.append(node("p", position.warnings.join(" "), "warnings"));
-  riskText = `Escenario ${$("side").value}\nEntrada: ${v.entry} USD\nStop: ${v.stop} USD\nObjetivo: ${v.target} USD\nCantidad: ${position.qty.toFixed(6)} BTC\nRiesgo total: ${position.budget.toFixed(2)} USDT\nMargen inicial: ${position.margin.toFixed(2)} USDT\nApalancamiento: ${v.leverage}x\nLiquidación aproximada: ${position.liq?.toFixed(2) ?? "—"} USD\n${position.warnings.join(" ")}\nCálculo personal; liquidación aproximada, sin financiación ni deslizamiento.`;
-}
-function renderJournal() {
-  const completed = journal.filter((j) => Number.isFinite(j.result));
-  text(
-    "journalStats",
-    `${journal.length} escenarios · ${completed.length} resultados registrados${completed.length ? ` · media ${fmt(completed.reduce((sum, j) => sum + j.result, 0) / completed.length, 2)} R` : ""}.`,
-  );
-  $("journalRows").replaceChildren();
-  for (const j of journal.slice().reverse()) {
-    const row = node("tr");
-    cell(row, time(j.at));
-    cell(row, j.side);
-    cell(row, `${fmt(j.entry, 0)} / ${fmt(j.stop, 0)} / ${fmt(j.target, 0)}`);
-    cell(row, `${fmt(j.qty, 6)} BTC`);
-    const td = node("td");
-    const input = node("input");
-    input.type = "number";
-    input.step = "any";
-    input.placeholder = "Pendiente";
-    input.value = Number.isFinite(j.result) ? j.result : "";
-    input.setAttribute("aria-label", `Resultado R del escenario ${time(j.at)}`);
-    input.dataset.journal = j.id;
-    td.append(input);
-    row.append(td);
-    $("journalRows").append(row);
-  }
-  if (!journal.length) {
-    const tr = node("tr"),
-      td = node("td", "Aún no hay escenarios guardados.");
-    td.colSpan = 5;
-    tr.append(td);
-    $("journalRows").append(tr);
-  }
-  $("exportJournal").disabled = !journal.length;
-  $("clearJournal").disabled = !journal.length;
-}
 function savePrefs() {
   storage.set("prefs", prefs);
   text("preferencesFeedback", "Preferencias guardadas en este navegador.");
@@ -1030,107 +786,6 @@ $("resetManual").addEventListener("click", () => {
   text("manualFeedback", "Fuentes oficiales activas.");
   renderRates();
 });
-$("riskForm").addEventListener("submit", (e) => e.preventDefault());
-const savedRisk = storage.get("riskInputs", {});
-for (const k of [
-  "side",
-  "equity",
-  "riskPct",
-  "leverage",
-  "entry",
-  "stop",
-  "target",
-  "fees",
-  "mmr",
-  "extra",
-]) {
-  if (savedRisk[k] != null) $(k).value = savedRisk[k];
-  $(k).addEventListener("input", () => {
-    storage.set(
-      "riskInputs",
-      Object.fromEntries(
-        ["side", ...Object.keys(riskInputs())].map((id) => [id, $(id).value]),
-      ),
-    );
-    renderRisk();
-    if (k === "fees") renderHistory();
-  });
-}
-$("usePrice").addEventListener("click", () => {
-  if (!quote || Date.now() - Date.parse(quote.fetchedAt) > 120000) {
-    toast("La cotización no está actualizada. Consulta las fuentes primero.");
-    return;
-  }
-  $("entry").value = quote.price.toFixed(2);
-  $("entry").dispatchEvent(new Event("input"));
-});
-$("copyRisk").addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(riskText);
-    toast("Cálculo copiado.");
-  } catch {
-    toast("El navegador no permite copiar.");
-  }
-});
-$("saveTrade").addEventListener("click", () => {
-  if (position?.error) return;
-  const v = riskInputs();
-  journal.push({
-    id: crypto.randomUUID(),
-    at: new Date().toISOString(),
-    side: $("side").value,
-    ...v,
-    qty: position.qty,
-    result: null,
-  });
-  if (journal.length > 500) journal = journal.slice(-500);
-  storage.set("journal", journal);
-  renderJournal();
-  toast("Escenario guardado en el diario local.");
-});
-$("journalRows").addEventListener("change", (e) => {
-  if (!e.target.dataset.journal) return;
-  const j = journal.find((j) => j.id === e.target.dataset.journal);
-  if (j) {
-    j.result = number(e.target.value);
-    storage.set("journal", journal);
-    renderJournal();
-  }
-});
-$("clearJournal").addEventListener("click", () => {
-  if (
-    !confirm(
-      "¿Vaciar el diario local? Exporta una copia antes si quieres conservarlo.",
-    )
-  )
-    return;
-  journal = [];
-  storage.set("journal", journal);
-  renderJournal();
-  toast("Diario vaciado.");
-});
-$("exportJournal").addEventListener("click", () =>
-  download("diario-liquidez.csv", [
-    [
-      "fecha",
-      "escenario",
-      "entrada_usd",
-      "stop_usd",
-      "objetivo_usd",
-      "cantidad_btc",
-      "resultado_R",
-    ],
-    ...journal.map((j) => [
-      j.at,
-      j.side,
-      j.entry,
-      j.stop,
-      j.target,
-      j.qty,
-      j.result,
-    ]),
-  ]),
-);
 $("export").addEventListener("click", () => {
   const { rows } = rates(),
     map = new Map(rows.map((r) => [r.date, r.value]));
@@ -1157,34 +812,17 @@ $("export").addEventListener("click", () => {
     ]),
   ]);
 });
-$("exportTrades").addEventListener("click", () =>
-  download("simulacion-liquidez.csv", [
-    [
-      "fecha_entrada",
-      "fecha_salida",
-      "escenario",
-      "entrada_USD",
-      "salida_USD",
-      "resultado_neto_R",
-      "motivo",
-      "banda_pb",
-      "comision_roundtrip_pb",
-    ],
-    ...(currentSimulation?.trades || []).map((t) => [
-      t.date,
-      t.exitDate,
-      t.side,
-      t.entry,
-      t.exit,
-      t.netR,
-      t.reason,
-      prefs.band,
-      number($("fees").value) ?? 12,
-    ]),
-  ]),
-);
 $("clearCache").addEventListener("click", () => {
-  for (const k of ["quote", "history", "sofr", "iorb", "macro"])
+  for (const k of [
+    "quote",
+    "history",
+    "sofr",
+    "iorb",
+    "macro",
+    "desk",
+    "deskQuotes",
+    "projects",
+  ])
     storage.remove("cache:" + k);
   location.reload();
 });
@@ -1196,8 +834,6 @@ document
       String(Number(b.dataset.range) === prefs.range),
     ),
   );
-renderRisk();
-renderJournal();
 initDesk({ chart, toast });
 switchPage(location.hash.slice(1) || "desk");
 refresh();
