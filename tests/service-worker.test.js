@@ -15,7 +15,8 @@ test("service worker bypasses API data and uses network before shell cache", asy
       location: new URL("https://dashboard.test/sw.js"),
       addEventListener: (n, f) => (handlers[n] = f),
     },
-    fetch: async () => {
+    fetch: async (_request, options) => {
+      assert.equal(options.cache, "no-store");
       if (offline) throw new Error("offline");
       return new Response("network-" + ++calls);
     },

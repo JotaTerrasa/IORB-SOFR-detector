@@ -1137,11 +1137,19 @@ window.addEventListener("offline", () => {
   $("status").classList.add("error");
   toast("Sin conexión. Las fechas de los datos siguen visibles.");
 });
-if ("serviceWorker" in navigator)
+if ("serviceWorker" in navigator) {
+  const wasControlled = Boolean(navigator.serviceWorker.controller);
+  let refreshingVersion = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!wasControlled || refreshingVersion) return;
+    refreshingVersion = true;
+    location.reload();
+  });
   navigator.serviceWorker
-    .register(`./sw.js?v=${VERSION}`)
+    .register(`./sw.js?v=${VERSION}`, { updateViaCache: "none" })
     .then((reg) => reg.update())
     .catch(() => {});
+}
 
 for (const wrapper of document.querySelectorAll(".table-wrap")) {
   wrapper.tabIndex = 0;
