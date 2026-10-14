@@ -1,3 +1,4 @@
+import { chartUnit, chartValue, chartDate } from "./lib/chart-format.js";
 import { initCalendar } from "./lib/calendar-view.js";
 import { initDesk, renderDesk } from "./lib/desk-view.js";
 import {
@@ -10,7 +11,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_11",
+const VERSION = "20261014_12",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -197,65 +198,224 @@ function chart(id, labels, datasets, scales = {}) {
     return;
   }
   charts[id]?.destroy();
+  const unit = chartUnit(id),
+    isBar = id === "repoChart";
+  const yScales = Object.keys(scales).length
+    ? scales
+    : { y: { title: { display: true, text: unit } } };
+  const styledScales = Object.fromEntries(
+    Object.entries(yScales).map(([key, value]) => [
+      key,
+      {
+        ...value,
+        border: { display: false },
+        grid: { color: "#8fa6b31a", drawTicks: false, ...value.grid },
+        title: {
+          display: true,
+          color: "#b2c4ce",
+          font: { size: 11 },
+          ...value.title,
+        },
+        ticks: {
+          color: "#afc0cb",
+          font: { size: 11 },
+          maxTicksLimit: 6,
+          padding: 8,
+          callback: (v) => chartValue(v, "", true),
+          ...value.ticks,
+        },
+        ...(isBar ? { beginAtZero: true } : {}),
+      },
+    ]),
+  );
   charts[id] = new Chart($(id), {
-    type: "line",
+    type: isBar ? "bar" : "line",
     data: {
       labels,
-      datasets: datasets.map((d) => ({
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHitRadius: 8,
-        tension: 0.15,
+      datasets: datasets.map((d, i) => ({
+        borderWidth: 2.3,
+        pointRadius: id === "curveChart" ? 4 : labels.length < 3 ? 3 : 0,
+        pointHoverRadius: 5,
+        pointHitRadius: 16,
+        tension: 0,
         spanGaps: false,
+        borderDash: i === 1 ? [6, 3] : i === 2 ? [2, 3] : [],
+        backgroundColor: isBar ? "#b6a1e2aa" : d.borderColor,
+        ...(isBar ? { borderRadius: 3, maxBarThickness: 18 } : {}),
         ...d,
       })),
     },
+    plugins: [
+      {
+        id: "emptyChart",
+        afterDraw(c) {
+          if (
+            c.data.datasets.some((d) =>
+              d.data.some((v) => v !== null && Number.isFinite(v)),
+            )
+          )
+            return;
+          const { ctx, chartArea: a } = c;
+          if (!a) return;
+          ctx.save();
+          ctx.fillStyle = "#afc0cb";
+          ctx.font = "13px system-ui";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            "Sin observaciones disponibles",
+            (a.left + a.right) / 2,
+            (a.top + a.bottom) / 2,
+          );
+          ctx.restore();
+        },
+      },
+    ],
     options: {
       responsive: true,
       maintainAspectRatio: false,
       animation: false,
+      layout: { padding: { top: 8, right: 8 } },
       interaction: { mode: "index", intersect: false },
       plugins: {
         legend: {
+          display: datasets.length > 1,
+          position: "bottom",
           labels: {
-            color: "#9cafbd",
+            color: "#c2d0d8",
             usePointStyle: true,
-            boxWidth: 7,
-            font: { size: 10 },
+            pointStyle: "line",
+            padding: 20,
+            font: { size: 11 },
           },
         },
         tooltip: {
+          backgroundColor: "#0c151d",
+          titleColor: "#ffffff",
+          bodyColor: "#e4edf2",
+          borderColor: "#48606e",
+          borderWidth: 1,
+          padding: 12,
+          displayColors: true,
           callbacks: {
-            title: (items) =>
-              /^\d{4}-\d{2}-\d{2}$/.test(items[0]?.label)
-                ? date(items[0]?.label)
-                : items[0]?.label,
+            title: (items) => chartDate(items[0]?.label),
             label: (ctx) =>
-              `${ctx.dataset.label}: ${fmt(ctx.parsed.y, ctx.dataset.yAxisID === "corr" ? 3 : 1)}`,
+              ctx.dataset.label +
+              ": " +
+              chartValue(ctx.parsed.y, chartUnit(id, ctx.dataset.yAxisID)),
           },
         },
       },
       scales: {
         x: {
+          border: { display: false },
           grid: { display: false },
           ticks: {
-            color: "#8296a6",
-            maxTicksLimit: 7,
-            font: { size: 10 },
-            callback: (v, i) =>
-              /^\d{4}-\d{2}-\d{2}$/.test(labels[i])
-                ? new Date(labels[i] + "T12:00:00Z").toLocaleDateString(
-                    "es-ES",
-                    { day: "2-digit", month: "2-digit" },
-                  )
-                : labels[i],
+            color: "#afc0cb",
+            maxTicksLimit: 6,
+            maxRotation: 0,
+            padding: 10,
+            font: { size: 11 },
+            callback: (v) => chartDate(labels[v], true),
           },
         },
-        ...scales,
+        ...styledScales,
       },
     },
   });
+  const canvas = $(id),
+    box = canvas.parentElement;
+  if (!box.nextElementSibling?.classList.contains("chart-tools")) {
+    const tools = node("div", null, "chart-tools");
+    const expand = node("button", "Ampliar", "button ghost");
+    expand.type = "button";
+    expand.setAttribute("aria-pressed", "false");
+    expand.setAttribute(
+      "aria-label",
+      "Ampliar " + canvas.getAttribute("aria-label"),
+    );
+    expand.addEventListener("click", () => {
+      const active = box.classList.toggle("chart-expanded");
+      expand.textContent = active ? "Reducir" : "Ampliar";
+      expand.setAttribute("aria-pressed", String(active));
+      charts[id]?.resize();
+    });
+    const save = node("button", "Descargar PNG", "button ghost");
+    save.type = "button";
+    save.setAttribute(
+      "aria-label",
+      "Descargar PNG de " + canvas.getAttribute("aria-label"),
+    );
+    save.addEventListener("click", () => {
+      const current = charts[id];
+      if (!current) return;
+      const output = document.createElement("canvas");
+      output.width = Math.max(canvas.width, 1000);
+      const imageHeight = (canvas.height * output.width) / canvas.width;
+      output.height = imageHeight + 160;
+      const ctx = output.getContext("2d");
+      ctx.fillStyle = "#101820";
+      ctx.fillRect(0, 0, output.width, output.height);
+      ctx.fillStyle = "#e9f0f3";
+      ctx.font = "18px system-ui";
+      ctx.fillText(
+        canvas.closest("article")?.querySelector("h2")?.textContent ||
+          "Market Desk",
+        20,
+        30,
+      );
+      ctx.font = "12px system-ui";
+      ctx.fillStyle = "#b2c4ce";
+      const dates = current.data.labels;
+      ctx.fillText(
+        id === "curveChart"
+          ? $("curveDate").textContent
+          : "Periodo mostrado: " +
+              chartDate(dates[0]) +
+              " — " +
+              chartDate(dates.at(-1)),
+        20,
+        55,
+      );
+      const provider =
+        id === "mainChart"
+          ? "Coinbase · NY Fed · FRED"
+          : id === "stonkRevenueChart"
+            ? "StonkFun · días UTC cerrados"
+            : ["asterTvlChart", "pumpTvlChart", "projectCompareChart"].includes(
+                  id,
+                )
+              ? "DeFiLlama · TVL, no rentabilidad del token"
+              : id === "tgaDailyChart"
+                ? "Tesoro de EE. UU. · saldo al cierre"
+                : id === "repoChart"
+                  ? "NY Fed · importes diarios aceptados"
+                  : "FRED · observaciones publicadas";
+      ctx.fillText("Fuente: " + provider, 20, 78);
+      ctx.drawImage(canvas, 0, 100, output.width, imageHeight);
+      ctx.fillText(
+        "Market Desk · " +
+          new Date().toLocaleString("es-ES") +
+          " · iorb-sofr-detector.vercel.app",
+        20,
+        output.height - 20,
+      );
+      output.toBlob((blob) => {
+        if (!blob) return;
+        const a = node("a"),
+          url = URL.createObjectURL(blob);
+        a.href = url;
+        a.download = id + "-" + day(Date.now()) + ".png";
+        document.body.append(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      }, "image/png");
+    });
+    tools.append(expand, save);
+    box.after(tools);
+  }
 }
+
 function axis(title, position = "left", extra = {}) {
   return {
     type: "linear",

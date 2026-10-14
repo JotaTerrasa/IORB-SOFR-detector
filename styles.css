@@ -1164,3 +1164,31 @@ code {
 #projectErrors:empty {
   display: none;
 }
+.chart-tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+.chart-tools .button {
+  min-height: 32px;
+  padding: 5px 10px;
+  font-size: 11px;
+  color: var(--muted);
+  border-color: transparent;
+}
+.chart-tools .button:hover {
+  color: var(--text);
+  border-color: var(--line);
+}
+.chart-box.chart-expanded {
+  height: 520px;
+}
+@media (max-width: 600px) {
+  .chart-box.chart-expanded {
+    height: 420px;
+  }
+  .chart-tools .button {
+    min-height: 40px;
+  }
+}
