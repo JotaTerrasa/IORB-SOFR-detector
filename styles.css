@@ -1237,3 +1237,123 @@ canvas.chart-interactive {
   touch-action: pan-y;
   user-select: none;
 }
+
+@media (max-width: 650px) {
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 12px;
+    overflow: visible;
+    padding-top: 8px;
+  }
+  .nav-item {
+    min-height: 44px;
+    padding: 10px 6px;
+    white-space: normal;
+    text-align: center;
+  }
+  .nav-item:last-child {
+    grid-column: 1 / -1;
+  }
+  .button,
+  .chart-tools .button,
+  .chart-range-controls .button,
+  .segments button {
+    min-height: 44px;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  input[type="checkbox"] {
+    min-height: 20px;
+  }
+  .chart-range-controls label {
+    flex: 1 1 125px;
+    min-width: 0;
+  }
+  .chart-range-controls input {
+    width: 100%;
+  }
+  summary {
+    min-height: 44px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size: 13px;
+  }
+  .card,
+  .kpi,
+  .brief-card,
+  .form-grid > * {
+    min-width: 0;
+  }
+  .kpi strong {
+    font-size: clamp(20px, 5.7vw, 25px);
+    overflow-wrap: anywhere;
+  }
+  .table-wrap {
+    max-width: 100%;
+  }
+  table {
+    font-size: 12px;
+  }
+  .table-wrap th:first-child,
+  .table-wrap td:first-child {
+    max-width: 125px;
+    min-width: 110px;
+    white-space: normal;
+    overflow-wrap: normal;
+  }
+  .table-wrap th,
+  .table-wrap td {
+    padding: 12px 10px;
+  }
+  .table-wrap.has-horizontal-scroll::before {
+    content: "Desliza la tabla para ver todas las columnas →";
+    display: block;
+    position: sticky;
+    left: 0;
+    width: fit-content;
+    max-width: 100%;
+    padding: 10px;
+    color: var(--muted);
+    font-size: 11px;
+    white-space: normal;
+  }
+  dialog {
+    width: calc(100% - 24px);
+    max-width: calc(100% - 24px);
+    max-height: 85dvh;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .button-row,
+  .chart-actions {
+    flex-wrap: wrap;
+  }
+  footer {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+}
+@media (max-width: 360px) {
+  .brief-grid,
+  .kpi-grid,
+  .correlation-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .header {
+    flex-wrap: wrap;
+  }
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .page-heading h1 {
+    font-size: 26px;
+  }
+}

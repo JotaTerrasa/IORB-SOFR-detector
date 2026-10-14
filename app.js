@@ -12,7 +12,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_16",
+const VERSION = "20261014_17",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -1075,3 +1075,22 @@ if ("serviceWorker" in navigator)
     .register(`./sw.js?v=${VERSION}`)
     .then((reg) => reg.update())
     .catch(() => {});
+
+for (const wrapper of document.querySelectorAll(".table-wrap")) {
+  wrapper.tabIndex = 0;
+  wrapper.setAttribute("role", "region");
+  wrapper.setAttribute(
+    "aria-label",
+    wrapper.closest("article")?.querySelector("h2")?.textContent ||
+      "Tabla de datos",
+  );
+  const observer = new ResizeObserver(() => {
+    wrapper.classList.toggle(
+      "has-horizontal-scroll",
+      wrapper.scrollWidth > wrapper.clientWidth + 2,
+    );
+  });
+  observer.observe(wrapper);
+  if (wrapper.querySelector("table"))
+    observer.observe(wrapper.querySelector("table"));
+}
