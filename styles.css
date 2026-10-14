@@ -1090,3 +1090,16 @@ code {
     grid-template-columns: 1fr;
   }
 }
+.report-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.8;
+  padding: 18px;
+  background: var(--surface2);
+  border-radius: 8px;
+}
+#projects > details {
+  margin-bottom: 20px;
+}

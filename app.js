@@ -10,7 +10,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_7",
+const VERSION = "20261014_8",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -244,7 +244,10 @@ function chart(id, labels, datasets, scales = {}) {
             font: { size: 10 },
             callback: (v, i) =>
               /^\d{4}-\d{2}-\d{2}$/.test(labels[i])
-                ? date(labels[i]).slice(0, 5)
+                ? new Date(labels[i] + "T12:00:00Z").toLocaleDateString(
+                    "es-ES",
+                    { day: "2-digit", month: "2-digit" },
+                  )
                 : labels[i],
           },
         },

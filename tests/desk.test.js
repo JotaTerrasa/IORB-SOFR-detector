@@ -172,3 +172,27 @@ test("Calendar charts keep the last published observation for each day", () => {
     [{ date: "2026-10-14", value: 2 }],
   );
 });
+
+test("TVL comparisons align dates and never invent missing seven-day values", async () => {
+  const { datedChange, indexedComparison } = await import(
+    "../lib/desk-analytics.js"
+  );
+  const a = [
+    { date: "2026-10-01", value: 100 },
+    { date: "2026-10-08", value: 120 },
+  ];
+  const b = [
+    { date: "2026-10-01", value: 200 },
+    { date: "2026-10-02", value: 220 },
+    { date: "2026-10-08", value: 180 },
+  ];
+  assert.ok(Math.abs(datedChange(a, 7) - 20) < 1e-9);
+  assert.equal(datedChange(a, 30), null);
+  assert.deepEqual(indexedComparison(a, b, 30), {
+    dates: ["2026-10-01", "2026-10-08"],
+    a: [100, 120],
+    b: [100, 90],
+  });
+  assert.deepEqual(indexedComparison([], b, 30), { dates: [], a: [], b: [] });
+  assert.equal(datedChange([{ date: "2026-10-01", value: 0 }, a[1]], 7), null);
+});
