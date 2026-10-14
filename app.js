@@ -17,7 +17,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_21",
+const VERSION = "20261014_22",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -1158,7 +1158,14 @@ for (const wrapper of document.querySelectorAll(".table-wrap")) {
     observer.observe(wrapper.querySelector("table"));
 }
 
-$("resetCharts").addEventListener("click", () => {
+$("resetCharts").addEventListener("click", () =>
+  $("resetChartsDialog").showModal(),
+);
+$("cancelResetCharts").addEventListener("click", () =>
+  $("resetChartsDialog").close(),
+);
+$("confirmResetCharts").addEventListener("click", () => {
+  $("resetChartsDialog").close();
   const cleared = clearChartViews();
   resetChartRanges();
   document
