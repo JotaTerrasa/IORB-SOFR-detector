@@ -1,7 +1,7 @@
 {
   "name": "iorb-sofr",
-  "version": "3.0.0",
-  "description": "Monitor de liquidez SOFR–IORB, BTC y contexto macro con fuentes fechadas y simulaciones transparentes",
+  "version": "3.1.0",
+  "description": "Mesa de mercado con financiación, bonos, liquidez macro y actividad DeFi con fuentes fechadas",
   "scripts": {
     "test": "node --test",
     "dev": "node scripts/dev.mjs",
