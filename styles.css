@@ -1365,3 +1365,12 @@ canvas.chart-interactive {
 .chart-tools {
   min-height: 44px;
 }
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .chart-box {
+    height: 65svh;
+  }
+  .chart-box.chart-expanded {
+    height: 80svh;
+  }
+}
