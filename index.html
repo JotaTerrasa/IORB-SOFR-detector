@@ -15,12 +15,12 @@
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_21" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_22" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
     <link rel="modulepreload" href="./lib/desk-view.js" />
     <link rel="modulepreload" href="./lib/desk-analytics.js" />
     <link rel="modulepreload" href="./lib/analytics.js" />
-    <script type="module" src="./app.js?v=20261014_21"></script>
+    <script type="module" src="./app.js?v=20261014_22"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -1014,6 +1014,25 @@ Esperando datos de proyectos…</pre
         ><span id="lastUpdated">—</span><span>v3.1 · 14/10/2026</span>
       </footer>
     </div>
+    <dialog
+      id="resetChartsDialog"
+      aria-labelledby="resetChartsTitle"
+      aria-describedby="resetChartsDescription"
+    >
+      <h2 id="resetChartsTitle">¿Restablecer todas las gráficas?</h2>
+      <p id="resetChartsDescription">
+        Se borrarán las fechas y ampliaciones guardadas de todas las gráficas.
+        El histórico de proyectos volverá a 90 días.
+      </p>
+      <div class="button-row">
+        <button id="cancelResetCharts" class="button ghost" autofocus>
+          Cancelar
+        </button>
+        <button id="confirmResetCharts" class="button primary">
+          Restablecer gráficas
+        </button>
+      </div>
+    </dialog>
     <dialog id="helpDialog" aria-labelledby="helpTitle">
       <div class="dialog-head">
         <h2 id="helpTitle">Cómo leer este monitor</h2>
