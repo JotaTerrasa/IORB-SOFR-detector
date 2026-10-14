@@ -8,16 +8,16 @@
     />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#101820" />
-    <title>IORB × SOFR × BTC — Monitor de liquidez</title>
+    <title>Crypto Market Desk — Liquidez y proyectos</title>
     <meta
       name="description"
-      content="Sigue el diferencial SOFR–IORB, Bitcoin, TGA y reservas bancarias con fuentes verificables y herramientas de análisis."
+      content="Mesa de mercado con SOFR–IORB, Bitcoin, TGA, bonos, divisas y proyectos DeFiLlama; cartera privada en el navegador."
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261013_1" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_1" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
-    <script type="module" src="./app.js?v=20261013_1"></script>
+    <script type="module" src="./app.js?v=20261014_1"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -40,6 +40,8 @@
     </header>
     <div class="shell">
       <nav class="nav" aria-label="Secciones">
+        <button class="nav-item" data-page="desk">Mesa de mercado</button
+        ><button class="nav-item" data-page="projects">Proyectos y spot</button>
         <button
           class="nav-item active"
           data-page="overview"
@@ -55,6 +57,486 @@
       </nav>
       <main id="main" tabindex="-1">
         <div id="banner" class="banner" role="status" hidden></div>
+
+        <section id="desk" class="page" hidden>
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">
+                FINANCIACIÓN · BONOS · DIVISAS · VOLATILIDAD
+              </p>
+              <h1>Todo el contexto, en una mesa.</h1>
+              <p class="muted">
+                Lectura conjunta de las métricas que aparecen en los análisis
+                públicos de César Langreo.
+              </p>
+            </div>
+            <div class="button-row">
+              <button id="deskCopy" class="button primary">
+                Copiar parte diario</button
+              ><button id="deskExport" class="button ghost">
+                Descargar CSV</button
+              ><button id="presentation" class="button ghost">
+                Modo presentación
+              </button>
+            </div>
+          </div>
+          <article class="card reading">
+            <div>
+              <p class="eyebrow">ANTES DE INTERPRETAR</p>
+              <h2>Comprueba la financiación y el contexto.</h2>
+              <p id="deskReading" class="muted">Esperando fuentes.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div class="card-heading">
+              <h2>Bonos, divisas y volatilidad</h2>
+              <span class="tag">Fuente: TradingView</span>
+            </div>
+            <p id="deskQuoteStatus" class="muted">Consultando cotizaciones…</p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Métrica</th>
+                    <th>Valor</th>
+                    <th>Δ sesión</th>
+                    <th>Sesión de referencia</th>
+                    <th>Disponibilidad</th>
+                    <th>Fuente</th>
+                  </tr>
+                </thead>
+                <tbody id="deskQuotes"></tbody>
+              </table>
+            </div>
+            <p class="note">
+              Los rendimientos son tasas, no precios de bonos. Su cambio se
+              muestra en puntos básicos. TLT es el precio de un ETF; MOVE mide
+              volatilidad de bonos y VIX de acciones.
+            </p>
+          </article>
+          <div class="macro-grid">
+            <article class="card chart-card">
+              <h2>Curva del Tesoro</h2>
+              <p id="curveDate" class="muted">Esperando cierres comunes.</p>
+              <div class="chart-box">
+                <canvas
+                  id="curveChart"
+                  role="img"
+                  aria-label="Curva de rendimientos del Tesoro a 2, 10, 20 y 30 años"
+                ></canvas>
+              </div>
+            </article>
+            <article class="card chart-card">
+              <h2>Nominal, real e inflación implícita</h2>
+              <p id="realDate" class="muted">Esperando series.</p>
+              <div class="chart-box">
+                <canvas
+                  id="realChart"
+                  role="img"
+                  aria-label="Tipos nominales, reales y breakeven a 10 años"
+                ></canvas>
+              </div>
+            </article>
+          </div>
+          <div class="macro-grid">
+            <article class="card chart-card">
+              <div class="card-heading">
+                <h2>TGA · saldo al cierre</h2>
+                <strong id="dailyTga">—</strong>
+              </div>
+              <p id="dailyTgaDate" class="muted">Esperando Tesoro.</p>
+              <div class="chart-box">
+                <canvas
+                  id="tgaDailyChart"
+                  role="img"
+                  aria-label="Saldo diario del TGA"
+                ></canvas>
+              </div>
+              <label
+                >Objetivo personal · miles de millones USD<input
+                  id="tgaTarget"
+                  type="number"
+                  min="1"
+                  step="1"
+                  placeholder="Introduce una referencia"
+              /></label>
+              <p id="tgaDistance" class="muted"></p>
+              <p class="note">
+                Saldo diario publicado por el Tesoro. La sección Liquidez macro
+                muestra otra medida: media semanal de FRED. Alcanzar un máximo
+                no asegura una caída ni una subida de crypto; importa el cambio
+                posterior y cómo se financia.
+              </p>
+            </article>
+            <article class="card chart-card">
+              <h2>Repos aceptados por la Fed</h2>
+              <p class="muted">
+                Suma por fecha de operación · miles de millones USD/día
+              </p>
+              <div class="chart-box">
+                <canvas
+                  id="repoChart"
+                  role="img"
+                  aria-label="Importes diarios aceptados en repos de la Fed"
+                ></canvas>
+              </div>
+              <p class="note">
+                Flujo de operaciones Repo, no saldo pendiente. Un cero publicado
+                es distinto de un dato ausente. Para reservas y ON RRP, abre
+                Liquidez macro.
+              </p>
+              <button class="button ghost" data-jump="macro">
+                Ver reservas y ON RRP
+              </button>
+            </article>
+          </div>
+          <article class="card">
+            <h2>Histórico y trazabilidad</h2>
+            <p id="deskStatus" class="muted">
+              Esperando copia de fuentes públicas.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Métrica</th>
+                    <th>Último valor</th>
+                    <th>Unidad</th>
+                    <th>Observación</th>
+                    <th>Δ 1 obs.</th>
+                    <th>Δ 5 obs.</th>
+                    <th>Consulta</th>
+                    <th>Fuente</th>
+                  </tr>
+                </thead>
+                <tbody id="deskMacroRows"></tbody>
+              </table>
+            </div>
+            <p class="note">
+              Cambios en unidades de la serie, calculados sobre observaciones
+              publicadas; no se rellenan festivos. WTI y Brent son precios spot
+              diarios, no futuros intradía.
+            </p>
+          </article>
+          <article class="card">
+            <h2>Próximos catalizadores</h2>
+            <p class="muted">
+              Comprueba el calendario oficial antes de una publicación. Horarios
+              del BLS en Nueva York; la diferencia con Madrid cambia en las
+              semanas de ajuste de horario.
+            </p>
+            <div class="button-row">
+              <a
+                class="button ghost"
+                href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+                target="_blank"
+                rel="noopener"
+                >Reuniones de la Fed</a
+              ><a
+                class="button ghost"
+                href="https://www.bls.gov/schedule/news_release/cpi.htm"
+                target="_blank"
+                rel="noopener"
+                >Inflación · CPI</a
+              ><a
+                class="button ghost"
+                href="https://www.bls.gov/schedule/news_release/empsit.htm"
+                target="_blank"
+                rel="noopener"
+                >Empleo · NFP</a
+              >
+            </div>
+            <p class="note">
+              Herramienta independiente. No es un producto oficial ni una
+              recomendación de César Langreo.
+            </p>
+          </article>
+        </section>
+        <section id="projects" class="page" hidden>
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">DEFiLLAMA · ACTIVIDAD Y CARTERA</p>
+              <h1>El proyecto y tu posición.</h1>
+              <p class="muted">
+                Contrasta actividad, capital bloqueado y liquidez del ecosistema
+                con referencias de precio guardadas localmente.
+              </p>
+            </div>
+            <a
+              href="https://api-docs.defillama.com/"
+              target="_blank"
+              rel="noopener"
+              class="button ghost"
+              >Documentación DeFiLlama</a
+            >
+          </div>
+          <article class="card">
+            <h2>Aster y Pump · capital bloqueado</h2>
+            <p id="projectStatus" class="muted">Consultando DeFiLlama…</p>
+            <p id="projectErrors" class="negative" role="status"></p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Proyecto</th>
+                    <th>TVL</th>
+                    <th>Último día observado</th>
+                    <th>Consulta</th>
+                    <th>Fuente</th>
+                  </tr>
+                </thead>
+                <tbody id="projectRows"></tbody>
+              </table>
+            </div>
+            <p class="note">
+              TVL agregado de cada proyecto según DeFiLlama, excluyendo las
+              categorías opcionales staking y pool2. No se suma el agregado a
+              sus productos; el TVL no es la capitalización del token.
+            </p>
+          </article>
+          <div class="macro-grid">
+            <article class="card chart-card">
+              <h2>Aster · TVL</h2>
+              <div class="chart-box">
+                <canvas
+                  id="asterTvlChart"
+                  role="img"
+                  aria-label="Histórico TVL de Aster"
+                ></canvas>
+              </div>
+            </article>
+            <article class="card chart-card">
+              <h2>Pump · TVL</h2>
+              <div class="chart-box">
+                <canvas
+                  id="pumpTvlChart"
+                  role="img"
+                  aria-label="Histórico TVL de Pump"
+                ></canvas>
+              </div>
+            </article>
+          </div>
+          <article class="card">
+            <div class="card-heading">
+              <h2>STONK · StonkFun en Solana</h2>
+              <a
+                class="button ghost"
+                href="https://stonkfun.xyz/revenue"
+                target="_blank"
+                rel="noopener"
+                >Historial oficial</a
+              >
+            </div>
+            <p class="muted">
+              Contrato:
+              <code>6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx</code>
+            </p>
+            <p id="stonkStatus" class="muted"></p>
+            <div class="kpi-grid">
+              <div>
+                <p>Precio · DeFiLlama</p>
+                <strong id="stonkPrice">—</strong>
+              </div>
+              <div>
+                <p>Valoración declarada por StonkFun</p>
+                <strong id="stonkCap">—</strong>
+              </div>
+              <div>
+                <p>Recompras · último día cerrado</p>
+                <strong id="stonkBuybacks">—</strong>
+              </div>
+              <div>
+                <p>STONK quemados · último día cerrado</p>
+                <strong id="stonkBurns">—</strong>
+              </div>
+            </div>
+            <div class="chart-box">
+              <canvas
+                id="stonkRevenueChart"
+                role="img"
+                aria-label="Ingresos y recompras diarias declaradas por StonkFun en días UTC cerrados"
+              ></canvas>
+            </div>
+            <p id="stonkPartial" class="note"></p>
+            <p class="note">
+              Fuente oficial: ingresos en USD reclamados al tesoro y gasto en
+              recompras. DeFiLlama aplica su propia metodología y puede usar
+              otra ventana. No comparar el día en curso con días completos. Las
+              recompras no son un dividendo garantizado ni implican que el
+              precio vaya a subir; STONK no es una acción de SPY ni otorga
+              propiedad del índice.
+            </p>
+            <details>
+              <summary>Liquidez de los principales pools de STONK</summary>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>DEX</th>
+                      <th>Par</th>
+                      <th>Liquidez USD del pool</th>
+                      <th>Volumen 24 h del pool</th>
+                      <th>Pool</th>
+                    </tr>
+                  </thead>
+                  <tbody id="stonkPoolRows"></tbody>
+                </table>
+              </div>
+              <p class="note">
+                DEX Screener · cinco pools con mayor liquidez publicada y
+                contrato base comprobado. La liquidez incluye ambos lados del
+                pool: no es profundidad ejecutable ni una estimación de
+                deslizamiento. El volumen del pool no es el volumen de toda
+                StonkFun.
+              </p>
+            </details>
+          </article>
+          <article class="card">
+            <h2>Actividad por producto</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Comisiones 24 h</th>
+                    <th>Comisiones 7 d</th>
+                    <th>Ingresos 24 h</th>
+                    <th>Volumen spot 24 h</th>
+                    <th>Comisiones 7 d vs previos</th>
+                    <th>Consulta comisiones</th>
+                    <th>Metodología</th>
+                  </tr>
+                </thead>
+                <tbody id="activityRows"></tbody>
+              </table>
+            </div>
+            <p class="note">
+              Comisiones pagadas por usuarios; ingresos retenidos según la
+              metodología de cada producto. No son dividendos para quien posee
+              el token. Volumen spot no incluye volumen de perpetuos. Un guion
+              significa que la fuente no aporta la métrica; no significa cero.
+              Las ventanas de 24 h son las publicadas por DeFiLlama.
+            </p>
+          </article>
+          <article class="card">
+            <h2>Liquidez del ecosistema</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Red</th>
+                    <th>TVL de la red</th>
+                    <th>Stablecoins · valor USD</th>
+                    <th>Consulta TVL</th>
+                    <th>Consulta stablecoins</th>
+                  </tr>
+                </thead>
+                <tbody id="chainRows"></tbody>
+              </table>
+            </div>
+            <p class="note">
+              Solana corresponde a la red, no al precio de SOL. Hyperliquid L1
+              aporta contexto para PURR; PURR es una meme y no representa una
+              participación en los ingresos de Hyperliquid.
+            </p>
+          </article>
+          <article class="card">
+            <div class="card-heading">
+              <h2>Cartera spot · privada en este navegador</h2>
+              <span class="tag">SIN ENVÍO AL SERVIDOR</span>
+            </div>
+            <p id="spotTotal" class="muted"></p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Activo</th>
+                    <th>Peso de referencia</th>
+                    <th>Precio</th>
+                    <th>Media seguimiento</th>
+                    <th>Distancia a media</th>
+                    <th>Última compra</th>
+                    <th>Media alternativa</th>
+                    <th>Fuente del precio</th>
+                  </tr>
+                </thead>
+                <tbody id="spotRows"></tbody>
+              </table>
+            </div>
+            <p class="note">
+              La distancia a la media es (precio / media − 1). No es el
+              beneficio total ni la rentabilidad histórica del portfolio: para
+              eso hacen falta cantidades, ventas, aportaciones y costes. Las
+              medias ajustadas por beneficios realizados y las últimas compras
+              se guardan por separado.
+            </p>
+            <details>
+              <summary>Editar o importar mi cartera</summary>
+              <form id="spotForm">
+                <p class="muted">
+                  Pesos de una fecha de referencia, no pesos que se recalculen
+                  con el mercado. STONK requiere precio manual hasta confirmar
+                  el contrato. Los precios manuales se identifican siempre como
+                  tales.
+                </p>
+                <div class="table-wrap">
+                  <table class="spot-form">
+                    <thead>
+                      <tr>
+                        <th>Activo</th>
+                        <th>Peso %</th>
+                        <th>Media seguimiento $</th>
+                        <th>Última compra $</th>
+                        <th>Media alternativa $</th>
+                        <th>Precio manual $</th>
+                      </tr>
+                    </thead>
+                    <tbody id="spotInputs"></tbody>
+                  </table>
+                </div>
+                <p id="spotError" role="status" class="negative"></p>
+                <div class="button-row">
+                  <button type="submit" class="button primary">
+                    Guardar localmente</button
+                  ><button type="button" id="spotExport" class="button ghost">
+                    Exportar JSON privado</button
+                  ><label class="button ghost"
+                    >Importar JSON<input
+                      id="spotImport"
+                      type="file"
+                      accept="application/json,.json" /></label
+                  ><button type="button" id="spotClear" class="button ghost">
+                    Borrar mi cartera
+                  </button>
+                </div>
+              </form>
+            </details>
+          </article>
+          <article class="card">
+            <h2>Escenario de exposición spot</h2>
+            <div class="form-grid">
+              <label
+                >Movimiento hipotético de todos los activos salvo USDT · %<input
+                  id="spotShock"
+                  type="number"
+                  min="-100"
+                  max="100"
+                  step="1"
+                  value="-20"
+              /></label>
+              <div>
+                <p class="eyebrow">EFECTO PONDERADO</p>
+                <strong id="spotScenario">—</strong>
+              </div>
+            </div>
+            <p class="note">
+              Aplica el mismo movimiento a los cinco activos y supone USDT
+              estable. Usa los pesos guardados, sin comisiones, impuestos,
+              cambios de peg ni nuevas operaciones. Es un escenario, no una
+              previsión.
+            </p>
+          </article>
+        </section>
         <section id="overview" class="page">
           <div class="page-heading">
             <div>
@@ -645,7 +1127,7 @@
       </main>
       <footer>
         <span>Datos para investigar. Hipótesis para contrastar.</span
-        ><span id="lastUpdated">—</span><span>v2 · 13/10/2026</span>
+        ><span id="lastUpdated">—</span><span>v3 · 14/10/2026</span>
       </footer>
     </div>
     <dialog id="helpDialog" aria-labelledby="helpTitle">

@@ -1,3 +1,4 @@
+import { initDesk, renderDesk } from "./lib/desk-view.js";
 import {
   day,
   number,
@@ -12,7 +13,7 @@ import {
   staleSofr,
 } from "./lib/analytics.js";
 import { migrateJournal } from "./lib/migrate.js";
-const VERSION = "20261013_1",
+const VERSION = "20261014_1",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -742,6 +743,9 @@ async function refresh() {
       "text",
     ),
     source("macro", "/api/macro"),
+    source("desk", "/api/desk"),
+    source("deskQuotes", "/api/quotes"),
+    source("projects", "/api/projects"),
   ]);
   if (Date.now() - liveAt >= 60000) quote = data.quote;
   try {
@@ -751,17 +755,23 @@ async function refresh() {
     renderMacro();
     renderSources();
     renderRisk();
+    renderDesk(data, health);
     lastRefresh = Date.now();
     text("lastUpdated", `Última consulta: ${time(lastRefresh)}`);
+    const partialDesk =
+      Object.values(data.desk?.series || {}).some((s) => s.error) ||
+      Object.values(data.projects?.sources || {}).some((s) => s.error) ||
+      data.deskQuotes?.error ||
+      data.deskQuotes?.rows?.some((q) => q.error);
     text(
       "status",
-      Object.values(health).every((h) => h.ok)
+      Object.values(health).every((h) => h.ok) && !partialDesk
         ? "Fuentes consultadas"
         : "Datos parciales",
     );
     $("status").classList.toggle(
       "error",
-      Object.values(health).some((h) => !h.ok),
+      Object.values(health).some((h) => !h.ok) || !!partialDesk,
     );
   } catch (e) {
     console.error(e);
@@ -955,7 +965,7 @@ for (const b of document.querySelectorAll("[data-page]"))
 for (const b of document.querySelectorAll("[data-jump]"))
   b.addEventListener("click", () => switchPage(b.dataset.jump));
 window.addEventListener("hashchange", () =>
-  switchPage(location.hash.slice(1) || "overview"),
+  switchPage(location.hash.slice(1) || "desk"),
 );
 for (const b of document.querySelectorAll("[data-range]"))
   b.addEventListener("click", () => {
@@ -1188,7 +1198,8 @@ document
   );
 renderRisk();
 renderJournal();
-switchPage(location.hash.slice(1) || "overview");
+initDesk({ chart, toast });
+switchPage(location.hash.slice(1) || "desk");
 refresh();
 connectLive();
 setInterval(async () => {
