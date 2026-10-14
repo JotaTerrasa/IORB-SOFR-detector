@@ -1,9 +1,9 @@
-const CACHE = "liquidity-shell-20261014-2";
+const CACHE = "liquidity-shell-20261014-3";
 const SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=20261014_2",
-  "./app.js?v=20261014_2",
+  "./styles.css?v=20261014_3",
+  "./app.js?v=20261014_3",
   "./lib/analytics.js",
   "./lib/desk-view.js",
   "./lib/desk-analytics.js",
