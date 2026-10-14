@@ -1234,6 +1234,6 @@ canvas.chart-dragging {
 }
 
 canvas.chart-interactive {
-  touch-action: none;
+  touch-action: pan-y;
   user-select: none;
 }
