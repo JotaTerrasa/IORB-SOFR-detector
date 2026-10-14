@@ -1,10 +1,15 @@
-const CACHE = "liquidity-shell-20261014-17";
+const CACHE = "liquidity-shell-20261014-18";
 const SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=20261014_3",
-  "./app.js?v=20261014_3",
+  "./styles.css?v=20261014_18",
+  "./app.js?v=20261014_18",
   "./lib/analytics.js",
+  "./lib/chart-range.js",
+  "./lib/chart-format.js",
+  "./lib/calendar-view.js",
+  "./lib/calendar-data.js",
+  "./lib/project-export.js",
   "./lib/desk-view.js",
   "./lib/desk-analytics.js",
   "./vendor/chart.umd.js?v=4.4.1",
@@ -44,7 +49,17 @@ self.addEventListener("fetch", (e) => {
   )
     return;
   e.respondWith(
-    fetch(r)
+    (async () => {
+      // The chart library is pinned to an exact version and never contains market data.
+      if (
+        u.pathname.endsWith("/vendor/chart.umd.js") &&
+        u.searchParams.get("v") === "4.4.1"
+      ) {
+        const cached = await caches.match(r);
+        if (cached) return cached;
+      }
+      return fetch(r);
+    })()
       .then((res) => {
         if (
           res.ok &&
