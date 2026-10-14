@@ -1,6 +1,6 @@
 # IORB × SOFR × BTC — Monitor de liquidez
 
-Monitor público de financiación repo y Bitcoin, con fuentes fechadas, contexto macro y herramientas de análisis. V3 reúne mercado, liquidez, proyectos y cartera spot local.
+Monitor público de financiación repo y Bitcoin, con fuentes fechadas, contexto macro y herramientas de análisis. V3 reúne mercado, liquidez y proyectos.
 
 ## Desarrollo y comprobaciones
 
@@ -18,7 +18,7 @@ El servidor local ejecuta las mismas funciones `api/*` que Vercel. Un servidor d
 ## Pantallas
 
 - **Mesa de mercado:** bonos, divisas, volatilidad, TGA diario, repos y fuentes fechadas.
-- **Proyectos y spot:** métricas DeFiLlama, STONK y cartera local.
+- **Proyectos DeFi:** métricas DeFiLlama, precios públicos y actividad de STONK.
 
 - **Resumen:** cotización BTC-USD spot, IORB, SOFR, diferencial en puntos básicos calculado con tasas de la misma fecha, tendencia y gráficos. Banda orientativa configurable, nunca “permiso para operar”.
 - **Liquidez macro:** TGA, reservas bancarias y ON RRP con fuentes, unidades, frecuencia y fechas propias. No se mezclan en un supuesto indicador exacto de liquidez.
@@ -52,20 +52,18 @@ Referencias: [metodología SOFR](https://www.newyorkfed.org/markets/reference-ra
 
 ## Privacidad, migración y seguridad
 
-Preferencias y cartera spot viven solo en `localStorage`; no se envían al backend. Laboratorio BTC y Riesgo y diario se han retirado por petición del usuario. No se borran los registros locales antiguos.
+Las preferencias de visualización se guardan en `localStorage`.
 
 Chart.js 4.4.1 se sirve localmente con su licencia. No hay dependencias CDN, fuentes remotas ni analítica de terceros. CSP restringe scripts/estilos al origen y WebSocket al proveedor de precio. No hay credenciales en Git. El proxy CoinGecko antiguo devuelve 410; los endpoints están acotados a fuentes y productos concretos.
 
 ## Release y recuperación
 
-Los cambios se revisan por PR y CI (`npm test`). Vercel mantiene despliegues versionados. Antes de publicar, comprobar escritorio/móvil, las cinco pantallas, gráficos, fuentes, cartera y CSV. Ver `docs/releases/2026-10-13.md` para la evidencia de esta actualización. La versión anterior es el commit `437d052`; se puede restaurar con un revert del PR o promoviendo su despliegue anterior en Vercel.
+Los cambios se revisan por PR y CI (`npm test`). Vercel mantiene despliegues versionados. Antes de publicar, comprobar escritorio/móvil, las cinco pantallas, gráficos, fuentes y CSV. Ver `docs/releases/2026-10-13.md` para la evidencia de esta actualización. La versión anterior es el commit `437d052`; se puede restaurar con un revert del PR o promoviendo su despliegue anterior en Vercel.
 
 ## Mesa de mercado y proyectos
 
 La mesa añade rendimientos 2/10/20/30 años, TLT, EUR/USD, USD/JPY, MOVE, VIX, curva FRED, tipos nominales/reales, petróleo spot, TGA diario y repos aceptados. Conserva las vistas de SOFR/IORB, reservas y ON RRP. Permite copiar un parte fechado, exportar observaciones y usar modo presentación.
 
-`Proyectos y spot` incorpora TVL y actividad de Aster/Pump y liquidez de Solana/Hyperliquid mediante la API gratuita de DeFiLlama. Las métricas de protocolo, red y token se distinguen. STONK se identifica por el contrato verificado de StonkFun en Solana: precio DeFiLlama, actividad del protocolo, ingresos/recompras/quemas oficiales en días UTC cerrados y liquidez por pool de DEX Screener.
+`Proyectos DeFi` incorpora TVL y actividad de Aster/Pump y liquidez de Solana/Hyperliquid mediante la API gratuita de DeFiLlama. Las métricas de protocolo, red y token se distinguen. STONK se identifica por el contrato verificado de StonkFun en Solana: precio DeFiLlama, actividad del protocolo, ingresos/recompras/quemas oficiales en días UTC cerrados y liquidez por pool de DEX Screener.
 
-La cartera se configura y guarda **solo en el navegador**. JSON de importación/exportación local, sin subida al servidor. Medias de seguimiento, compras y medias alternativas son campos separados. No se calcula beneficio total sin un libro completo de operaciones. El estado inicial 100% USDT es un ejemplo, no una cartera publicada de César.
-
-Fuentes y criterios: [documentación de la mesa](docs/research/cesar-market-desk.md). `node scripts/update-desk.mjs` actualiza snapshots públicos. El workflow usa el código de main y publica únicamente archivos de datos en data-feed.
+Fuentes y criterios: [documentación de la mesa](docs/research/market-sources.md). `node scripts/update-desk.mjs` actualiza snapshots públicos. El workflow usa el código de main y publica únicamente archivos de datos en data-feed.

@@ -5,9 +5,6 @@ import {
   repoRows,
   yieldDeltaBp,
   commonDate,
-  validatePortfolio,
-  scenario,
-  referenceReturn,
 } from "../lib/desk-analytics.js";
 import { collectQuotes, collectProjects } from "../api/_desk-data.js";
 test("Daily TGA closing record uses modern closing-balance field, without turning null into zero", () => {
@@ -71,23 +68,6 @@ test("Real and nominal comparison uses an actual common date", () => {
     "2026-10-12",
   );
   assert.equal(commonDate([[], [{ date: "2026-10-12" }]]), null);
-});
-const portfolio = () =>
-  ["USDT", "STONK", "SOL", "ASTER", "PUMP", "PURR"].map((symbol) => ({
-    symbol,
-    weight: symbol === "USDT" ? 40 : symbol === "SOL" ? 60 : 0,
-    average: null,
-    lastBuy: null,
-    alternative: null,
-    manualPrice: null,
-  }));
-test("Local portfolio scenario preserves cash and never presents reference return as realised profit", () => {
-  assert.equal(scenario(portfolio(), { SOL: -20 }), -12);
-  assert.ok(Math.abs(referenceReturn(120, 100) - 20) < 1e-10);
-  assert.equal(referenceReturn(120, null), null);
-  const p = portfolio();
-  p[1].weight = 1;
-  assert.throws(() => validatePortfolio(p), /100/);
 });
 test("Public quote parser rejects wrong instrument metadata", async () => {
   const old = globalThis.fetch;

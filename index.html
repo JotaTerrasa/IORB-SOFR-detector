@@ -11,13 +11,13 @@
     <title>Crypto Market Desk — Liquidez y proyectos</title>
     <meta
       name="description"
-      content="Mesa de mercado con SOFR–IORB, Bitcoin, TGA, bonos, divisas y proyectos DeFiLlama; cartera privada en el navegador."
+      content="Mesa de mercado con SOFR–IORB, Bitcoin, TGA, bonos, divisas y proyectos DeFiLlama."
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_2" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_3" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
-    <script type="module" src="./app.js?v=20261014_2"></script>
+    <script type="module" src="./app.js?v=20261014_3"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -41,7 +41,7 @@
     <div class="shell">
       <nav class="nav" aria-label="Secciones">
         <button class="nav-item" data-page="desk">Mesa de mercado</button
-        ><button class="nav-item" data-page="projects">Proyectos y spot</button>
+        ><button class="nav-item" data-page="projects">Proyectos DeFi</button>
         <button
           class="nav-item active"
           data-page="overview"
@@ -64,8 +64,8 @@
               </p>
               <h1>Todo el contexto, en una mesa.</h1>
               <p class="muted">
-                Lectura conjunta de las métricas que aparecen en los análisis
-                públicos de César Langreo.
+                Financiación, bonos, divisas y volatilidad con fuentes y fechas
+                verificables.
               </p>
             </div>
             <div class="button-row">
@@ -245,19 +245,18 @@
               >
             </div>
             <p class="note">
-              Herramienta independiente. No es un producto oficial ni una
-              recomendación de César Langreo.
+              Datos de fuentes públicas para analizar el mercado.
             </p>
           </article>
         </section>
         <section id="projects" class="page" hidden>
           <div class="page-heading">
             <div>
-              <p class="eyebrow">DEFiLLAMA · ACTIVIDAD Y CARTERA</p>
-              <h1>El proyecto y tu posición.</h1>
+              <p class="eyebrow">DEFiLLAMA · ACTIVIDAD DE PROYECTOS</p>
+              <h1>Los proyectos y su actividad.</h1>
               <p class="muted">
-                Contrasta actividad, capital bloqueado y liquidez del ecosistema
-                con referencias de precio guardadas localmente.
+                Contrasta actividad, capital bloqueado y liquidez de cada
+                ecosistema.
               </p>
             </div>
             <a
@@ -436,102 +435,6 @@
               Solana corresponde a la red, no al precio de SOL. Hyperliquid L1
               aporta contexto para PURR; PURR es una meme y no representa una
               participación en los ingresos de Hyperliquid.
-            </p>
-          </article>
-          <article class="card">
-            <div class="card-heading">
-              <h2>Cartera spot · privada en este navegador</h2>
-              <span class="tag">SIN ENVÍO AL SERVIDOR</span>
-            </div>
-            <p id="spotTotal" class="muted"></p>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Activo</th>
-                    <th>Peso de referencia</th>
-                    <th>Precio</th>
-                    <th>Media seguimiento</th>
-                    <th>Distancia a media</th>
-                    <th>Última compra</th>
-                    <th>Media alternativa</th>
-                    <th>Fuente del precio</th>
-                  </tr>
-                </thead>
-                <tbody id="spotRows"></tbody>
-              </table>
-            </div>
-            <p class="note">
-              La distancia a la media es (precio / media − 1). No es el
-              beneficio total ni la rentabilidad histórica del portfolio: para
-              eso hacen falta cantidades, ventas, aportaciones y costes. Las
-              medias ajustadas por beneficios realizados y las últimas compras
-              se guardan por separado.
-            </p>
-            <details>
-              <summary>Editar o importar mi cartera</summary>
-              <form id="spotForm">
-                <p class="muted">
-                  Pesos de una fecha de referencia, no pesos que se recalculen
-                  con el mercado. STONK requiere precio manual hasta confirmar
-                  el contrato. Los precios manuales se identifican siempre como
-                  tales.
-                </p>
-                <div class="table-wrap">
-                  <table class="spot-form">
-                    <thead>
-                      <tr>
-                        <th>Activo</th>
-                        <th>Peso %</th>
-                        <th>Media seguimiento $</th>
-                        <th>Última compra $</th>
-                        <th>Media alternativa $</th>
-                        <th>Precio manual $</th>
-                      </tr>
-                    </thead>
-                    <tbody id="spotInputs"></tbody>
-                  </table>
-                </div>
-                <p id="spotError" role="status" class="negative"></p>
-                <div class="button-row">
-                  <button type="submit" class="button primary">
-                    Guardar localmente</button
-                  ><button type="button" id="spotExport" class="button ghost">
-                    Exportar JSON privado</button
-                  ><label class="button ghost"
-                    >Importar JSON<input
-                      id="spotImport"
-                      type="file"
-                      accept="application/json,.json" /></label
-                  ><button type="button" id="spotClear" class="button ghost">
-                    Borrar mi cartera
-                  </button>
-                </div>
-              </form>
-            </details>
-          </article>
-          <article class="card">
-            <h2>Escenario de exposición spot</h2>
-            <div class="form-grid">
-              <label
-                >Movimiento hipotético de todos los activos salvo USDT · %<input
-                  id="spotShock"
-                  type="number"
-                  min="-100"
-                  max="100"
-                  step="1"
-                  value="-20"
-              /></label>
-              <div>
-                <p class="eyebrow">EFECTO PONDERADO</p>
-                <strong id="spotScenario">—</strong>
-              </div>
-            </div>
-            <p class="note">
-              Aplica el mismo movimiento a los cinco activos y supone USDT
-              estable. Usa los pesos guardados, sin comisiones, impuestos,
-              cambios de peg ni nuevas operaciones. Es un escenario, no una
-              previsión.
             </p>
           </article>
         </section>
@@ -885,8 +788,8 @@
       </p>
       <p>
         La <strong>mesa de mercado</strong> reúne financiación, bonos, divisas y
-        volatilidad. <strong>Proyectos y spot</strong> añade actividad de
-        DeFiLlama y tu cartera local. El <strong>resumen</strong> sigue BTC y
+        volatilidad. <strong>Proyectos DeFi</strong> añade actividad de
+        DeFiLlama de los proyectos. El <strong>resumen</strong> sigue BTC y
         SOFR–IORB; <strong>liquidez macro</strong> muestra reservas y ON RRP.
       </p>
       <p>

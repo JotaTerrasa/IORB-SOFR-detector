@@ -842,7 +842,7 @@ dialog::backdrop {
   margin-top: 8px;
 }
 
-/* Market desk and local portfolio */
+/* Market desk */
 #desk > .card,
 #projects > .card,
 #desk > .macro-grid,
@@ -853,22 +853,12 @@ dialog::backdrop {
 #projects .card {
   padding: 24px;
 }
-.spot-form input {
-  min-width: 105px;
-  width: 100%;
-}
-#spotScenario,
 #dailyTga {
   font-size: 26px;
   font-variant-numeric: tabular-nums;
 }
 #tgaTarget {
   max-width: 260px;
-}
-#spotImport {
-  display: block;
-  max-width: 200px;
-  margin-top: 8px;
 }
 .presentation .header {
   position: static;
