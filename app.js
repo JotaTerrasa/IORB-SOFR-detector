@@ -21,7 +21,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_23",
+const VERSION = "20261014_31",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
