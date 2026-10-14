@@ -10,7 +10,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_6",
+const VERSION = "20261014_7",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -159,6 +159,24 @@ async function source(key, url, parser = (x) => x, format = "json") {
       stale: !!cached,
       error: e.message,
     };
+  }
+  if (busy) {
+    completedSources++;
+    text("status", `Fuentes consultadas: ${completedSources}/8`);
+    try {
+      if (key === "quote") {
+        if (Date.now() - liveAt >= 60000) quote = data.quote;
+        renderQuote();
+      }
+      if (["sofr", "iorb"].includes(key)) renderRates();
+      if (["history", "sofr", "iorb"].includes(key)) renderHistory();
+      if (key === "macro") renderMacro();
+      if (["desk", "deskQuotes", "projects", "sofr", "iorb"].includes(key))
+        renderDesk(data, health);
+      renderSources();
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 function switchPage(id) {
@@ -568,9 +586,11 @@ function renderSources() {
     $("sourceRows").append(tr);
   }
 }
+let completedSources = 0;
 async function refresh() {
   if (busy) return;
   busy = true;
+  completedSources = 0;
   $("refresh").disabled = true;
   text("refresh", "Consultando…");
   text("status", "Consultando fuentes…");
