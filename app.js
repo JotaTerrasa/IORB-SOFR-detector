@@ -1,3 +1,4 @@
+import { attachChartRange } from "./lib/chart-range.js";
 import { chartUnit, chartValue, chartDate } from "./lib/chart-format.js";
 import { initCalendar } from "./lib/calendar-view.js";
 import { initDesk, renderDesk } from "./lib/desk-view.js";
@@ -11,7 +12,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_12",
+const VERSION = "20261014_13",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -315,7 +316,9 @@ function chart(id, labels, datasets, scales = {}) {
             maxRotation: 0,
             padding: 10,
             font: { size: 11 },
-            callback: (v) => chartDate(labels[v], true),
+            callback: function (v) {
+              return chartDate(this.getLabelForValue(v), true);
+            },
           },
         },
         ...styledScales,
@@ -324,6 +327,7 @@ function chart(id, labels, datasets, scales = {}) {
   });
   const canvas = $(id),
     box = canvas.parentElement;
+  attachChartRange(id, charts[id], canvas);
   if (!box.nextElementSibling?.classList.contains("chart-tools")) {
     const tools = node("div", null, "chart-tools");
     const expand = node("button", "Ampliar", "button ghost");
