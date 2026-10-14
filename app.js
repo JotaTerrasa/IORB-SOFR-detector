@@ -198,8 +198,8 @@ function switchPage(id) {
     if (b.dataset.page === id) b.setAttribute("aria-current", "page");
     else b.removeAttribute("aria-current");
   });
-  history.replaceState(null, "", "#" + id);
-  window.scrollTo({ top: 0 });
+  history.replaceState(null, "", "#/" + id);
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   Object.values(charts).forEach((c) => c.resize());
 }
 for (const canvas of document.querySelectorAll(".chart-box canvas")) {
@@ -982,7 +982,7 @@ for (const b of document.querySelectorAll("[data-page]"))
 for (const b of document.querySelectorAll("[data-jump]"))
   b.addEventListener("click", () => switchPage(b.dataset.jump));
 window.addEventListener("hashchange", () =>
-  switchPage(location.hash.slice(1) || "desk"),
+  switchPage(location.hash.slice(1).replace(/^\//, "") || "desk"),
 );
 for (const b of document.querySelectorAll("[data-range]"))
   b.addEventListener("click", () => {
@@ -1096,7 +1096,7 @@ document
     ),
   );
 initDesk({ chart, toast });
-switchPage(location.hash.slice(1) || "desk");
+switchPage(location.hash.slice(1).replace(/^\//, "") || "desk");
 refresh();
 connectLive();
 setInterval(async () => {
