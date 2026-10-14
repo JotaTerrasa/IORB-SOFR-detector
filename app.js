@@ -1,4 +1,8 @@
 import {
+  captureChartViews,
+  restoreChartViews,
+} from "./lib/chart-preferences.js";
+import {
   readChartView,
   saveChartView,
   clearChartViews,
@@ -17,7 +21,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_22",
+const VERSION = "20261014_23",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -1166,6 +1170,11 @@ $("cancelResetCharts").addEventListener("click", () =>
 );
 $("confirmResetCharts").addEventListener("click", () => {
   $("resetChartsDialog").close();
+  const previous = captureChartViews();
+  if (previous) {
+    storage.set("chartResetUndo", previous);
+    $("undoResetCharts").hidden = false;
+  }
   const cleared = clearChartViews();
   resetChartRanges();
   document
@@ -1187,5 +1196,43 @@ $("confirmResetCharts").addEventListener("click", () => {
     cleared
       ? "Gráficas restablecidas. Se han borrado las fechas y ampliaciones guardadas."
       : "Gráficas restablecidas en esta sesión. El navegador no ha permitido borrar las preferencias guardadas.",
+  );
+});
+
+$("undoResetCharts").hidden = !storage.get("chartResetUndo");
+$("undoResetCharts").addEventListener("click", () => {
+  if (!restoreChartViews(storage.get("chartResetUndo"))) {
+    text(
+      "resetChartsFeedback",
+      "No se han podido recuperar las preferencias. Vuelve a intentarlo.",
+    );
+    return;
+  }
+  resetChartRanges();
+  for (const canvas of document.querySelectorAll(".chart-box canvas")) {
+    const expanded = readChartView(canvas.id).expanded === true;
+    canvas.parentElement.classList.toggle("chart-expanded", expanded);
+    const button = canvas.parentElement.nextElementSibling.querySelector(
+      "button[aria-pressed]",
+    );
+    if (button) {
+      button.textContent = expanded ? "Reducir" : "Ampliar";
+      button.setAttribute("aria-pressed", String(expanded));
+    }
+  }
+  let range = "90";
+  try {
+    range = localStorage.getItem("market-project-range:v1") || "90";
+  } catch {}
+  $("projectRange").value = ["30", "90", "all"].includes(range) ? range : "90";
+  renderHistory();
+  renderMacro();
+  renderDesk(data, health);
+  Object.values(charts).forEach((c) => c.resize());
+  storage.set("chartResetUndo", null);
+  $("undoResetCharts").hidden = true;
+  text(
+    "resetChartsFeedback",
+    "Se han recuperado las fechas y ampliaciones anteriores al último restablecimiento.",
   );
 });
