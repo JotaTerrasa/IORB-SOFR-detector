@@ -15,9 +15,9 @@
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_6" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_7" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
-    <script type="module" src="./app.js?v=20261014_6"></script>
+    <script type="module" src="./app.js?v=20261014_7"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -97,6 +97,29 @@
               </button>
             </div>
           </div>
+          <details class="card source-health">
+            <summary>
+              Estado y actualidad de las fuentes
+              <span id="deskHealthCount" class="tag">Consultando…</span>
+            </summary>
+            <p class="muted">
+              Una consulta correcta puede contener una observación anterior.
+              Revisa ambas fechas antes de interpretar.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Bloque</th>
+                    <th>Estado</th>
+                    <th>Observación</th>
+                    <th>Última consulta de la fuente</th>
+                  </tr>
+                </thead>
+                <tbody id="deskHealthRows"></tbody>
+              </table>
+            </div>
+          </details>
           <article class="card reading">
             <div>
               <p class="eyebrow">ANTES DE INTERPRETAR</p>
