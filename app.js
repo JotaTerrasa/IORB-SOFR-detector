@@ -12,7 +12,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_18",
+const VERSION = "20261014_19",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -193,6 +193,17 @@ function switchPage(id) {
   window.scrollTo({ top: 0 });
   Object.values(charts).forEach((c) => c.resize());
 }
+for (const canvas of document.querySelectorAll(".chart-box canvas")) {
+  const box = canvas.parentElement;
+  if (canvas.id !== "curveChart") {
+    const slot = document.createElement("div");
+    slot.className = "chart-range-slot";
+    box.before(slot);
+  }
+  const tools = document.createElement("div");
+  tools.className = "chart-tools";
+  box.after(tools);
+}
 const pendingCharts = new Map();
 const chartFrames = new Map();
 const chartObserver = new IntersectionObserver(
@@ -201,7 +212,7 @@ const chartObserver = new IntersectionObserver(
       if (entry.isIntersecting) paintChart(entry.target.id);
     }
   },
-  { rootMargin: "200px" },
+  { rootMargin: "600px" },
 );
 function paintChart(id) {
   if (chartFrames.has(id) || !pendingCharts.has(id)) return;
@@ -223,8 +234,8 @@ function chart(id, labels, datasets, scales = {}) {
   const rect = canvas.getBoundingClientRect();
   if (
     !canvas.closest("[hidden]") &&
-    rect.bottom >= -200 &&
-    rect.top <= innerHeight + 200
+    rect.bottom >= -600 &&
+    rect.top <= innerHeight + 600
   )
     paintChart(id);
 }
@@ -364,8 +375,8 @@ function drawChartNow(id, labels, datasets, scales = {}) {
   const canvas = $(id),
     box = canvas.parentElement;
   attachChartRange(id, charts[id], canvas);
-  if (!box.nextElementSibling?.classList.contains("chart-tools")) {
-    const tools = node("div", null, "chart-tools");
+  if (!box.nextElementSibling?.querySelector("button")) {
+    const tools = box.nextElementSibling;
     const expand = node("button", "Ampliar", "button ghost");
     expand.type = "button";
     expand.setAttribute("aria-pressed", "false");
