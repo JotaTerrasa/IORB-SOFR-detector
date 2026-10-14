@@ -15,9 +15,9 @@
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_7" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_8" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
-    <script type="module" src="./app.js?v=20261014_7"></script>
+    <script type="module" src="./app.js?v=20261014_8"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -369,6 +369,8 @@
                   <tr>
                     <th>Proyecto</th>
                     <th>TVL</th>
+                    <th>Δ 7 días</th>
+                    <th>Δ 30 días</th>
                     <th>Último día observado</th>
                     <th>Consulta</th>
                     <th>Fuente</th>
@@ -383,6 +385,35 @@
               sus productos; el TVL no es la capitalización del token.
             </p>
           </article>
+          <article class="card chart-card">
+            <h2>Comparar evolución del TVL</h2>
+            <p id="projectCompareNote" class="muted"></p>
+            <div class="chart-box">
+              <canvas
+                id="projectCompareChart"
+                role="img"
+                aria-label="Comparación de TVL de Aster y Pump con base 100 en la primera fecha común"
+              ></canvas>
+            </div>
+            <p class="note">
+              El selector de histórico se aplica también a esta comparación. Un
+              cambio de TVL puede proceder de flujos o del precio de los activos
+              depositados. Los cambios de 7 y 30 días requieren una observación
+              en ambas fechas exactas.
+            </p>
+          </article>
+          <details id="projectReportDetails" class="card">
+            <summary>Resumen listo para copiar</summary>
+            <p class="muted">
+              Datos públicos con ventanas, fechas y estado de las fuentes.
+            </p>
+            <button id="projectCopy" class="button primary" disabled>
+              Copiar resumen de proyectos
+            </button>
+            <pre id="projectReport" class="report-text">
+Esperando datos de proyectos…</pre
+            >
+          </details>
           <div class="macro-grid">
             <article class="card chart-card">
               <h2>Aster · TVL</h2>
