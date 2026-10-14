@@ -1110,3 +1110,57 @@ code {
   border-color: var(--accent);
   color: var(--accent);
 }
+/* Quieter hierarchy: data first, explanatory text on demand. */
+.method-note {
+  margin-top: 16px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.method-note summary {
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+.method-note[open] summary {
+  color: var(--accent);
+}
+.method-note .note {
+  margin-bottom: 0;
+  line-height: 1.65;
+}
+#desk .desk-context {
+  padding: 15px 20px;
+  border-left-width: 2px;
+  background: transparent;
+}
+.desk-context p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+}
+#deskReportDetails > summary,
+.source-health > summary,
+#projectReportDetails > summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--muted);
+}
+#deskReportDetails[open] > summary,
+.source-health[open] > summary,
+#projectReportDetails[open] > summary {
+  color: var(--text);
+}
+.page-heading {
+  margin-bottom: 26px;
+}
+#desk .card,
+#projects .card {
+  border-radius: 10px;
+}
+#desk .table-wrap,
+#projects .table-wrap {
+  border-radius: 6px;
+}
+#projectErrors:empty {
+  display: none;
+}

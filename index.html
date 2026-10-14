@@ -15,9 +15,9 @@
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./styles.css?v=20261014_10" />
+    <link rel="stylesheet" href="./styles.css?v=20261014_11" />
     <script defer src="./vendor/chart.umd.js?v=4.4.1"></script>
-    <script type="module" src="./app.js?v=20261014_10"></script>
+    <script type="module" src="./app.js?v=20261014_11"></script>
   </head>
   <body>
     <a class="skip" href="#main">Saltar al contenido</a>
@@ -78,19 +78,7 @@
               </button>
             </div>
           </div>
-          <details id="deskReportDetails" class="card">
-            <summary>Revisar parte diario antes de compartir</summary>
-            <p class="muted">
-              Revisa las fechas y los avisos de consulta antes de usar estas
-              cifras.
-            </p>
-            <button id="deskReportDownload" class="button ghost" disabled>
-              Descargar parte TXT
-            </button>
-            <pre id="deskReport" class="report-text">
-Esperando observaciones…</pre
-            >
-          </details>
+
           <div
             id="marketBrief"
             class="brief-grid"
@@ -110,33 +98,9 @@ Esperando observaciones…</pre
               </button>
             </div>
           </div>
-          <details class="card source-health">
-            <summary>
-              Estado y actualidad de las fuentes
-              <span id="deskHealthCount" class="tag">Consultando…</span>
-            </summary>
-            <p class="muted">
-              Una consulta correcta puede contener una observación anterior.
-              Revisa ambas fechas antes de interpretar.
-            </p>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Bloque</th>
-                    <th>Estado</th>
-                    <th>Observación</th>
-                    <th>Última consulta de la fuente</th>
-                  </tr>
-                </thead>
-                <tbody id="deskHealthRows"></tbody>
-              </table>
-            </div>
-          </details>
-          <article class="card reading">
+
+          <article class="card reading desk-context">
             <div>
-              <p class="eyebrow">ANTES DE INTERPRETAR</p>
-              <h2>Comprueba la financiación y el contexto.</h2>
               <p id="deskReading" class="muted">Esperando fuentes.</p>
             </div>
           </article>
@@ -163,11 +127,14 @@ Esperando observaciones…</pre
                 <tbody id="deskQuotes"></tbody>
               </table>
             </div>
-            <p class="note">
-              Los rendimientos son tasas, no precios de bonos. Su cambio se
-              muestra en puntos básicos. TLT es el precio de un ETF; MOVE mide
-              volatilidad de bonos y VIX de acciones.
-            </p>
+            <details class="method-note">
+              <summary>Cómo interpretar estos datos</summary>
+              <p class="note">
+                Los rendimientos son tasas, no precios de bonos. Su cambio se
+                muestra en puntos básicos. TLT es el precio de un ETF; MOVE mide
+                volatilidad de bonos y VIX de acciones.
+              </p>
+            </details>
           </article>
           <div class="macro-grid">
             <article class="card chart-card">
@@ -216,12 +183,15 @@ Esperando observaciones…</pre
                   placeholder="Introduce una referencia"
               /></label>
               <p id="tgaDistance" class="muted"></p>
-              <p class="note">
-                Saldo diario publicado por el Tesoro. La sección Liquidez macro
-                muestra otra medida: media semanal de FRED. Alcanzar un máximo
-                no asegura una caída ni una subida de crypto; importa el cambio
-                posterior y cómo se financia.
-              </p>
+              <details class="method-note">
+                <summary>Cómo interpretar estos datos</summary>
+                <p class="note">
+                  Saldo diario publicado por el Tesoro. La sección Liquidez
+                  macro muestra otra medida: media semanal de FRED. Alcanzar un
+                  máximo no asegura una caída ni una subida de crypto; importa
+                  el cambio posterior y cómo se financia.
+                </p>
+              </details>
             </article>
             <article class="card chart-card">
               <h2>Repos aceptados por la Fed</h2>
@@ -267,11 +237,14 @@ Esperando observaciones…</pre
                 <tbody id="deskMacroRows"></tbody>
               </table>
             </div>
-            <p class="note">
-              Cambios en unidades de la serie, calculados sobre observaciones
-              publicadas; no se rellenan festivos. WTI y Brent son precios spot
-              diarios, no futuros intradía.
-            </p>
+            <details class="method-note">
+              <summary>Cómo interpretar estos datos</summary>
+              <p class="note">
+                Cambios en unidades de la serie, calculados sobre observaciones
+                publicadas; no se rellenan festivos. WTI y Brent son precios
+                spot diarios, no futuros intradía.
+              </p>
+            </details>
           </article>
           <article class="card">
             <h2>Próximos catalizadores</h2>
@@ -324,6 +297,42 @@ Esperando observaciones…</pre
               </button>
             </section>
           </article>
+          <details id="deskReportDetails" class="card">
+            <summary>Revisar parte diario antes de compartir</summary>
+            <p class="muted">
+              Revisa las fechas y los avisos de consulta antes de usar estas
+              cifras.
+            </p>
+            <button id="deskReportDownload" class="button ghost" disabled>
+              Descargar parte TXT
+            </button>
+            <pre id="deskReport" class="report-text">
+Esperando observaciones…</pre
+            >
+          </details>
+          <details class="card source-health">
+            <summary>
+              Estado y actualidad de las fuentes
+              <span id="deskHealthCount" class="tag">Consultando…</span>
+            </summary>
+            <p class="muted">
+              Una consulta correcta puede contener una observación anterior.
+              Revisa ambas fechas antes de interpretar.
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Bloque</th>
+                    <th>Estado</th>
+                    <th>Observación</th>
+                    <th>Última consulta de la fuente</th>
+                  </tr>
+                </thead>
+                <tbody id="deskHealthRows"></tbody>
+              </table>
+            </div>
+          </details>
         </section>
         <section id="projects" class="page" hidden>
           <div class="page-heading">
@@ -392,11 +401,14 @@ Esperando observaciones…</pre
                 <tbody id="projectRows"></tbody>
               </table>
             </div>
-            <p class="note">
-              TVL agregado de cada proyecto según DeFiLlama, excluyendo las
-              categorías opcionales staking y pool2. No se suma el agregado a
-              sus productos; el TVL no es la capitalización del token.
-            </p>
+            <details class="method-note">
+              <summary>Cómo interpretar estos datos</summary>
+              <p class="note">
+                TVL agregado de cada proyecto según DeFiLlama, excluyendo las
+                categorías opcionales staking y pool2. No se suma el agregado a
+                sus productos; el TVL no es la capitalización del token.
+              </p>
+            </details>
           </article>
           <article class="card chart-card">
             <h2>Comparar evolución del TVL</h2>
@@ -408,12 +420,15 @@ Esperando observaciones…</pre
                 aria-label="Comparación de TVL de Aster y Pump con base 100 en la primera fecha común"
               ></canvas>
             </div>
-            <p class="note">
-              El selector de histórico se aplica también a esta comparación. Un
-              cambio de TVL puede proceder de flujos o del precio de los activos
-              depositados. Los cambios de 7 y 30 días requieren una observación
-              en ambas fechas exactas.
-            </p>
+            <details class="method-note">
+              <summary>Cómo interpretar estos datos</summary>
+              <p class="note">
+                El selector de histórico se aplica también a esta comparación.
+                Un cambio de TVL puede proceder de flujos o del precio de los
+                activos depositados. Los cambios de 7 y 30 días requieren una
+                observación en ambas fechas exactas.
+              </p>
+            </details>
           </article>
           <details id="projectReportDetails" class="card">
             <summary>Resumen listo para copiar</summary>
@@ -429,12 +444,15 @@ Esperando observaciones…</pre
             <button id="projectReportDownload" class="button ghost" disabled>
               Descargar resumen TXT
             </button>
-            <p class="note">
-              El CSV incluye todo el histórico disponible y las ventanas
-              publicadas, sin aplicar el buscador ni el rango del gráfico.
-              Celdas de observación vacías indican ventanas móviles sin fecha
-              diaria publicada.
-            </p>
+            <details class="method-note">
+              <summary>Cómo interpretar estos datos</summary>
+              <p class="note">
+                El CSV incluye todo el histórico disponible y las ventanas
+                publicadas, sin aplicar el buscador ni el rango del gráfico.
+                Celdas de observación vacías indican ventanas móviles sin fecha
+                diaria publicada.
+              </p>
+            </details>
             <pre id="projectReport" class="report-text">
 Esperando datos de proyectos…</pre
             >
@@ -506,14 +524,17 @@ Esperando datos de proyectos…</pre
             </div>
             <p id="stonkRangeNote" class="muted"></p>
             <p id="stonkPartial" class="note"></p>
-            <p class="note">
-              Fuente oficial: ingresos en USD reclamados al tesoro y gasto en
-              recompras. DeFiLlama aplica su propia metodología y puede usar
-              otra ventana. No comparar el día en curso con días completos. Las
-              recompras no son un dividendo garantizado ni implican que el
-              precio vaya a subir; STONK no es una acción de SPY ni otorga
-              propiedad del índice.
-            </p>
+            <details class="method-note">
+              <summary>Cómo interpretar estos datos</summary>
+              <p class="note">
+                Fuente oficial: ingresos en USD reclamados al tesoro y gasto en
+                recompras. DeFiLlama aplica su propia metodología y puede usar
+                otra ventana. No comparar el día en curso con días completos.
+                Las recompras no son un dividendo garantizado ni implican que el
+                precio vaya a subir; STONK no es una acción de SPY ni otorga
+                propiedad del índice.
+              </p>
+            </details>
             <details>
               <summary>Liquidez de los principales pools de STONK</summary>
               <div class="table-wrap">
@@ -530,13 +551,16 @@ Esperando datos de proyectos…</pre
                   <tbody id="stonkPoolRows"></tbody>
                 </table>
               </div>
-              <p class="note">
-                DEX Screener · cinco pools con mayor liquidez publicada y
-                contrato base comprobado. La liquidez incluye ambos lados del
-                pool: no es profundidad ejecutable ni una estimación de
-                deslizamiento. El volumen del pool no es el volumen de toda
-                StonkFun.
-              </p>
+              <details class="method-note">
+                <summary>Cómo interpretar estos datos</summary>
+                <p class="note">
+                  DEX Screener · cinco pools con mayor liquidez publicada y
+                  contrato base comprobado. La liquidez incluye ambos lados del
+                  pool: no es profundidad ejecutable ni una estimación de
+                  deslizamiento. El volumen del pool no es el volumen de toda
+                  StonkFun.
+                </p>
+              </details>
             </details>
           </article>
           <article class="card">
@@ -573,13 +597,16 @@ Esperando datos de proyectos…</pre
                 <tbody id="activityRows"></tbody>
               </table>
             </div>
-            <p class="note">
-              Comisiones pagadas por usuarios; ingresos retenidos según la
-              metodología de cada producto. No son dividendos para quien posee
-              el token. Volumen spot no incluye volumen de perpetuos. Un guion
-              significa que la fuente no aporta la métrica; no significa cero.
-              Las ventanas de 24 h son las publicadas por DeFiLlama.
-            </p>
+            <details class="method-note">
+              <summary>Cómo interpretar estos datos</summary>
+              <p class="note">
+                Comisiones pagadas por usuarios; ingresos retenidos según la
+                metodología de cada producto. No son dividendos para quien posee
+                el token. Volumen spot no incluye volumen de perpetuos. Un guion
+                significa que la fuente no aporta la métrica; no significa cero.
+                Las ventanas de 24 h son las publicadas por DeFiLlama.
+              </p>
+            </details>
           </article>
           <article class="card">
             <h2 id="chainBlock" tabindex="-1">Liquidez del ecosistema</h2>
@@ -597,11 +624,14 @@ Esperando datos de proyectos…</pre
                 <tbody id="chainRows"></tbody>
               </table>
             </div>
-            <p class="note">
-              Solana corresponde a la red, no al precio de SOL. Hyperliquid L1
-              aporta contexto para PURR; PURR es una meme y no representa una
-              participación en los ingresos de Hyperliquid.
-            </p>
+            <details class="method-note">
+              <summary>Cómo interpretar estos datos</summary>
+              <p class="note">
+                Solana corresponde a la red, no al precio de SOL. Hyperliquid L1
+                aporta contexto para PURR; PURR es una meme y no representa una
+                participación en los ingresos de Hyperliquid.
+              </p>
+            </details>
           </article>
           <details class="card glossary">
             <summary>Cómo leer estas métricas</summary>
