@@ -21,7 +21,7 @@ import {
   spreadRows,
   staleSofr,
 } from "./lib/analytics.js";
-const VERSION = "20261014_32",
+const VERSION = "20261014_33",
   $ = (id) => document.getElementById(id);
 const fmt = (n, d = 2) =>
   Number.isFinite(n)
@@ -190,7 +190,10 @@ async function source(key, url, parser = (x) => x, format = "json") {
     }
   }
 }
-function switchPage(id, addHistory = false) {
+function switchPage(id, addHistory = false, restorePosition = false) {
+  const savedTop = restorePosition ? Number(history.state?.scrollTop) || 0 : 0;
+  if (addHistory)
+    history.replaceState({ ...history.state, scrollTop: window.scrollY }, "");
   if (!$(id)?.classList.contains("page")) id = "desk";
   document.querySelectorAll(".page").forEach((p) => (p.hidden = p.id !== id));
   document.querySelectorAll("[data-page]").forEach((b) => {
@@ -199,10 +202,12 @@ function switchPage(id, addHistory = false) {
     else b.removeAttribute("aria-current");
   });
   const route = "#/" + id;
-  if (addHistory && location.hash !== route) history.pushState(null, "", route);
-  else history.replaceState(null, "", route);
-  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  if (addHistory && location.hash !== route)
+    history.pushState({ scrollTop: 0 }, "", route);
+  else
+    history.replaceState({ ...history.state, scrollTop: savedTop }, "", route);
   Object.values(charts).forEach((c) => c.resize());
+  window.scrollTo({ top: savedTop, left: 0, behavior: "instant" });
 }
 for (const canvas of document.querySelectorAll(".chart-box canvas")) {
   const box = canvas.parentElement;
@@ -983,8 +988,22 @@ for (const b of document.querySelectorAll("[data-page]"))
   b.addEventListener("click", () => switchPage(b.dataset.page, true));
 for (const b of document.querySelectorAll("[data-jump]"))
   b.addEventListener("click", () => switchPage(b.dataset.jump, true));
+let scrollSaveTimer;
+window.addEventListener(
+  "scroll",
+  () => {
+    clearTimeout(scrollSaveTimer);
+    const route = location.hash;
+    const top = window.scrollY;
+    scrollSaveTimer = setTimeout(() => {
+      if (location.hash === route)
+        history.replaceState({ ...history.state, scrollTop: top }, "");
+    }, 150);
+  },
+  { passive: true },
+);
 window.addEventListener("hashchange", () =>
-  switchPage(location.hash.slice(1).replace(/^\//, "") || "desk"),
+  switchPage(location.hash.slice(1).replace(/^\//, "") || "desk", false, true),
 );
 for (const b of document.querySelectorAll("[data-range]"))
   b.addEventListener("click", () => {
