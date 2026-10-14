@@ -54,6 +54,18 @@
     "api/iorb.js": {
       "maxDuration": 30,
       "includeFiles": "data/fred-snapshot.json"
+    },
+    "api/desk.js": {
+      "maxDuration": 30,
+      "includeFiles": "data/*-snapshot.json"
+    },
+    "api/quotes.js": {
+      "maxDuration": 30,
+      "includeFiles": "data/*-snapshot.json"
+    },
+    "api/projects.js": {
+      "maxDuration": 30,
+      "includeFiles": "data/*-snapshot.json"
     }
   },
   "git": {

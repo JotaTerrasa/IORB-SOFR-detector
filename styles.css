@@ -841,3 +841,63 @@ dialog::backdrop {
   display: block;
   margin-top: 8px;
 }
+
+/* Market desk and local portfolio */
+#desk > .card,
+#projects > .card,
+#desk > .macro-grid,
+#projects > .macro-grid {
+  margin-bottom: 20px;
+}
+#desk .card,
+#projects .card {
+  padding: 24px;
+}
+.spot-form input {
+  min-width: 105px;
+  width: 100%;
+}
+#spotScenario,
+#dailyTga {
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+}
+#tgaTarget {
+  max-width: 260px;
+}
+#spotImport {
+  display: block;
+  max-width: 200px;
+  margin-top: 8px;
+}
+.presentation .header {
+  position: static;
+}
+.presentation .shell {
+  max-width: 1800px;
+}
+.presentation .card {
+  font-size: 18px;
+}
+.presentation .table-wrap {
+  max-height: none;
+}
+@media (max-width: 600px) {
+  #desk .card,
+  #projects .card {
+    padding: 16px;
+  }
+  #desk .button-row {
+    flex-wrap: wrap;
+  }
+}
+#desk > .macro-grid,
+#projects > .macro-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 850px) {
+  #desk > .macro-grid,
+  #projects > .macro-grid {
+    grid-template-columns: 1fr;
+  }
+}

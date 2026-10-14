@@ -3,7 +3,15 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const apiNames = new Set(["iorb", "nyfed", "market", "macro"]);
+const apiNames = new Set([
+  "iorb",
+  "nyfed",
+  "market",
+  "macro",
+  "desk",
+  "quotes",
+  "projects",
+]);
 const types = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",

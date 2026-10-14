@@ -1,9 +1,7 @@
-name: Refresh verified FRED data
+name: Refresh verified market data
 on:
   schedule:
     - cron: '17 */2 * * *'
-  push:
-    branches: [fix/fred-production]
   workflow_dispatch:
 permissions:
   contents: write
@@ -16,18 +14,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main
+          path: app
+      - uses: actions/checkout@v4
+        with:
           ref: data-feed
+          path: feed
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
+          cache-dependency-path: app/package-lock.json
       - run: npm ci
+        working-directory: app
+      - name: Preserve last verified observations
+        run: cp feed/data/*-snapshot.json app/data/
       - run: node scripts/update-fred.mjs
-      - name: Publish changed observations
+        working-directory: app
+      - run: node scripts/update-desk.mjs
+        working-directory: app
+      - name: Publish only data files
+        working-directory: feed
         run: |
-          if git diff --quiet -- data/fred-snapshot.json; then exit 0; fi
+          cp ../app/data/*-snapshot.json data/
+          if git diff --quiet -- data/; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/fred-snapshot.json
-          git commit -m 'Refresh verified FRED observations'
+          git add data/*-snapshot.json
+          git commit -m 'Refresh public market observations'
           git push origin HEAD:data-feed
