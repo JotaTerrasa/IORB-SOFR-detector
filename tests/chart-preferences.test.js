@@ -66,3 +66,36 @@ test("Reset removes only chart preferences and the project history selection", a
     false,
   );
 });
+
+test("Undo restores previous chart values and leaves unrelated settings intact", async () => {
+  const { captureChartViews, restoreChartViews, clearChartViews } =
+    await import("../lib/chart-preferences.js");
+  const data = new Map([
+    [
+      "market-chart-view:v1:a",
+      JSON.stringify({ range: ["2026-09-01", "2026-09-15"], expanded: true }),
+    ],
+    ["market-project-range:v1", "all"],
+    ["other", "keep"],
+  ]);
+  const store = {
+    get length() {
+      return data.size;
+    },
+    key: (i) => [...data.keys()][i],
+    getItem: (k) => data.get(k),
+    setItem: (k, v) => data.set(k, v),
+    removeItem: (k) => data.delete(k),
+  };
+  const snapshot = captureChartViews(store);
+  clearChartViews(store);
+  assert.equal(restoreChartViews(snapshot, store), true);
+  assert.equal(readChartView("a", store).expanded, true);
+  assert.deepEqual(readChartView("a", store).range, [
+    "2026-09-01",
+    "2026-09-15",
+  ]);
+  assert.equal(data.get("market-project-range:v1"), "all");
+  assert.equal(data.get("other"), "keep");
+  assert.equal(restoreChartViews(null, store), false);
+});
