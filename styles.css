@@ -1232,3 +1232,8 @@ canvas.chart-interactive {
 canvas.chart-dragging {
   cursor: grabbing;
 }
+
+canvas.chart-interactive {
+  touch-action: none;
+  user-select: none;
+}

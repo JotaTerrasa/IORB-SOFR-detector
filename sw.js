@@ -1,4 +1,4 @@
-const CACHE = "liquidity-shell-20261014-14";
+const CACHE = "liquidity-shell-20261014-15";
 const SHELL = [
   "./",
   "./index.html",
