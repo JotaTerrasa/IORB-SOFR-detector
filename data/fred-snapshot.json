@@ -1,12 +1,8 @@
 {
-  "generatedAt": "2026-10-14T18:40:27.521Z",
+  "generatedAt": "2026-10-15T04:44:55.750Z",
   "source": "FRED CSV official series",
   "series": {
     "IORB": [
-      {
-        "date": "2024-08-05",
-        "value": 5.4
-      },
       {
         "date": "2024-08-06",
         "value": 5.4
@@ -3206,6 +3202,10 @@
       {
         "date": "2026-10-14",
         "value": 3.9
+      },
+      {
+        "date": "2026-10-15",
+        "value": 3.9
       }
     ],
     "WTREGEN": [
@@ -4125,10 +4125,6 @@
       }
     ],
     "RRPONTSYD": [
-      {
-        "date": "2024-08-05",
-        "value": 316.246
-      },
       {
         "date": "2024-08-06",
         "value": 291.958
