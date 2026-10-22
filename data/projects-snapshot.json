@@ -1,33 +1,33 @@
 {
-  "generatedAt": "2026-10-22T11:58:14.561Z",
+  "generatedAt": "2026-10-22T17:14:20.444Z",
   "sources": {
-    "stablecoins": {
-      "value": [
-        {
-          "name": "Hyperliquid L1",
-          "usd": 7045960602.579268
-        },
-        {
-          "name": "Solana",
-          "usd": 15899545890.49703
-        }
-      ],
-      "fetchedAt": "2026-10-22T11:58:06.625Z",
-      "url": "https://stablecoins.llama.fi/stablecoinchains"
-    },
     "chains": {
       "value": [
         {
           "name": "Hyperliquid L1",
-          "tvl": 2430458803.0030003
+          "tvl": 2415479265.2403145
         },
         {
           "name": "Solana",
-          "tvl": 5909847598.06444
+          "tvl": 6054476587.980045
         }
       ],
-      "fetchedAt": "2026-10-22T11:58:06.650Z",
+      "fetchedAt": "2026-10-22T17:14:12.320Z",
       "url": "https://api.llama.fi/v2/chains"
+    },
+    "stablecoins": {
+      "value": [
+        {
+          "name": "Hyperliquid L1",
+          "usd": 7049283499.656225
+        },
+        {
+          "name": "Solana",
+          "usd": 15916280480.109232
+        }
+      ],
+      "fetchedAt": "2026-10-22T17:14:12.426Z",
+      "url": "https://stablecoins.llama.fi/stablecoinchains"
     },
     "stonkPools": {
       "value": [
@@ -35,40 +35,51 @@
           "pair": "AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg",
           "dex": "orca",
           "quote": "SOL",
-          "liquidity": 2198729.03,
-          "volume24h": 1259375.63
+          "liquidity": 2140541.89,
+          "volume24h": 989620.31
         },
         {
           "pair": "zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
           "dex": "meteora",
           "quote": "SOL",
-          "liquidity": 2001747.98,
-          "volume24h": 2185437.28
+          "liquidity": 1885046.57,
+          "volume24h": 1880830.07
         },
         {
           "pair": "G4G5SzkbLFMhoSgHiQNeyJFt75sSDsL1rD8LVyT5xZbU",
           "dex": "raydium",
           "quote": "USDC",
-          "liquidity": 468909.47,
-          "volume24h": 962452.86
+          "liquidity": 458844.44,
+          "volume24h": 857941.41
         },
         {
           "pair": "GupqDENX2H7xFSUtGwWkvXYNg3eFriX2K3KeHniWTARf",
           "dex": "orca",
           "quote": "USDC",
-          "liquidity": 117127.04,
-          "volume24h": 179164.27
+          "liquidity": 113063.78,
+          "volume24h": 117335.75
         },
         {
           "pair": "36SpkkrsnyUgjPC24KU993r8T3whkJaPgoEeAmbBj9uB",
           "dex": "meteora",
           "quote": "USDC",
-          "liquidity": 97229.99,
-          "volume24h": 20275.1
+          "liquidity": 94947.86,
+          "volume24h": 16929.23
         }
       ],
-      "fetchedAt": "2026-10-22T11:58:06.669Z",
+      "fetchedAt": "2026-10-22T17:14:12.446Z",
       "url": "https://api.dexscreener.com/token-pairs/v1/solana/6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
+    },
+    "stonkMarket": {
+      "value": {
+        "mint": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+        "price": 0.10813799924916763,
+        "marketCap": 85097790.51699266,
+        "supply": 786936979.6727368,
+        "generatedAt": "2026-10-22T17:12:06.631Z"
+      },
+      "fetchedAt": "2026-10-22T17:14:12.449Z",
+      "url": "https://stonkfun.xyz/api/v2/revenue/platform-token"
     },
     "volume": {
       "value": [
@@ -105,7 +116,7 @@
         {
           "slug": "aster-spot",
           "name": "Aster Spot",
-          "total24h": 3370877,
+          "total24h": 3028799,
           "total7d": 24188709,
           "total30d": 153927856,
           "change7d": -25.33,
@@ -132,213 +143,64 @@
           "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/dexs/stonkfun.ts"
         }
       ],
-      "fetchedAt": "2026-10-22T11:58:06.756Z",
+      "fetchedAt": "2026-10-22T17:14:12.553Z",
       "url": "https://api.llama.fi/overview/dexs?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true"
-    },
-    "revenue": {
-      "value": [
-        {
-          "slug": "pump.fun",
-          "name": "pump.fun",
-          "total24h": 1390282,
-          "total7d": 9558621,
-          "total30d": 45507909,
-          "change7d": -8.88,
-          "methodology": {
-            "Fees": "Bonding-curve trade fees paid by users (pump's slice + creator/cashback slice), graduation fees, and Mayhem-mode fees.",
-            "Revenue": "Pump's slice of the bonding-curve trade fee plus graduation fees and Mayhem-mode fees.",
-            "ProtocolRevenue": "Pump's slice kept by the protocol after the buyback share, plus 100% of graduation and Mayhem fees. Era-based split: 100% pre-2025-07-14, 0% from 2025-07-14, 50% from 2026-04-28.",
-            "HoldersRevenue": "PUMP token buyback (sourced from onchain burns; aggregates buybacks across all pump products, so it won't sum exactly with ProtocolRevenue here).",
-            "SupplySideRevenue": "Creator fees paid out to coin creators and cashback returned to traders/holders of the coin."
-          },
-          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/pumpdotfun.ts"
-        },
-        {
-          "slug": "pumpswap",
-          "name": "PumpSwap",
-          "total24h": 426415,
-          "total7d": 2920725,
-          "total30d": 15701992,
-          "change7d": -13.42,
-          "methodology": {
-            "UserFees": "Swap fees paid by users",
-            "Fees": "Total fees collected from all sources, including LP fees (0.20%) and protocol fees (0.05%) and coin creator fees (0.05%) from each trade",
-            "Revenue": "Revenue kept by the protocol, which is the 0.05% protocol fee from each trade",
-            "ProtocolRevenue": "Percentage of swap fees going to treasury",
-            "HoldersRevenue": "Money going to governance token holders",
-            "SupplySideRevenue": "Value earned by liquidity providers, which is the 0.20% LP fee from each trade",
-            "Volume": "Tracks the trading volume across all pairs on PumpFun AMM"
-          },
-          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/pump-swap"
-        },
-        {
-          "slug": "stonkfun",
-          "name": "StonkFun",
-          "total24h": 133538,
-          "total7d": 1010548,
-          "total30d": 14801236,
-          "change7d": -14.67,
-          "methodology": {
-            "Fees": "Trading fees StonkFun collects, measured when it claims them: the 1% platform fee on its Raydium LaunchLab bonding curves (every platform config whose fees it claims), the creator fee on the Raydium CPMM pools those launches graduate into, and the quote side of fees harvested from the permanently locked liquidity behind pre-LaunchLab launches. Raydium's own fee shares are excluded. Each token is valued with Dune trade prices at the hour it was received, ignoring trades priced more than 10x away from that day's median.",
-            "UserFees": "Same as fees.",
-            "Revenue": "Fees less the creator share of standard launches and the flywheel share of reward launches, as paid out on-chain. From 2026-08-28, fees paid in STONK and fees from STONK's own pool are excluded: they cannot fund a STONK buyback.",
-            "SupplySideRevenue": "Creator and flywheel shares of fees, measured when they are paid out.",
-            "HoldersRevenue": "Quote assets spent buying STONK on Jupiter, identified on-chain as swaps that returned STONK to the operator wallet, at the net amount each swap spent.",
-            "ProtocolRevenue": "Fees StonkFun keeps after paying the creator share of standard launches and the flywheel share of reward launches, minus the quote assets spent buying STONK on Jupiter. From 2026-08-28, fees paid in STONK and fees from STONK's own pool are excluded. Buybacks spend income claimed on earlier days, so this is negative when a buyback is larger than the day's retained fees."
-          },
-          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/stonkfun.ts"
-        }
-      ],
-      "fetchedAt": "2026-10-22T11:58:06.864Z",
-      "url": "https://api.llama.fi/overview/fees?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true&dataType=dailyRevenue"
-    },
-    "stonkMarket": {
-      "value": {
-        "mint": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
-        "price": 0.11312933773081982,
-        "marketCap": 89042821.74819316,
-        "supply": 787088685.6958523,
-        "generatedAt": "2026-10-22T11:58:06.775Z"
-      },
-      "fetchedAt": "2026-10-22T11:58:06.865Z",
-      "url": "https://stonkfun.xyz/api/v2/revenue/platform-token"
     },
     "prices": {
       "value": {
         "STONK": {
-          "price": 0.11308711155470638,
-          "timestamp": 1792669978,
+          "price": 0.10990117749447567,
+          "timestamp": 1792687662,
           "confidence": 0.99,
           "id": "solana:6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
         },
         "USDT": {
-          "price": 0.999258407212008,
-          "timestamp": 1792670250,
+          "price": 0.9991222076117291,
+          "timestamp": 1792688904,
           "confidence": 0.99,
           "id": "coingecko:tether"
         },
         "SOL": {
-          "price": 104.4080123598041,
-          "timestamp": 1792670250,
+          "price": 103.62679255774276,
+          "timestamp": 1792688904,
           "confidence": 0.99,
           "id": "coingecko:solana"
         },
         "ASTER": {
-          "price": 0.7017746252381645,
-          "timestamp": 1792670220,
+          "price": 0.6971512248006111,
+          "timestamp": 1792688904,
           "confidence": 0.99,
           "id": "bsc:0x000ae314e2a2172a039b26378814c252734f556a"
         },
         "PUMP": {
-          "price": 0.00478965456470235,
-          "timestamp": 1792670250,
+          "price": 0.0045711758514199365,
+          "timestamp": 1792688904,
           "confidence": 0.99,
           "id": "solana:pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn"
         },
         "PURR": {
-          "price": 0.09858370832276261,
-          "timestamp": 1792669978,
+          "price": 0.09536183561177114,
+          "timestamp": 1792687662,
           "confidence": 0.99,
           "id": "coingecko:purr-2"
         }
       },
-      "fetchedAt": "2026-10-22T11:58:06.867Z",
+      "fetchedAt": "2026-10-22T17:14:12.572Z",
       "url": "https://coins.llama.fi/prices/current/solana:6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,coingecko:tether,coingecko:solana,bsc:0x000ae314e2a2172a039b26378814c252734f556a,solana:pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn,coingecko:purr-2"
     },
-    "fees": {
-      "value": [
-        {
-          "slug": "pump.fun",
-          "name": "pump.fun",
-          "total24h": 1997031,
-          "total7d": 13460534,
-          "total30d": 62894246,
-          "change7d": -7.54,
-          "methodology": {
-            "Fees": "Bonding-curve trade fees paid by users (pump's slice + creator/cashback slice), graduation fees, and Mayhem-mode fees.",
-            "Revenue": "Pump's slice of the bonding-curve trade fee plus graduation fees and Mayhem-mode fees.",
-            "ProtocolRevenue": "Pump's slice kept by the protocol after the buyback share, plus 100% of graduation and Mayhem fees. Era-based split: 100% pre-2025-07-14, 0% from 2025-07-14, 50% from 2026-04-28.",
-            "HoldersRevenue": "PUMP token buyback (sourced from onchain burns; aggregates buybacks across all pump products, so it won't sum exactly with ProtocolRevenue here).",
-            "SupplySideRevenue": "Creator fees paid out to coin creators and cashback returned to traders/holders of the coin."
-          },
-          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/pumpdotfun.ts"
-        },
-        {
-          "slug": "pumpswap",
-          "name": "PumpSwap",
-          "total24h": 3462354,
-          "total7d": 22042306,
-          "total30d": 116369586,
-          "change7d": -10.28,
-          "methodology": {
-            "UserFees": "Swap fees paid by users",
-            "Fees": "Total fees collected from all sources, including LP fees (0.20%) and protocol fees (0.05%) and coin creator fees (0.05%) from each trade",
-            "Revenue": "Revenue kept by the protocol, which is the 0.05% protocol fee from each trade",
-            "ProtocolRevenue": "Percentage of swap fees going to treasury",
-            "HoldersRevenue": "Money going to governance token holders",
-            "SupplySideRevenue": "Value earned by liquidity providers, which is the 0.20% LP fee from each trade",
-            "Volume": "Tracks the trading volume across all pairs on PumpFun AMM"
-          },
-          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/pump-swap"
-        },
-        {
-          "slug": "aster-perps",
-          "name": "Aster Perps",
-          "total24h": 175781,
-          "total7d": 909893,
-          "total30d": 4145334,
-          "change7d": -11.38,
-          "methodology": {
-            "UserFees": "Fees paid by users",
-            "Fees": "All trading fees collected from perpetual futures trading, including opening/closing positions and funding fees",
-            "Revenue": "Treasury and token holders revenue",
-            "ProtocolRevenue": "Fees going to treasury",
-            "HoldersRevenue": "Fees going to governance token holders",
-            "SupplySideRevenue": "LPs revenue"
-          },
-          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/apollox"
-        },
-        {
-          "slug": "aster-spot",
-          "name": "Aster Spot",
-          "total24h": null,
-          "total7d": null,
-          "total30d": null,
-          "change7d": null,
-          "methodology": {
-            "UserFees": "Swap fees paid by users",
-            "Fees": "Swap fees paid by users",
-            "Revenue": "Percentage of swap fees going to treasury and/or token holders",
-            "ProtocolRevenue": "Percentage of swap fees going to treasury",
-            "HoldersRevenue": "Aster token strategic buybacks from platform fees. Used to be burnt before Feb 2nd, 2026; from Jun 17th, 2026, 99% of daily platform fees buy back ASTER via TWAP on Aster Spot (wallet 0xa0edBaBcb48034e368de286b49F9603C7AfA1b60) and are distributed to veASTER stakers; an equal amount which is burned from reserve is not included as they are not sourced from revenue..",
-            "SupplySideRevenue": "Liquidity providers revenue"
-          },
-          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/aster-spot"
-        },
-        {
-          "slug": "stonkfun",
-          "name": "StonkFun",
-          "total24h": 145632,
-          "total7d": 1096503,
-          "total30d": 16911359,
-          "change7d": -19.69,
-          "methodology": {
-            "Fees": "Trading fees StonkFun collects, measured when it claims them: the 1% platform fee on its Raydium LaunchLab bonding curves (every platform config whose fees it claims), the creator fee on the Raydium CPMM pools those launches graduate into, and the quote side of fees harvested from the permanently locked liquidity behind pre-LaunchLab launches. Raydium's own fee shares are excluded. Each token is valued with Dune trade prices at the hour it was received, ignoring trades priced more than 10x away from that day's median.",
-            "UserFees": "Same as fees.",
-            "Revenue": "Fees less the creator share of standard launches and the flywheel share of reward launches, as paid out on-chain. From 2026-08-28, fees paid in STONK and fees from STONK's own pool are excluded: they cannot fund a STONK buyback.",
-            "SupplySideRevenue": "Creator and flywheel shares of fees, measured when they are paid out.",
-            "HoldersRevenue": "Quote assets spent buying STONK on Jupiter, identified on-chain as swaps that returned STONK to the operator wallet, at the net amount each swap spent.",
-            "ProtocolRevenue": "Fees StonkFun keeps after paying the creator share of standard launches and the flywheel share of reward launches, minus the quote assets spent buying STONK on Jupiter. From 2026-08-28, fees paid in STONK and fees from STONK's own pool are excluded. Buybacks spend income claimed on earlier days, so this is negative when a buyback is larger than the day's retained fees."
-          },
-          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/stonkfun.ts"
-        }
-      ],
-      "fetchedAt": "2026-10-22T11:58:06.914Z",
-      "url": "https://api.llama.fi/overview/fees?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true"
+    "stonk": {
+      "value": {
+        "name": "StonkFun",
+        "address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+        "symbol": "STONK",
+        "tvl": null
+      },
+      "fetchedAt": "2026-10-22T17:14:12.827Z",
+      "url": "https://api.llama.fi/protocol/stonkfun"
     },
     "stonkDaily": {
       "value": {
-        "generatedAt": "2026-10-22T11:58:06.977Z",
+        "generatedAt": "2026-10-22T17:14:13.003Z",
         "rows": [
           {
             "date": "2026-07-25",
@@ -402,375 +264,375 @@
           },
           {
             "date": "2026-08-04",
-            "revenue": 28399.345027576674,
+            "revenue": 28399.34502757669,
             "buybacks": 17114.834666373554,
             "burned": 12127896.664658098
           },
           {
             "date": "2026-08-05",
-            "revenue": 42151.609403418464,
+            "revenue": 42151.609403418435,
             "buybacks": 23761.207156741846,
             "burned": 6907457.775866995
           },
           {
             "date": "2026-08-06",
-            "revenue": 81293.94165567891,
+            "revenue": 81293.94165567888,
             "buybacks": 47973.60158132838,
             "burned": 7392494.13932444
           },
           {
             "date": "2026-08-07",
-            "revenue": 71961.52027371422,
+            "revenue": 71961.52027371421,
             "buybacks": 42539.52954492048,
             "burned": 5313325.219421129
           },
           {
             "date": "2026-08-08",
-            "revenue": 29895.001740502215,
-            "buybacks": 17618.666026602543,
+            "revenue": 29895.00174050223,
+            "buybacks": 17618.666026602536,
             "burned": 2176944.045604622
           },
           {
             "date": "2026-08-09",
-            "revenue": 30025.168397826612,
+            "revenue": 30025.1683978266,
             "buybacks": 17729.968485630663,
             "burned": 2641459.342394964
           },
           {
             "date": "2026-08-10",
             "revenue": 60504.252948611014,
-            "buybacks": 34699.91210722343,
+            "buybacks": 34699.91210722344,
             "burned": 3025546.291572832
           },
           {
             "date": "2026-08-11",
-            "revenue": 79988.36063588562,
+            "revenue": 79988.3606358856,
             "buybacks": 44916.78056611927,
             "burned": 3531276.37288167
           },
           {
             "date": "2026-08-12",
-            "revenue": 46976.56183427286,
-            "buybacks": 27649.44319544502,
+            "revenue": 46976.56183427283,
+            "buybacks": 27649.443195445016,
             "burned": 2201037.4571790476
           },
           {
             "date": "2026-08-13",
             "revenue": 53705.17852096315,
-            "buybacks": 31655.20469893759,
-            "burned": 2814051.392254145
+            "buybacks": 31655.2046989376,
+            "burned": 2814051.3922541435
           },
           {
             "date": "2026-08-14",
-            "revenue": 74645.69223192455,
-            "buybacks": 43483.60606538098,
-            "burned": 4267158.040210913
+            "revenue": 74645.69223192452,
+            "buybacks": 43483.606065381,
+            "burned": 4267158.040210916
           },
           {
             "date": "2026-08-15",
-            "revenue": 51164.60552600141,
-            "buybacks": 25281.163479597803,
+            "revenue": 51164.605526001425,
+            "buybacks": 25281.1634795978,
             "burned": 2478383.1136294417
           },
           {
             "date": "2026-08-16",
-            "revenue": 34824.0667104427,
-            "buybacks": 19780.070272914087,
+            "revenue": 34824.066710442705,
+            "buybacks": 19780.07027291409,
             "burned": 2541749.2640737174
           },
           {
             "date": "2026-08-17",
-            "revenue": 26390.662310436706,
+            "revenue": 26390.662310436703,
             "buybacks": 15117.019352355786,
-            "burned": 2240482.0010079383
+            "burned": 2240482.0010079374
           },
           {
             "date": "2026-08-18",
-            "revenue": 32757.155213342758,
-            "buybacks": 18727.564095760863,
+            "revenue": 32757.15521334276,
+            "buybacks": 18727.564095760867,
             "burned": 3151316.45119714
           },
           {
             "date": "2026-08-19",
-            "revenue": 33659.09311347585,
-            "buybacks": 19668.023241592746,
-            "burned": 4455763.138659773
+            "revenue": 33659.09311347586,
+            "buybacks": 19668.023241592742,
+            "burned": 4455763.138659774
           },
           {
             "date": "2026-08-20",
-            "revenue": 34939.72697002666,
-            "buybacks": 20546.27955176488,
-            "burned": 3813742.6474379306
+            "revenue": 34939.72697002667,
+            "buybacks": 20546.279551764885,
+            "burned": 3813742.647437929
           },
           {
             "date": "2026-08-21",
-            "revenue": 18846.76291220389,
-            "buybacks": 10680.202640741156,
-            "burned": 1606126.0377730364
+            "revenue": 18846.762912203892,
+            "buybacks": 10680.202640741154,
+            "burned": 1606126.0377730366
           },
           {
             "date": "2026-08-22",
             "revenue": 42993.72478048348,
-            "buybacks": 25517.51531673779,
-            "burned": 3453820.9246792835
+            "buybacks": 25517.515316737787,
+            "burned": 3453820.924679282
           },
           {
             "date": "2026-08-23",
-            "revenue": 31266.353369228415,
-            "buybacks": 18243.022014967504,
+            "revenue": 31266.353369228404,
+            "buybacks": 18243.022014967508,
             "burned": 1897560.8308060854
           },
           {
             "date": "2026-08-24",
-            "revenue": 22725.851012042334,
-            "buybacks": 13359.491151142362,
-            "burned": 1342368.9804144658
+            "revenue": 22725.851012042363,
+            "buybacks": 13359.491151142363,
+            "burned": 1342368.980414466
           },
           {
             "date": "2026-08-25",
-            "revenue": 26527.43297262622,
-            "buybacks": 15586.555727285966,
+            "revenue": 26527.432972626222,
+            "buybacks": 15586.555727285964,
             "burned": 1779865.3370611523
           },
           {
             "date": "2026-08-26",
             "revenue": 84859.63433141338,
             "buybacks": 51218.65241603127,
-            "burned": 4140438.592573245
+            "burned": 4140438.5925732465
           },
           {
             "date": "2026-08-27",
-            "revenue": 55685.83558941558,
-            "buybacks": 31567.01807708704,
+            "revenue": 55685.835589415576,
+            "buybacks": 31567.018077087032,
             "burned": 1984597.5479481113
           },
           {
             "date": "2026-08-28",
             "revenue": 21477.44813070429,
-            "buybacks": 12982.321607003101,
-            "burned": 923346.4603944641
+            "buybacks": 12982.3216070031,
+            "burned": 923346.460394464
           },
           {
             "date": "2026-08-29",
-            "revenue": 42308.81633395134,
-            "buybacks": 24965.805088468922,
-            "burned": 1535901.05372638
+            "revenue": 42308.816333951334,
+            "buybacks": 24965.805088468915,
+            "burned": 1535901.0537263798
           },
           {
             "date": "2026-08-30",
             "revenue": 28898.555927600464,
-            "buybacks": 17401.451964129126,
-            "burned": 775265.0864624061
+            "buybacks": 17401.45196412912,
+            "burned": 775265.086462406
           },
           {
             "date": "2026-08-31",
-            "revenue": 56668.192184321386,
-            "buybacks": 34013.31545856768,
-            "burned": 1755323.7899117088
+            "revenue": 56668.19218432138,
+            "buybacks": 34013.315458567675,
+            "burned": 1755323.789911709
           },
           {
             "date": "2026-09-01",
             "revenue": 131343.10268160046,
             "buybacks": 76853.61533082937,
-            "burned": 3095030.471137777
+            "burned": 3095030.4711377774
           },
           {
             "date": "2026-09-02",
-            "revenue": 38857.95498308738,
+            "revenue": 38857.95498308736,
             "buybacks": 23019.25169155444,
             "burned": 1157232.628885263
           },
           {
             "date": "2026-09-03",
             "revenue": 64050.00379900649,
-            "buybacks": 38019.552839123295,
-            "burned": 1582135.8928002892
+            "buybacks": 38019.55283912329,
+            "burned": 1582135.8928002887
           },
           {
             "date": "2026-09-04",
             "revenue": 78869.12495296852,
-            "buybacks": 46358.597199199714,
-            "burned": 2151037.2591734147
+            "buybacks": 46358.59719919971,
+            "burned": 2151037.2591734156
           },
           {
             "date": "2026-09-05",
-            "revenue": 186107.63435034288,
+            "revenue": 186107.63435034294,
             "buybacks": 110863.87317045375,
             "burned": 3164701.413389826
           },
           {
             "date": "2026-09-06",
-            "revenue": 1508194.5494740866,
-            "buybacks": 904502.7482378251,
-            "burned": 6797594.085921376
+            "revenue": 1508194.5494740875,
+            "buybacks": 904502.7482378252,
+            "burned": 6797594.085921378
           },
           {
             "date": "2026-09-07",
             "revenue": 1198986.5950265408,
-            "buybacks": 719516.4534626639,
+            "buybacks": 719516.4534626638,
             "burned": 5669955.868823887
           },
           {
             "date": "2026-09-08",
             "revenue": 1341249.3647007262,
-            "buybacks": 783380.3856379894,
-            "burned": 4977566.137911452
+            "buybacks": 783380.385637989,
+            "burned": 4977566.13791145
           },
           {
             "date": "2026-09-09",
-            "revenue": 1355591.1077829937,
-            "buybacks": 814042.9992660013,
-            "burned": 4545753.456321942
+            "revenue": 1355591.1077829928,
+            "buybacks": 814042.9992660014,
+            "burned": 4545753.456321941
           },
           {
             "date": "2026-09-10",
-            "revenue": 867101.5246595909,
-            "buybacks": 525198.5011681931,
-            "burned": 2799744.300994437
+            "revenue": 867101.5246595908,
+            "buybacks": 525198.5011681928,
+            "burned": 2799744.3009944377
           },
           {
             "date": "2026-09-11",
-            "revenue": 2205092.135024824,
-            "buybacks": 1269778.0003211824,
+            "revenue": 2205092.1350248246,
+            "buybacks": 1269778.000321181,
             "burned": 5267353.539949616
           },
           {
             "date": "2026-09-12",
-            "revenue": 1045810.196883474,
-            "buybacks": 653347.603215565,
-            "burned": 2486146.662608982
+            "revenue": 1045810.1968834737,
+            "buybacks": 653347.6032155646,
+            "burned": 2486146.6626089816
           },
           {
             "date": "2026-09-13",
-            "revenue": 900903.6560629102,
-            "buybacks": 538654.6373630057,
+            "revenue": 900903.6560629095,
+            "buybacks": 538654.6373630055,
             "burned": 2235385.4908989426
           },
           {
             "date": "2026-09-14",
-            "revenue": 870664.3581579418,
-            "buybacks": 517396.0412525631,
-            "burned": 2574691.281280225
+            "revenue": 870664.3581579428,
+            "buybacks": 517396.04125256324,
+            "burned": 2574691.281280226
           },
           {
             "date": "2026-09-15",
-            "revenue": 599181.2757824208,
-            "buybacks": 357847.5130599214,
-            "burned": 2064389.9437994198
+            "revenue": 599181.2757824211,
+            "buybacks": 357847.5130599216,
+            "burned": 2064389.94379942
           },
           {
             "date": "2026-09-16",
-            "revenue": 561373.0288964006,
-            "buybacks": 335378.6671915576,
-            "burned": 2061803.5189059004
+            "revenue": 561373.0288964005,
+            "buybacks": 335378.66719155747,
+            "burned": 2061803.5189059
           },
           {
             "date": "2026-09-17",
-            "revenue": 900646.1855801932,
-            "buybacks": 541460.3500319943,
-            "burned": 2524563.824097389
+            "revenue": 900646.185580193,
+            "buybacks": 541460.3500319944,
+            "burned": 2524563.8240973884
           },
           {
             "date": "2026-09-18",
-            "revenue": 1120578.9489319145,
-            "buybacks": 672012.4008107656,
-            "burned": 2690365.7452751105
+            "revenue": 1120578.9489319148,
+            "buybacks": 672012.4008107652,
+            "burned": 2690365.745275111
           },
           {
             "date": "2026-09-19",
-            "revenue": 1251411.5921050897,
-            "buybacks": 749636.2178174452,
+            "revenue": 1251411.5921050918,
+            "buybacks": 749636.2178174455,
             "burned": 2932989.2450586027
           },
           {
             "date": "2026-09-20",
-            "revenue": 1119344.7719102842,
-            "buybacks": 671058.2962332423,
-            "burned": 2349009.5623754384
+            "revenue": 1119344.771910286,
+            "buybacks": 671058.2962332426,
+            "burned": 2349009.562375439
           },
           {
             "date": "2026-09-21",
-            "revenue": 2113836.704103789,
-            "buybacks": 1227424.9226400037,
-            "burned": 3466251.8510252023
+            "revenue": 2113836.7041037893,
+            "buybacks": 1227424.9226400044,
+            "burned": 3466251.851025202
           },
           {
             "date": "2026-09-22",
-            "revenue": 1532433.4203965978,
-            "buybacks": 717397.2594511106,
-            "burned": 2395722.155175502
+            "revenue": 1532433.4203965995,
+            "buybacks": 717397.2594511105,
+            "burned": 2395722.1551755015
           },
           {
             "date": "2026-09-23",
-            "revenue": 1509466.7138747887,
-            "buybacks": 1130911.9026433167,
-            "burned": 3666056.1114934036
+            "revenue": 1509466.7138747845,
+            "buybacks": 1130911.9026433174,
+            "burned": 3666056.111493404
           },
           {
             "date": "2026-09-24",
             "revenue": 1095923.737560417,
-            "buybacks": 672720.5218643744,
-            "burned": 2046039.8781597107
+            "buybacks": 672720.5218643745,
+            "burned": 2046039.8781597102
           },
           {
             "date": "2026-09-25",
-            "revenue": 965962.4066531576,
-            "buybacks": 580634.487048439,
-            "burned": 1895834.3569844365
+            "revenue": 965962.4066531562,
+            "buybacks": 580634.4870484392,
+            "burned": 1895834.3569844356
           },
           {
             "date": "2026-09-26",
             "revenue": 630301.2986235828,
             "buybacks": 376494.7357566395,
-            "burned": 1424283.1892350775
+            "burned": 1424283.1892350784
           },
           {
             "date": "2026-09-27",
-            "revenue": 526393.1542173234,
-            "buybacks": 316238.6190163922,
-            "burned": 1188799.2066397995
+            "revenue": 526393.154217323,
+            "buybacks": 316238.6190163921,
+            "burned": 1188799.2066398
           },
           {
             "date": "2026-09-28",
-            "revenue": 619406.3609935427,
-            "buybacks": 372628.84869734704,
+            "revenue": 619406.3609935422,
+            "buybacks": 372628.8486973472,
             "burned": 1535136.3176536618
           },
           {
             "date": "2026-09-29",
-            "revenue": 1163258.1134927827,
-            "buybacks": 703179.1086068891,
-            "burned": 2750251.7055975692
+            "revenue": 1163258.113492783,
+            "buybacks": 703179.1086068894,
+            "burned": 2750251.7055975674
           },
           {
             "date": "2026-09-30",
-            "revenue": 980100.9100272543,
-            "buybacks": 587211.0490203727,
-            "burned": 2296870.7290860014
+            "revenue": 980100.9100272544,
+            "buybacks": 587211.0490203723,
+            "burned": 2296870.729086001
           },
           {
             "date": "2026-10-01",
-            "revenue": 893225.9450488297,
-            "buybacks": 535244.2978268863,
-            "burned": 2300343.7480050926
+            "revenue": 893225.9450488293,
+            "buybacks": 535244.2978268862,
+            "burned": 2300343.748005092
           },
           {
             "date": "2026-10-02",
-            "revenue": 694664.3452360778,
-            "buybacks": 417358.93733133806,
-            "burned": 1802915.1738909008
+            "revenue": 694664.3452360777,
+            "buybacks": 417358.93733133824,
+            "burned": 1802915.1738909013
           },
           {
             "date": "2026-10-03",
-            "revenue": 365714.2560807503,
+            "revenue": 365714.25608075014,
             "buybacks": 219316.29044209365,
-            "burned": 1031215.859673975
+            "burned": 1031215.8596739752
           },
           {
             "date": "2026-10-04",
-            "revenue": 590268.3639079487,
-            "buybacks": 353601.38631276664,
-            "burned": 1789958.4782952818
+            "revenue": 590268.3639079488,
+            "buybacks": 353601.3863127667,
+            "burned": 1789958.478295282
           },
           {
             "date": "2026-10-05",
@@ -780,120 +642,258 @@
           },
           {
             "date": "2026-10-06",
-            "revenue": 461540.0848772767,
-            "buybacks": 277190.369902852,
-            "burned": 1426112.9236976833
+            "revenue": 461540.08487727644,
+            "buybacks": 277190.36990285176,
+            "burned": 1426112.9236976835
           },
           {
             "date": "2026-10-07",
-            "revenue": 256261.1561235102,
-            "buybacks": 153269.02122878964,
-            "burned": 840562.1428037483
+            "revenue": 256261.15612351045,
+            "buybacks": 153269.02122878958,
+            "burned": 840562.1428037484
           },
           {
             "date": "2026-10-08",
-            "revenue": 293814.2844186973,
+            "revenue": 293814.2844186974,
             "buybacks": 176523.3345261162,
-            "burned": 1178160.173150638
+            "burned": 1178160.1731506377
           },
           {
             "date": "2026-10-09",
-            "revenue": 179603.3467402615,
-            "buybacks": 107830.08241085484,
-            "burned": 769197.2708479314
+            "revenue": 179603.34674026154,
+            "buybacks": 107830.08241085485,
+            "burned": 769197.270847931
           },
           {
             "date": "2026-10-10",
-            "revenue": 140598.82712688466,
-            "buybacks": 84189.51825220141,
-            "burned": 629547.4208805362
+            "revenue": 140598.82712688477,
+            "buybacks": 84189.51825220142,
+            "burned": 629547.4208805357
           },
           {
             "date": "2026-10-11",
             "revenue": 146679.72038764518,
             "buybacks": 88161.80863211528,
-            "burned": 638140.8859142422
+            "burned": 638140.885914242
           },
           {
             "date": "2026-10-12",
-            "revenue": 219500.94734483983,
-            "buybacks": 130099.6376834384,
-            "burned": 893851.826789141
+            "revenue": 219500.94734483963,
+            "buybacks": 130099.63768343849,
+            "burned": 893851.8267891413
           },
           {
             "date": "2026-10-13",
             "revenue": 120995.90899060639,
-            "buybacks": 73457.94124755533,
-            "burned": 611784.571040605
+            "buybacks": 73457.9412475553,
+            "burned": 611784.5710406048
           },
           {
             "date": "2026-10-14",
-            "revenue": 82489.12533439198,
-            "buybacks": 49624.61798620223,
-            "burned": 431222.3396314969
+            "revenue": 82489.12533439204,
+            "buybacks": 49624.617986202225,
+            "burned": 431222.3396314968
           },
           {
             "date": "2026-10-15",
-            "revenue": 159089.6774148981,
+            "revenue": 159089.67741489812,
             "buybacks": 94628.93661514313,
-            "burned": 876728.819908276
+            "burned": 876728.8199082759
           },
           {
             "date": "2026-10-16",
-            "revenue": 187848.30191389206,
-            "buybacks": 113106.17113608084,
+            "revenue": 187848.3019138921,
+            "buybacks": 113106.17113608081,
             "burned": 1002628.5526956241
           },
           {
             "date": "2026-10-17",
             "revenue": 107650.50269367125,
             "buybacks": 64379.485526441735,
-            "burned": 601925.2232349188
+            "burned": 601925.2232349189
           },
           {
             "date": "2026-10-18",
-            "revenue": 85850.28361551513,
-            "buybacks": 51650.39417881343,
+            "revenue": 85850.28361551522,
+            "buybacks": 51650.39417881344,
             "burned": 569037.5742282058
           },
           {
             "date": "2026-10-19",
-            "revenue": 175901.85307179336,
-            "buybacks": 105264.72792805757,
-            "burned": 982378.0866899923
+            "revenue": 175901.85307179333,
+            "buybacks": 105264.72792805752,
+            "burned": 982378.0866899922
           },
           {
             "date": "2026-10-20",
             "revenue": 164124.02971042282,
-            "buybacks": 97974.16928145982,
+            "buybacks": 97974.16928145985,
             "burned": 832665.4796594819
           },
           {
             "date": "2026-10-21",
-            "revenue": 133731.812496529,
-            "buybacks": 78566.51869957757,
-            "burned": 619412.611490484
+            "revenue": 133731.81249652905,
+            "buybacks": 78566.5186995776,
+            "burned": 619412.6114904841
           },
           {
             "date": "2026-10-22",
-            "revenue": 33694.99924581209,
-            "buybacks": 22277.477198607507,
-            "burned": 186878.98539954497
+            "revenue": 61701.73815605461,
+            "buybacks": 39245.23326038601,
+            "burned": 341985.25390271295
           }
         ]
       },
-      "fetchedAt": "2026-10-22T11:58:07.056Z",
+      "fetchedAt": "2026-10-22T17:14:13.017Z",
       "url": "https://stonkfun.xyz/api/v2/revenue/daily?limit=90"
     },
-    "stonk": {
-      "value": {
-        "name": "StonkFun",
-        "address": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
-        "symbol": "STONK",
-        "tvl": null
-      },
-      "fetchedAt": "2026-10-22T11:58:07.470Z",
-      "url": "https://api.llama.fi/protocol/stonkfun"
+    "revenue": {
+      "value": [
+        {
+          "slug": "pump.fun",
+          "name": "pump.fun",
+          "total24h": 1492366,
+          "total7d": 10358390,
+          "total30d": 46307267,
+          "change7d": -1.26,
+          "methodology": {
+            "Fees": "Bonding-curve trade fees paid by users (pump's slice + creator/cashback slice), graduation fees, Mayhem-mode fees, and the Platform Fee on pump.fun web and mobile app trades.",
+            "Revenue": "Pump's slice of the bonding-curve trade fee plus graduation fees, Mayhem-mode fees and the Platform Fee.",
+            "ProtocolRevenue": "Pump's slice kept by the protocol after the buyback share, plus 100% of graduation fees, Mayhem fees and the Platform Fee. Era-based split: 100% pre-2025-07-14, 0% from 2025-07-14, 50% from 2026-04-28.",
+            "HoldersRevenue": "PUMP bought back on the market by pump.fun buyback wallets (funded by all pump products, so it won't sum exactly with ProtocolRevenue here).",
+            "SupplySideRevenue": "Creator fees paid out to coin creators and cashback returned to traders/holders of the coin."
+          },
+          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/pumpdotfun.ts"
+        },
+        {
+          "slug": "pumpswap",
+          "name": "PumpSwap",
+          "total24h": 426415,
+          "total7d": 2920725,
+          "total30d": 15701992,
+          "change7d": -13.42,
+          "methodology": {
+            "UserFees": "Swap fees paid by users",
+            "Fees": "Total fees collected from all sources, including LP fees (0.20%) and protocol fees (0.05%) and coin creator fees (0.05%) from each trade",
+            "Revenue": "Revenue kept by the protocol, which is the 0.05% protocol fee from each trade",
+            "ProtocolRevenue": "Percentage of swap fees going to treasury",
+            "HoldersRevenue": "Money going to governance token holders",
+            "SupplySideRevenue": "Value earned by liquidity providers, which is the 0.20% LP fee from each trade",
+            "Volume": "Tracks the trading volume across all pairs on PumpFun AMM"
+          },
+          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/pump-swap"
+        },
+        {
+          "slug": "stonkfun",
+          "name": "StonkFun",
+          "total24h": 133538,
+          "total7d": 1010548,
+          "total30d": 14801236,
+          "change7d": -14.67,
+          "methodology": {
+            "Fees": "Trading fees StonkFun collects, measured when it claims them: the 1% platform fee on its Raydium LaunchLab bonding curves (every platform config whose fees it claims), the creator fee on the Raydium CPMM pools those launches graduate into, and the quote side of fees harvested from the permanently locked liquidity behind pre-LaunchLab launches. Raydium's own fee shares are excluded. Each token is valued with Dune trade prices at the hour it was received, ignoring trades priced more than 10x away from that day's median.",
+            "UserFees": "Same as fees.",
+            "Revenue": "Fees less the creator share of standard launches and the flywheel share of reward launches, as paid out on-chain. From 2026-08-28, fees paid in STONK and fees from STONK's own pool are excluded: they cannot fund a STONK buyback.",
+            "SupplySideRevenue": "Creator and flywheel shares of fees, measured when they are paid out.",
+            "HoldersRevenue": "Quote assets spent buying STONK on Jupiter, identified on-chain as swaps that returned STONK to the operator wallet, at the net amount each swap spent.",
+            "ProtocolRevenue": "Fees StonkFun keeps after paying the creator share of standard launches and the flywheel share of reward launches, minus the quote assets spent buying STONK on Jupiter. From 2026-08-28, fees paid in STONK and fees from STONK's own pool are excluded. Buybacks spend income claimed on earlier days, so this is negative when a buyback is larger than the day's retained fees."
+          },
+          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/stonkfun.ts"
+        }
+      ],
+      "fetchedAt": "2026-10-22T17:14:13.870Z",
+      "url": "https://api.llama.fi/overview/fees?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true&dataType=dailyRevenue"
+    },
+    "fees": {
+      "value": [
+        {
+          "slug": "pump.fun",
+          "name": "pump.fun",
+          "total24h": 2067903,
+          "total7d": 14286215,
+          "total30d": 63720163,
+          "change7d": -1.87,
+          "methodology": {
+            "Fees": "Bonding-curve trade fees paid by users (pump's slice + creator/cashback slice), graduation fees, Mayhem-mode fees, and the Platform Fee on pump.fun web and mobile app trades.",
+            "Revenue": "Pump's slice of the bonding-curve trade fee plus graduation fees, Mayhem-mode fees and the Platform Fee.",
+            "ProtocolRevenue": "Pump's slice kept by the protocol after the buyback share, plus 100% of graduation fees, Mayhem fees and the Platform Fee. Era-based split: 100% pre-2025-07-14, 0% from 2025-07-14, 50% from 2026-04-28.",
+            "HoldersRevenue": "PUMP bought back on the market by pump.fun buyback wallets (funded by all pump products, so it won't sum exactly with ProtocolRevenue here).",
+            "SupplySideRevenue": "Creator fees paid out to coin creators and cashback returned to traders/holders of the coin."
+          },
+          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/pumpdotfun.ts"
+        },
+        {
+          "slug": "pumpswap",
+          "name": "PumpSwap",
+          "total24h": 3462354,
+          "total7d": 22042306,
+          "total30d": 116369586,
+          "change7d": -10.28,
+          "methodology": {
+            "UserFees": "Swap fees paid by users",
+            "Fees": "Total fees collected from all sources, including LP fees (0.20%) and protocol fees (0.05%) and coin creator fees (0.05%) from each trade",
+            "Revenue": "Revenue kept by the protocol, which is the 0.05% protocol fee from each trade",
+            "ProtocolRevenue": "Percentage of swap fees going to treasury",
+            "HoldersRevenue": "Money going to governance token holders",
+            "SupplySideRevenue": "Value earned by liquidity providers, which is the 0.20% LP fee from each trade",
+            "Volume": "Tracks the trading volume across all pairs on PumpFun AMM"
+          },
+          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/pump-swap"
+        },
+        {
+          "slug": "aster-perps",
+          "name": "Aster Perps",
+          "total24h": 182776,
+          "total7d": 909893,
+          "total30d": 4145334,
+          "change7d": -11.38,
+          "methodology": {
+            "UserFees": "Fees paid by users",
+            "Fees": "All trading fees collected from perpetual futures trading, including opening/closing positions and funding fees",
+            "Revenue": "Treasury and token holders revenue",
+            "ProtocolRevenue": "Fees going to treasury",
+            "HoldersRevenue": "Fees going to governance token holders",
+            "SupplySideRevenue": "LPs revenue"
+          },
+          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/apollox"
+        },
+        {
+          "slug": "aster-spot",
+          "name": "Aster Spot",
+          "total24h": null,
+          "total7d": null,
+          "total30d": null,
+          "change7d": null,
+          "methodology": {
+            "UserFees": "Swap fees paid by users",
+            "Fees": "Swap fees paid by users",
+            "Revenue": "Percentage of swap fees going to treasury and/or token holders",
+            "ProtocolRevenue": "Percentage of swap fees going to treasury",
+            "HoldersRevenue": "Aster token strategic buybacks from platform fees. Used to be burnt before Feb 2nd, 2026; from Jun 17th, 2026, 99% of daily platform fees buy back ASTER via TWAP on Aster Spot (wallet 0xa0edBaBcb48034e368de286b49F9603C7AfA1b60) and are distributed to veASTER stakers; an equal amount which is burned from reserve is not included as they are not sourced from revenue..",
+            "SupplySideRevenue": "Liquidity providers revenue"
+          },
+          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/aster-spot"
+        },
+        {
+          "slug": "stonkfun",
+          "name": "StonkFun",
+          "total24h": 145632,
+          "total7d": 1096503,
+          "total30d": 16911359,
+          "change7d": -19.69,
+          "methodology": {
+            "Fees": "Trading fees StonkFun collects, measured when it claims them: the 1% platform fee on its Raydium LaunchLab bonding curves (every platform config whose fees it claims), the creator fee on the Raydium CPMM pools those launches graduate into, and the quote side of fees harvested from the permanently locked liquidity behind pre-LaunchLab launches. Raydium's own fee shares are excluded. Each token is valued with Dune trade prices at the hour it was received, ignoring trades priced more than 10x away from that day's median.",
+            "UserFees": "Same as fees.",
+            "Revenue": "Fees less the creator share of standard launches and the flywheel share of reward launches, as paid out on-chain. From 2026-08-28, fees paid in STONK and fees from STONK's own pool are excluded: they cannot fund a STONK buyback.",
+            "SupplySideRevenue": "Creator and flywheel shares of fees, measured when they are paid out.",
+            "HoldersRevenue": "Quote assets spent buying STONK on Jupiter, identified on-chain as swaps that returned STONK to the operator wallet, at the net amount each swap spent.",
+            "ProtocolRevenue": "Fees StonkFun keeps after paying the creator share of standard launches and the flywheel share of reward launches, minus the quote assets spent buying STONK on Jupiter. From 2026-08-28, fees paid in STONK and fees from STONK's own pool are excluded. Buybacks spend income claimed on earlier days, so this is negative when a buyback is larger than the day's retained fees."
+          },
+          "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/stonkfun.ts"
+        }
+      ],
+      "fetchedAt": "2026-10-22T17:14:13.934Z",
+      "url": "https://api.llama.fi/overview/fees?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true"
     },
     "aster": {
       "value": {
@@ -1299,12 +1299,12 @@
           },
           {
             "date": "2026-10-22",
-            "value": 735138624
+            "value": 734731025
           }
         ],
-        "tvl": 735138624
+        "tvl": 734731025
       },
-      "fetchedAt": "2026-10-22T11:58:09.006Z",
+      "fetchedAt": "2026-10-22T17:14:14.200Z",
       "url": "https://api.llama.fi/protocol/aster"
     },
     "pump": {
@@ -1711,12 +1711,12 @@
           },
           {
             "date": "2026-10-22",
-            "value": 348961880
+            "value": 351918240
           }
         ],
-        "tvl": 348961880
+        "tvl": 351918240
       },
-      "fetchedAt": "2026-10-22T11:58:14.561Z",
+      "fetchedAt": "2026-10-22T17:14:20.444Z",
       "url": "https://api.llama.fi/protocol/pump"
     }
   }
