@@ -1,18 +1,32 @@
 {
-  "generatedAt": "2026-10-21T13:51:02.856Z",
+  "generatedAt": "2026-10-22T04:54:01.533Z",
   "sources": {
+    "stablecoins": {
+      "value": [
+        {
+          "name": "Hyperliquid L1",
+          "usd": 7066581043.388026
+        },
+        {
+          "name": "Solana",
+          "usd": 15928101514.66335
+        }
+      ],
+      "fetchedAt": "2026-10-22T04:53:55.343Z",
+      "url": "https://stablecoins.llama.fi/stablecoinchains"
+    },
     "chains": {
       "value": [
         {
           "name": "Hyperliquid L1",
-          "tvl": 2493802372.679789
+          "tvl": 2481715252.627452
         },
         {
           "name": "Solana",
-          "tvl": 6005825939.151928
+          "tvl": 5980185266.616514
         }
       ],
-      "fetchedAt": "2026-10-21T13:51:00.819Z",
+      "fetchedAt": "2026-10-22T04:53:55.356Z",
       "url": "https://api.llama.fi/v2/chains"
     },
     "stonk": {
@@ -22,49 +36,8 @@
         "symbol": "STONK",
         "tvl": null
       },
-      "fetchedAt": "2026-10-21T13:51:00.826Z",
+      "fetchedAt": "2026-10-22T04:53:55.371Z",
       "url": "https://api.llama.fi/protocol/stonkfun"
-    },
-    "stonkPools": {
-      "value": [
-        {
-          "pair": "AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg",
-          "dex": "orca",
-          "quote": "SOL",
-          "liquidity": 2436909.99,
-          "volume24h": 2147779.66
-        },
-        {
-          "pair": "zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
-          "dex": "meteora",
-          "quote": "SOL",
-          "liquidity": 2204651.51,
-          "volume24h": 2408804.17
-        },
-        {
-          "pair": "G4G5SzkbLFMhoSgHiQNeyJFt75sSDsL1rD8LVyT5xZbU",
-          "dex": "raydium",
-          "quote": "USDC",
-          "liquidity": 416565.47,
-          "volume24h": 728436.64
-        },
-        {
-          "pair": "GupqDENX2H7xFSUtGwWkvXYNg3eFriX2K3KeHniWTARf",
-          "dex": "orca",
-          "quote": "USDC",
-          "liquidity": 129966.51,
-          "volume24h": 84652.42
-        },
-        {
-          "pair": "48M3tRdbVYmEbf5rCTFVAgqCCaZdChVmeg3VPBrmgT8m",
-          "dex": "meteora",
-          "quote": "SOL",
-          "liquidity": 121042.83,
-          "volume24h": 31320.08
-        }
-      ],
-      "fetchedAt": "2026-10-21T13:51:00.951Z",
-      "url": "https://api.dexscreener.com/token-pairs/v1/solana/6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
     },
     "volume": {
       "value": [
@@ -72,9 +45,9 @@
           "slug": "pump.fun",
           "name": "pump.fun",
           "total24h": 166390519,
-          "total7d": 1065253578,
-          "total30d": 4741292465,
-          "change7d": -7.87,
+          "total7d": 913834953,
+          "total30d": 4619126771,
+          "change7d": -20.31,
           "methodology": {
             "Volume": "Quote-asset side of every trade on pump.fun bonding curves: SOL, or the Custom Pair quote asset (USDC, tokenized stocks, WBTC, PUMP, other pump.fun coins, ...) since May 2026, priced by DefiLlama."
           },
@@ -83,10 +56,10 @@
         {
           "slug": "pumpswap",
           "name": "PumpSwap",
-          "total24h": 396955961,
-          "total7d": 2511949570,
-          "total30d": 10360724074,
-          "change7d": 10.69,
+          "total24h": 293401398,
+          "total7d": 2552843503,
+          "total30d": 10264005252,
+          "change7d": 13.89,
           "methodology": {
             "UserFees": "Swap fees paid by users",
             "Fees": "Swap fees paid by users",
@@ -101,10 +74,10 @@
         {
           "slug": "aster-spot",
           "name": "Aster Spot",
-          "total24h": 3146308,
-          "total7d": 24294878,
-          "total30d": 169421046,
-          "change7d": -27.59,
+          "total24h": 3056827,
+          "total7d": 24188709,
+          "total30d": 153927856,
+          "change7d": -25.33,
           "methodology": {
             "UserFees": "Swap fees paid by users",
             "Fees": "Swap fees paid by users",
@@ -119,27 +92,68 @@
           "slug": "stonkfun",
           "name": "StonkFun",
           "total24h": 1694546,
-          "total7d": 11552648,
-          "total30d": 547622674,
-          "change7d": -69.44,
+          "total7d": 10029609,
+          "total30d": 484597547,
+          "change7d": -65.95,
           "methodology": {
             "Volume": "Quote-token value of every buy and sell on the Raydium LaunchLab bonding curves configured by StonkFun, denominated in each pool's quote token (SOL, ZEC, wBTC, xStocks, STONK, ...)."
           },
           "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/dexs/stonkfun.ts"
         }
       ],
-      "fetchedAt": "2026-10-21T13:51:01.011Z",
+      "fetchedAt": "2026-10-22T04:53:55.453Z",
       "url": "https://api.llama.fi/overview/dexs?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true"
+    },
+    "stonkPools": {
+      "value": [
+        {
+          "pair": "AfrddTGYwCVEQB1gxCAhR8i48o6qtxYqksdVkeLudEhg",
+          "dex": "orca",
+          "quote": "SOL",
+          "liquidity": 2397197.29,
+          "volume24h": 1261899.16
+        },
+        {
+          "pair": "zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
+          "dex": "meteora",
+          "quote": "SOL",
+          "liquidity": 2103707.24,
+          "volume24h": 1949647.69
+        },
+        {
+          "pair": "G4G5SzkbLFMhoSgHiQNeyJFt75sSDsL1rD8LVyT5xZbU",
+          "dex": "raydium",
+          "quote": "USDC",
+          "liquidity": 507017.64,
+          "volume24h": 867235.59
+        },
+        {
+          "pair": "GupqDENX2H7xFSUtGwWkvXYNg3eFriX2K3KeHniWTARf",
+          "dex": "orca",
+          "quote": "USDC",
+          "liquidity": 129507.2,
+          "volume24h": 211805.72
+        },
+        {
+          "pair": "36SpkkrsnyUgjPC24KU993r8T3whkJaPgoEeAmbBj9uB",
+          "dex": "meteora",
+          "quote": "USDC",
+          "liquidity": 106562.49,
+          "volume24h": 16929.78
+        }
+      ],
+      "fetchedAt": "2026-10-22T04:53:55.457Z",
+      "url": "https://api.dexscreener.com/token-pairs/v1/solana/6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
     },
     "revenue": {
       "value": [
         {
           "slug": "pump.fun",
           "name": "pump.fun",
-          "total24h": 1457872,
-          "total7d": 9545072,
-          "total30d": 45372494,
-          "change7d": -11.9,
+          "total24h": 1390282,
+          "total7d": 9558621,
+          "total30d": 45507909,
+          "change7d": -8.88,
           "methodology": {
             "Fees": "Bonding-curve trade fees paid by users (pump's slice + creator/cashback slice), graduation fees, and Mayhem-mode fees.",
             "Revenue": "Pump's slice of the bonding-curve trade fee plus graduation fees and Mayhem-mode fees.",
@@ -152,10 +166,10 @@
         {
           "slug": "pumpswap",
           "name": "PumpSwap",
-          "total24h": 410945,
-          "total7d": 2935241,
-          "total30d": 15751551,
-          "change7d": -16.39,
+          "total24h": 426415,
+          "total7d": 2920725,
+          "total30d": 15701992,
+          "change7d": -13.42,
           "methodology": {
             "UserFees": "Swap fees paid by users",
             "Fees": "Total fees collected from all sources, including LP fees (0.20%) and protocol fees (0.05%) and coin creator fees (0.05%) from each trade",
@@ -171,9 +185,9 @@
           "slug": "stonkfun",
           "name": "StonkFun",
           "total24h": 164075,
-          "total7d": 959325,
-          "total30d": 16819674,
-          "change7d": -29.29,
+          "total7d": 877010,
+          "total30d": 14667698,
+          "change7d": -25.94,
           "methodology": {
             "Fees": "Trading fees StonkFun collects, measured when it claims them: the 1% platform fee on its Raydium LaunchLab bonding curves (every platform config whose fees it claims), the creator fee on the Raydium CPMM pools those launches graduate into, and the quote side of fees harvested from the permanently locked liquidity behind pre-LaunchLab launches. Raydium's own fee shares are excluded. Each token is valued with Dune trade prices at the hour it was received, ignoring trades priced more than 10x away from that day's median.",
             "UserFees": "Same as fees.",
@@ -185,29 +199,18 @@
           "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/stonkfun.ts"
         }
       ],
-      "fetchedAt": "2026-10-21T13:51:01.106Z",
+      "fetchedAt": "2026-10-22T04:53:55.518Z",
       "url": "https://api.llama.fi/overview/fees?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true&dataType=dailyRevenue"
-    },
-    "stonkMarket": {
-      "value": {
-        "mint": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
-        "price": 0.12551876316407035,
-        "marketCap": 98864099.41933022,
-        "supply": 787643989.8479657,
-        "generatedAt": "2026-10-21T13:50:41.660Z"
-      },
-      "fetchedAt": "2026-10-21T13:51:01.116Z",
-      "url": "https://stonkfun.xyz/api/v2/revenue/platform-token"
     },
     "fees": {
       "value": [
         {
           "slug": "pump.fun",
           "name": "pump.fun",
-          "total24h": 2081424,
-          "total7d": 13378446,
-          "total30d": 62626872,
-          "change7d": -10.97,
+          "total24h": 1997031,
+          "total7d": 13460534,
+          "total30d": 62894246,
+          "change7d": -7.54,
           "methodology": {
             "Fees": "Bonding-curve trade fees paid by users (pump's slice + creator/cashback slice), graduation fees, and Mayhem-mode fees.",
             "Revenue": "Pump's slice of the bonding-curve trade fee plus graduation fees and Mayhem-mode fees.",
@@ -220,10 +223,10 @@
         {
           "slug": "pumpswap",
           "name": "PumpSwap",
-          "total24h": 3293223,
-          "total7d": 21871602,
-          "total30d": 116264858,
-          "change7d": -14.32,
+          "total24h": 3462354,
+          "total7d": 22042306,
+          "total30d": 116369586,
+          "change7d": -10.28,
           "methodology": {
             "UserFees": "Swap fees paid by users",
             "Fees": "Total fees collected from all sources, including LP fees (0.20%) and protocol fees (0.05%) and coin creator fees (0.05%) from each trade",
@@ -238,10 +241,10 @@
         {
           "slug": "aster-perps",
           "name": "Aster Perps",
-          "total24h": 129323,
-          "total7d": 927793,
-          "total30d": 4363788,
-          "change7d": -8.52,
+          "total24h": 152463,
+          "total7d": 909893,
+          "total30d": 4145334,
+          "change7d": -11.38,
           "methodology": {
             "UserFees": "Fees paid by users",
             "Fees": "All trading fees collected from perpetual futures trading, including opening/closing positions and funding fees",
@@ -273,9 +276,9 @@
           "slug": "stonkfun",
           "name": "StonkFun",
           "total24h": 177934,
-          "total7d": 1043289,
-          "total30d": 19122650,
-          "change7d": -33.68,
+          "total7d": 950871,
+          "total30d": 16765727,
+          "change7d": -30.36,
           "methodology": {
             "Fees": "Trading fees StonkFun collects, measured when it claims them: the 1% platform fee on its Raydium LaunchLab bonding curves (every platform config whose fees it claims), the creator fee on the Raydium CPMM pools those launches graduate into, and the quote side of fees harvested from the permanently locked liquidity behind pre-LaunchLab launches. Raydium's own fee shares are excluded. Each token is valued with Dune trade prices at the hour it was received, ignoring trades priced more than 10x away from that day's median.",
             "UserFees": "Same as fees.",
@@ -287,8 +290,1022 @@
           "methodologyURL": "https://github.com/DefiLlama/dimension-adapters/blob/master/fees/stonkfun.ts"
         }
       ],
-      "fetchedAt": "2026-10-21T13:51:01.182Z",
+      "fetchedAt": "2026-10-22T04:53:55.557Z",
       "url": "https://api.llama.fi/overview/fees?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true"
+    },
+    "prices": {
+      "value": {
+        "STONK": {
+          "price": 0.12485461126110775,
+          "timestamp": 1792644777,
+          "confidence": 0.99,
+          "id": "solana:6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
+        },
+        "USDT": {
+          "price": 0.9993116924796136,
+          "timestamp": 1792644777,
+          "confidence": 0.99,
+          "id": "coingecko:tether"
+        },
+        "SOL": {
+          "price": 105.23646946718073,
+          "timestamp": 1792644777,
+          "confidence": 0.99,
+          "id": "coingecko:solana"
+        },
+        "ASTER": {
+          "price": 0.71287595198228,
+          "timestamp": 1792644114,
+          "confidence": 0.99,
+          "id": "bsc:0x000ae314e2a2172a039b26378814c252734f556a"
+        },
+        "PUMP": {
+          "price": 0.004930104662727153,
+          "timestamp": 1792644777,
+          "confidence": 0.99,
+          "id": "solana:pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn"
+        },
+        "PURR": {
+          "price": 0.09931446008605507,
+          "timestamp": 1792644777,
+          "confidence": 0.99,
+          "id": "coingecko:purr-2"
+        }
+      },
+      "fetchedAt": "2026-10-22T04:53:55.572Z",
+      "url": "https://coins.llama.fi/prices/current/solana:6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,coingecko:tether,coingecko:solana,bsc:0x000ae314e2a2172a039b26378814c252734f556a,solana:pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn,coingecko:purr-2"
+    },
+    "stonkMarket": {
+      "value": {
+        "mint": "6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx",
+        "price": 0.12572814511331062,
+        "marketCap": 98970497.19649823,
+        "supply": 787180707.4949988,
+        "generatedAt": "2026-10-22T04:53:01.911Z"
+      },
+      "fetchedAt": "2026-10-22T04:53:55.586Z",
+      "url": "https://stonkfun.xyz/api/v2/revenue/platform-token"
+    },
+    "stonkDaily": {
+      "value": {
+        "generatedAt": "2026-10-22T04:53:55.802Z",
+        "rows": [
+          {
+            "date": "2026-07-25",
+            "revenue": 854.7111166450093,
+            "buybacks": 0,
+            "burned": 0
+          },
+          {
+            "date": "2026-07-26",
+            "revenue": 87.78670600064989,
+            "buybacks": 0,
+            "burned": 0
+          },
+          {
+            "date": "2026-07-27",
+            "revenue": 31.733485344075017,
+            "buybacks": 0,
+            "burned": 0
+          },
+          {
+            "date": "2026-07-28",
+            "revenue": 54.84419575547304,
+            "buybacks": 0,
+            "burned": 0
+          },
+          {
+            "date": "2026-07-29",
+            "revenue": 21.926179571980004,
+            "buybacks": 0,
+            "burned": 0
+          },
+          {
+            "date": "2026-07-30",
+            "revenue": 70.76392097960988,
+            "buybacks": 0,
+            "burned": 0
+          },
+          {
+            "date": "2026-07-31",
+            "revenue": 26.377850702124025,
+            "buybacks": 0,
+            "burned": 0
+          },
+          {
+            "date": "2026-08-01",
+            "revenue": 15.6082497355,
+            "buybacks": 0,
+            "burned": 0
+          },
+          {
+            "date": "2026-08-02",
+            "revenue": 3340.515577319976,
+            "buybacks": 0,
+            "burned": 0
+          },
+          {
+            "date": "2026-08-03",
+            "revenue": 1670.5027806591108,
+            "buybacks": 3743.660988753495,
+            "burned": 4030938.358184892
+          },
+          {
+            "date": "2026-08-04",
+            "revenue": 28399.345027576703,
+            "buybacks": 17114.834666373554,
+            "burned": 12127896.664658098
+          },
+          {
+            "date": "2026-08-05",
+            "revenue": 42151.60940341845,
+            "buybacks": 23761.207156741846,
+            "burned": 6907457.775866995
+          },
+          {
+            "date": "2026-08-06",
+            "revenue": 81293.9416556789,
+            "buybacks": 47973.60158132838,
+            "burned": 7392494.13932444
+          },
+          {
+            "date": "2026-08-07",
+            "revenue": 71961.52027371427,
+            "buybacks": 42539.52954492048,
+            "burned": 5313325.219421129
+          },
+          {
+            "date": "2026-08-08",
+            "revenue": 29895.00174050223,
+            "buybacks": 17618.666026602532,
+            "burned": 2176944.045604622
+          },
+          {
+            "date": "2026-08-09",
+            "revenue": 30025.16839782661,
+            "buybacks": 17729.968485630667,
+            "burned": 2641459.342394964
+          },
+          {
+            "date": "2026-08-10",
+            "revenue": 60504.25294861102,
+            "buybacks": 34699.91210722343,
+            "burned": 3025546.291572832
+          },
+          {
+            "date": "2026-08-11",
+            "revenue": 79988.36063588558,
+            "buybacks": 44916.7805661193,
+            "burned": 3531276.37288167
+          },
+          {
+            "date": "2026-08-12",
+            "revenue": 46976.561834272834,
+            "buybacks": 27649.443195445012,
+            "burned": 2201037.457179049
+          },
+          {
+            "date": "2026-08-13",
+            "revenue": 53705.178520963134,
+            "buybacks": 31655.20469893758,
+            "burned": 2814051.3922541435
+          },
+          {
+            "date": "2026-08-14",
+            "revenue": 74645.69223192452,
+            "buybacks": 43483.60606538101,
+            "burned": 4267158.040210916
+          },
+          {
+            "date": "2026-08-15",
+            "revenue": 51164.605526001425,
+            "buybacks": 25281.163479597795,
+            "burned": 2478383.113629442
+          },
+          {
+            "date": "2026-08-16",
+            "revenue": 34824.06671044269,
+            "buybacks": 19780.07027291409,
+            "burned": 2541749.264073718
+          },
+          {
+            "date": "2026-08-17",
+            "revenue": 26390.662310436703,
+            "buybacks": 15117.01935235579,
+            "burned": 2240482.001007938
+          },
+          {
+            "date": "2026-08-18",
+            "revenue": 32757.15521334276,
+            "buybacks": 18727.564095760863,
+            "burned": 3151316.451197139
+          },
+          {
+            "date": "2026-08-19",
+            "revenue": 33659.093113475865,
+            "buybacks": 19668.023241592746,
+            "burned": 4455763.138659774
+          },
+          {
+            "date": "2026-08-20",
+            "revenue": 34939.72697002668,
+            "buybacks": 20546.279551764885,
+            "burned": 3813742.647437931
+          },
+          {
+            "date": "2026-08-21",
+            "revenue": 18846.762912203892,
+            "buybacks": 10680.202640741154,
+            "burned": 1606126.0377730369
+          },
+          {
+            "date": "2026-08-22",
+            "revenue": 42993.7247804835,
+            "buybacks": 25517.515316737787,
+            "burned": 3453820.924679283
+          },
+          {
+            "date": "2026-08-23",
+            "revenue": 31266.353369228418,
+            "buybacks": 18243.022014967508,
+            "burned": 1897560.830806085
+          },
+          {
+            "date": "2026-08-24",
+            "revenue": 22725.851012042338,
+            "buybacks": 13359.49115114236,
+            "burned": 1342368.9804144655
+          },
+          {
+            "date": "2026-08-25",
+            "revenue": 26527.432972626215,
+            "buybacks": 15586.55572728597,
+            "burned": 1779865.3370611528
+          },
+          {
+            "date": "2026-08-26",
+            "revenue": 84859.63433141338,
+            "buybacks": 51218.652416031255,
+            "burned": 4140438.5925732465
+          },
+          {
+            "date": "2026-08-27",
+            "revenue": 55685.83558941558,
+            "buybacks": 31567.018077087032,
+            "burned": 1984597.5479481113
+          },
+          {
+            "date": "2026-08-28",
+            "revenue": 21477.448130704288,
+            "buybacks": 12982.321607003101,
+            "burned": 923346.4603944639
+          },
+          {
+            "date": "2026-08-29",
+            "revenue": 42308.816333951334,
+            "buybacks": 24965.80508846892,
+            "burned": 1535901.0537263795
+          },
+          {
+            "date": "2026-08-30",
+            "revenue": 28898.555927600457,
+            "buybacks": 17401.451964129126,
+            "burned": 775265.086462406
+          },
+          {
+            "date": "2026-08-31",
+            "revenue": 56668.192184321386,
+            "buybacks": 34013.31545856767,
+            "burned": 1755323.789911709
+          },
+          {
+            "date": "2026-09-01",
+            "revenue": 131343.1026816005,
+            "buybacks": 76853.61533082937,
+            "burned": 3095030.471137777
+          },
+          {
+            "date": "2026-09-02",
+            "revenue": 38857.95498308737,
+            "buybacks": 23019.25169155444,
+            "burned": 1157232.628885263
+          },
+          {
+            "date": "2026-09-03",
+            "revenue": 64050.00379900649,
+            "buybacks": 38019.55283912327,
+            "burned": 1582135.8928002892
+          },
+          {
+            "date": "2026-09-04",
+            "revenue": 78869.12495296852,
+            "buybacks": 46358.597199199714,
+            "burned": 2151037.259173415
+          },
+          {
+            "date": "2026-09-05",
+            "revenue": 186107.6343503429,
+            "buybacks": 110863.87317045373,
+            "burned": 3164701.413389826
+          },
+          {
+            "date": "2026-09-06",
+            "revenue": 1508194.549474087,
+            "buybacks": 904502.7482378253,
+            "burned": 6797594.08592138
+          },
+          {
+            "date": "2026-09-07",
+            "revenue": 1198986.5950265399,
+            "buybacks": 719516.4534626644,
+            "burned": 5669955.868823886
+          },
+          {
+            "date": "2026-09-08",
+            "revenue": 1341249.3647007255,
+            "buybacks": 783380.3856379893,
+            "burned": 4977566.137911451
+          },
+          {
+            "date": "2026-09-09",
+            "revenue": 1355591.1077829914,
+            "buybacks": 814042.9992660017,
+            "burned": 4545753.456321942
+          },
+          {
+            "date": "2026-09-10",
+            "revenue": 867101.5246595903,
+            "buybacks": 525198.5011681926,
+            "burned": 2799744.300994437
+          },
+          {
+            "date": "2026-09-11",
+            "revenue": 2205092.1350248246,
+            "buybacks": 1269778.0003211813,
+            "burned": 5267353.539949616
+          },
+          {
+            "date": "2026-09-12",
+            "revenue": 1045810.1968834725,
+            "buybacks": 653347.6032155654,
+            "burned": 2486146.662608982
+          },
+          {
+            "date": "2026-09-13",
+            "revenue": 900903.6560629098,
+            "buybacks": 538654.6373630057,
+            "burned": 2235385.490898942
+          },
+          {
+            "date": "2026-09-14",
+            "revenue": 870664.3581579417,
+            "buybacks": 517396.0412525632,
+            "burned": 2574691.2812802256
+          },
+          {
+            "date": "2026-09-15",
+            "revenue": 599181.2757824215,
+            "buybacks": 357847.51305992156,
+            "burned": 2064389.9437994193
+          },
+          {
+            "date": "2026-09-16",
+            "revenue": 561373.0288964005,
+            "buybacks": 335378.6671915575,
+            "burned": 2061803.5189059
+          },
+          {
+            "date": "2026-09-17",
+            "revenue": 900646.1855801931,
+            "buybacks": 541460.3500319945,
+            "burned": 2524563.8240973884
+          },
+          {
+            "date": "2026-09-18",
+            "revenue": 1120578.9489319152,
+            "buybacks": 672012.4008107651,
+            "burned": 2690365.745275111
+          },
+          {
+            "date": "2026-09-19",
+            "revenue": 1251411.5921050918,
+            "buybacks": 749636.217817446,
+            "burned": 2932989.245058602
+          },
+          {
+            "date": "2026-09-20",
+            "revenue": 1119344.771910286,
+            "buybacks": 671058.2962332421,
+            "burned": 2349009.5623754384
+          },
+          {
+            "date": "2026-09-21",
+            "revenue": 2113836.7041037846,
+            "buybacks": 1227424.922640004,
+            "burned": 3466251.8510252023
+          },
+          {
+            "date": "2026-09-22",
+            "revenue": 1532433.4203965983,
+            "buybacks": 717397.2594511108,
+            "burned": 2395722.1551755024
+          },
+          {
+            "date": "2026-09-23",
+            "revenue": 1509466.7138747852,
+            "buybacks": 1130911.902643317,
+            "burned": 3666056.1114934036
+          },
+          {
+            "date": "2026-09-24",
+            "revenue": 1095923.7375604166,
+            "buybacks": 672720.5218643748,
+            "burned": 2046039.8781597107
+          },
+          {
+            "date": "2026-09-25",
+            "revenue": 965962.4066531567,
+            "buybacks": 580634.4870484392,
+            "burned": 1895834.3569844356
+          },
+          {
+            "date": "2026-09-26",
+            "revenue": 630301.2986235825,
+            "buybacks": 376494.7357566396,
+            "burned": 1424283.1892350782
+          },
+          {
+            "date": "2026-09-27",
+            "revenue": 526393.1542173239,
+            "buybacks": 316238.61901639204,
+            "burned": 1188799.2066398002
+          },
+          {
+            "date": "2026-09-28",
+            "revenue": 619406.3609935426,
+            "buybacks": 372628.848697347,
+            "burned": 1535136.317653662
+          },
+          {
+            "date": "2026-09-29",
+            "revenue": 1163258.1134927825,
+            "buybacks": 703179.1086068894,
+            "burned": 2750251.7055975683
+          },
+          {
+            "date": "2026-09-30",
+            "revenue": 980100.9100272547,
+            "buybacks": 587211.0490203726,
+            "burned": 2296870.7290860014
+          },
+          {
+            "date": "2026-10-01",
+            "revenue": 893225.9450488294,
+            "buybacks": 535244.297826886,
+            "burned": 2300343.748005092
+          },
+          {
+            "date": "2026-10-02",
+            "revenue": 694664.3452360773,
+            "buybacks": 417358.93733133806,
+            "burned": 1802915.1738909008
+          },
+          {
+            "date": "2026-10-03",
+            "revenue": 365714.2560807501,
+            "buybacks": 219316.29044209362,
+            "burned": 1031215.859673975
+          },
+          {
+            "date": "2026-10-04",
+            "revenue": 590268.3639079487,
+            "buybacks": 353601.3863127669,
+            "burned": 1789958.478295282
+          },
+          {
+            "date": "2026-10-05",
+            "revenue": 456429.2586257871,
+            "buybacks": 274231.77242792584,
+            "burned": 1394890.7163385553
+          },
+          {
+            "date": "2026-10-06",
+            "revenue": 461540.0848772761,
+            "buybacks": 277190.3699028519,
+            "burned": 1426112.923697683
+          },
+          {
+            "date": "2026-10-07",
+            "revenue": 256261.1561235104,
+            "buybacks": 153269.02122878958,
+            "burned": 840562.1428037481
+          },
+          {
+            "date": "2026-10-08",
+            "revenue": 293814.2844186971,
+            "buybacks": 176523.3345261162,
+            "burned": 1178160.1731506374
+          },
+          {
+            "date": "2026-10-09",
+            "revenue": 179603.34674026156,
+            "buybacks": 107830.08241085484,
+            "burned": 769197.2708479309
+          },
+          {
+            "date": "2026-10-10",
+            "revenue": 140598.82712688472,
+            "buybacks": 84189.51825220142,
+            "burned": 629547.4208805357
+          },
+          {
+            "date": "2026-10-11",
+            "revenue": 146679.72038764527,
+            "buybacks": 88161.80863211525,
+            "burned": 638140.8859142421
+          },
+          {
+            "date": "2026-10-12",
+            "revenue": 219500.94734483966,
+            "buybacks": 130099.63768343847,
+            "burned": 893851.826789141
+          },
+          {
+            "date": "2026-10-13",
+            "revenue": 120995.9089906064,
+            "buybacks": 73457.94124755534,
+            "burned": 611784.571040605
+          },
+          {
+            "date": "2026-10-14",
+            "revenue": 82489.12533439204,
+            "buybacks": 49624.61798620223,
+            "burned": 431222.3396314969
+          },
+          {
+            "date": "2026-10-15",
+            "revenue": 159089.67741489815,
+            "buybacks": 94628.93661514313,
+            "burned": 876728.8199082757
+          },
+          {
+            "date": "2026-10-16",
+            "revenue": 187848.30191389198,
+            "buybacks": 113106.17113608081,
+            "burned": 1002628.5526956241
+          },
+          {
+            "date": "2026-10-17",
+            "revenue": 107650.5026936713,
+            "buybacks": 64379.48552644173,
+            "burned": 601925.2232349189
+          },
+          {
+            "date": "2026-10-18",
+            "revenue": 85850.28361551513,
+            "buybacks": 51650.394178813454,
+            "burned": 569037.5742282058
+          },
+          {
+            "date": "2026-10-19",
+            "revenue": 175901.85307179348,
+            "buybacks": 105264.72792805756,
+            "burned": 982378.0866899923
+          },
+          {
+            "date": "2026-10-20",
+            "revenue": 164124.02971042276,
+            "buybacks": 97974.16928145985,
+            "burned": 832665.479659482
+          },
+          {
+            "date": "2026-10-21",
+            "revenue": 133731.81249652905,
+            "buybacks": 78566.51869957757,
+            "burned": 619412.611490484
+          },
+          {
+            "date": "2026-10-22",
+            "revenue": 16688.67836158077,
+            "buybacks": 12191.54527960341,
+            "burned": 97033.24897947299
+          }
+        ]
+      },
+      "fetchedAt": "2026-10-22T04:53:55.815Z",
+      "url": "https://stonkfun.xyz/api/v2/revenue/daily?limit=90"
+    },
+    "aster": {
+      "value": {
+        "name": "Aster",
+        "symbol": "ASTER",
+        "address": "bsc:0x000ae314e2a2172a039b26378814c252734f556a",
+        "rows": [
+          {
+            "date": "2026-07-16",
+            "value": 762648074
+          },
+          {
+            "date": "2026-07-17",
+            "value": 756238071
+          },
+          {
+            "date": "2026-07-18",
+            "value": 773507051
+          },
+          {
+            "date": "2026-07-19",
+            "value": 770682654
+          },
+          {
+            "date": "2026-07-20",
+            "value": 787216480
+          },
+          {
+            "date": "2026-07-21",
+            "value": 789578434
+          },
+          {
+            "date": "2026-07-22",
+            "value": 782649064
+          },
+          {
+            "date": "2026-07-23",
+            "value": 781669787
+          },
+          {
+            "date": "2026-07-24",
+            "value": 762550464
+          },
+          {
+            "date": "2026-07-25",
+            "value": 743825305
+          },
+          {
+            "date": "2026-07-26",
+            "value": 745938926
+          },
+          {
+            "date": "2026-07-27",
+            "value": 759888232
+          },
+          {
+            "date": "2026-07-28",
+            "value": 751651729
+          },
+          {
+            "date": "2026-07-29",
+            "value": 755162683
+          },
+          {
+            "date": "2026-07-30",
+            "value": 750650647
+          },
+          {
+            "date": "2026-07-31",
+            "value": 758929420
+          },
+          {
+            "date": "2026-08-01",
+            "value": 752289459
+          },
+          {
+            "date": "2026-08-02",
+            "value": 751307912
+          },
+          {
+            "date": "2026-08-03",
+            "value": 751294395
+          },
+          {
+            "date": "2026-08-04",
+            "value": 746941355
+          },
+          {
+            "date": "2026-08-05",
+            "value": 750242386
+          },
+          {
+            "date": "2026-08-06",
+            "value": 757378915
+          },
+          {
+            "date": "2026-08-07",
+            "value": 743548691
+          },
+          {
+            "date": "2026-08-08",
+            "value": 739396729
+          },
+          {
+            "date": "2026-08-09",
+            "value": 753413442
+          },
+          {
+            "date": "2026-08-10",
+            "value": 762117676
+          },
+          {
+            "date": "2026-08-11",
+            "value": 763228126
+          },
+          {
+            "date": "2026-08-12",
+            "value": 770691594
+          },
+          {
+            "date": "2026-08-13",
+            "value": 768088959
+          },
+          {
+            "date": "2026-08-14",
+            "value": 754510827
+          },
+          {
+            "date": "2026-08-15",
+            "value": 740099073
+          },
+          {
+            "date": "2026-08-16",
+            "value": 735710899
+          },
+          {
+            "date": "2026-08-17",
+            "value": 732910839
+          },
+          {
+            "date": "2026-08-18",
+            "value": 728459168
+          },
+          {
+            "date": "2026-08-19",
+            "value": 725226831
+          },
+          {
+            "date": "2026-08-20",
+            "value": 740937620
+          },
+          {
+            "date": "2026-08-21",
+            "value": 745502582
+          },
+          {
+            "date": "2026-08-22",
+            "value": 763437566
+          },
+          {
+            "date": "2026-08-23",
+            "value": 769856628
+          },
+          {
+            "date": "2026-08-24",
+            "value": 763972679
+          },
+          {
+            "date": "2026-08-25",
+            "value": 768863550
+          },
+          {
+            "date": "2026-08-26",
+            "value": 770285658
+          },
+          {
+            "date": "2026-08-27",
+            "value": 782930088
+          },
+          {
+            "date": "2026-08-28",
+            "value": 809325594
+          },
+          {
+            "date": "2026-08-29",
+            "value": 804619487
+          },
+          {
+            "date": "2026-08-30",
+            "value": 807827110
+          },
+          {
+            "date": "2026-08-31",
+            "value": 808370400
+          },
+          {
+            "date": "2026-09-01",
+            "value": 817456435
+          },
+          {
+            "date": "2026-09-02",
+            "value": 832227891
+          },
+          {
+            "date": "2026-09-03",
+            "value": 847657701
+          },
+          {
+            "date": "2026-09-04",
+            "value": 862886292
+          },
+          {
+            "date": "2026-09-05",
+            "value": 866602594
+          },
+          {
+            "date": "2026-09-06",
+            "value": 854675853
+          },
+          {
+            "date": "2026-09-07",
+            "value": 855361952
+          },
+          {
+            "date": "2026-09-08",
+            "value": 819030157
+          },
+          {
+            "date": "2026-09-09",
+            "value": 813706085
+          },
+          {
+            "date": "2026-09-10",
+            "value": 812386525
+          },
+          {
+            "date": "2026-09-11",
+            "value": 804542889
+          },
+          {
+            "date": "2026-09-12",
+            "value": 810096520
+          },
+          {
+            "date": "2026-09-13",
+            "value": 816330836
+          },
+          {
+            "date": "2026-09-14",
+            "value": 819441202
+          },
+          {
+            "date": "2026-09-15",
+            "value": 826484428
+          },
+          {
+            "date": "2026-09-16",
+            "value": 833230930
+          },
+          {
+            "date": "2026-09-17",
+            "value": 822620796
+          },
+          {
+            "date": "2026-09-18",
+            "value": 826983413
+          },
+          {
+            "date": "2026-09-19",
+            "value": 832991018
+          },
+          {
+            "date": "2026-09-20",
+            "value": 825622899
+          },
+          {
+            "date": "2026-09-21",
+            "value": 820293705
+          },
+          {
+            "date": "2026-09-22",
+            "value": 822224385
+          },
+          {
+            "date": "2026-09-23",
+            "value": 799745753
+          },
+          {
+            "date": "2026-09-24",
+            "value": 792340398
+          },
+          {
+            "date": "2026-09-25",
+            "value": 787419557
+          },
+          {
+            "date": "2026-09-26",
+            "value": 786548774
+          },
+          {
+            "date": "2026-09-27",
+            "value": 781700957
+          },
+          {
+            "date": "2026-09-28",
+            "value": 782561810
+          },
+          {
+            "date": "2026-09-29",
+            "value": 774643137
+          },
+          {
+            "date": "2026-09-30",
+            "value": 770455118
+          },
+          {
+            "date": "2026-10-01",
+            "value": 771590735
+          },
+          {
+            "date": "2026-10-02",
+            "value": 786502063
+          },
+          {
+            "date": "2026-10-03",
+            "value": 790659608
+          },
+          {
+            "date": "2026-10-04",
+            "value": 792785214
+          },
+          {
+            "date": "2026-10-05",
+            "value": 790014382
+          },
+          {
+            "date": "2026-10-06",
+            "value": 794151962
+          },
+          {
+            "date": "2026-10-07",
+            "value": 794647566
+          },
+          {
+            "date": "2026-10-08",
+            "value": 793025025
+          },
+          {
+            "date": "2026-10-09",
+            "value": 776125050
+          },
+          {
+            "date": "2026-10-10",
+            "value": 775607660
+          },
+          {
+            "date": "2026-10-11",
+            "value": 774118241
+          },
+          {
+            "date": "2026-10-12",
+            "value": 775549965
+          },
+          {
+            "date": "2026-10-13",
+            "value": 763982773
+          },
+          {
+            "date": "2026-10-14",
+            "value": 763890986
+          },
+          {
+            "date": "2026-10-15",
+            "value": 739968522
+          },
+          {
+            "date": "2026-10-16",
+            "value": 735147475
+          },
+          {
+            "date": "2026-10-17",
+            "value": 735153263
+          },
+          {
+            "date": "2026-10-18",
+            "value": 728141056
+          },
+          {
+            "date": "2026-10-19",
+            "value": 730137522
+          },
+          {
+            "date": "2026-10-20",
+            "value": 729648304
+          },
+          {
+            "date": "2026-10-21",
+            "value": 743551046
+          },
+          {
+            "date": "2026-10-22",
+            "value": 746166608
+          },
+          {
+            "date": "2026-10-22",
+            "value": 737220819
+          }
+        ],
+        "tvl": 737220819
+      },
+      "fetchedAt": "2026-10-22T04:53:57.913Z",
+      "url": "https://api.llama.fi/protocol/aster"
     },
     "pump": {
       "value": {
@@ -690,1034 +1707,17 @@
           },
           {
             "date": "2026-10-21",
-            "value": 354175060
+            "value": 358139182
           },
           {
             "date": "2026-10-21",
-            "value": 356654756
+            "value": 358139182
           }
         ],
-        "tvl": 356654756
+        "tvl": 358139182
       },
-      "fetchedAt": "2026-10-21T13:51:01.679Z",
+      "fetchedAt": "2026-10-22T04:54:01.533Z",
       "url": "https://api.llama.fi/protocol/pump"
-    },
-    "prices": {
-      "value": {
-        "STONK": {
-          "price": 0.12488636930495516,
-          "timestamp": 1792590127,
-          "confidence": 0.99,
-          "id": "solana:6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx"
-        },
-        "USDT": {
-          "price": 0.9989922202519262,
-          "timestamp": 1792590599,
-          "confidence": 0.99,
-          "id": "coingecko:tether"
-        },
-        "SOL": {
-          "price": 106.6894077292631,
-          "timestamp": 1792590599,
-          "confidence": 0.99,
-          "id": "coingecko:solana"
-        },
-        "ASTER": {
-          "price": 0.7178728216795107,
-          "timestamp": 1792590127,
-          "confidence": 0.99,
-          "id": "bsc:0x000ae314e2a2172a039b26378814c252734f556a"
-        },
-        "PUMP": {
-          "price": 0.004756019809518072,
-          "timestamp": 1792590599,
-          "confidence": 0.99,
-          "id": "solana:pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn"
-        },
-        "PURR": {
-          "price": 0.10275877908878747,
-          "timestamp": 1792588981,
-          "confidence": 0.99,
-          "id": "coingecko:purr-2"
-        }
-      },
-      "fetchedAt": "2026-10-21T13:51:01.684Z",
-      "url": "https://coins.llama.fi/prices/current/solana:6GmAFSYs4gk3FDao5FzzySQpPZaWsa4rUJHacpMpUNgx,coingecko:tether,coingecko:solana,bsc:0x000ae314e2a2172a039b26378814c252734f556a,solana:pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn,coingecko:purr-2"
-    },
-    "stablecoins": {
-      "value": [
-        {
-          "name": "Hyperliquid L1",
-          "usd": 7023894986.851573
-        },
-        {
-          "name": "Solana",
-          "usd": 15689569880.081919
-        }
-      ],
-      "fetchedAt": "2026-10-21T13:51:01.685Z",
-      "url": "https://stablecoins.llama.fi/stablecoinchains"
-    },
-    "stonkDaily": {
-      "value": {
-        "generatedAt": "2026-10-21T13:51:01.273Z",
-        "rows": [
-          {
-            "date": "2026-07-24",
-            "revenue": 0,
-            "buybacks": 0,
-            "burned": 7571934.829086284
-          },
-          {
-            "date": "2026-07-25",
-            "revenue": 854.7111166450093,
-            "buybacks": 0,
-            "burned": 0
-          },
-          {
-            "date": "2026-07-26",
-            "revenue": 87.78670600064989,
-            "buybacks": 0,
-            "burned": 0
-          },
-          {
-            "date": "2026-07-27",
-            "revenue": 31.733485344075017,
-            "buybacks": 0,
-            "burned": 0
-          },
-          {
-            "date": "2026-07-28",
-            "revenue": 54.84419575547304,
-            "buybacks": 0,
-            "burned": 0
-          },
-          {
-            "date": "2026-07-29",
-            "revenue": 21.926179571980004,
-            "buybacks": 0,
-            "burned": 0
-          },
-          {
-            "date": "2026-07-30",
-            "revenue": 70.76392097960988,
-            "buybacks": 0,
-            "burned": 0
-          },
-          {
-            "date": "2026-07-31",
-            "revenue": 26.377850702124025,
-            "buybacks": 0,
-            "burned": 0
-          },
-          {
-            "date": "2026-08-01",
-            "revenue": 15.6082497355,
-            "buybacks": 0,
-            "burned": 0
-          },
-          {
-            "date": "2026-08-02",
-            "revenue": 3340.515577319976,
-            "buybacks": 0,
-            "burned": 0
-          },
-          {
-            "date": "2026-08-03",
-            "revenue": 1670.5027806591108,
-            "buybacks": 3743.660988753495,
-            "burned": 4030938.358184892
-          },
-          {
-            "date": "2026-08-04",
-            "revenue": 28399.345027576688,
-            "buybacks": 17114.834666373554,
-            "burned": 12127896.664658098
-          },
-          {
-            "date": "2026-08-05",
-            "revenue": 42151.60940341845,
-            "buybacks": 23761.207156741846,
-            "burned": 6907457.775866995
-          },
-          {
-            "date": "2026-08-06",
-            "revenue": 81293.94165567891,
-            "buybacks": 47973.60158132838,
-            "burned": 7392494.13932444
-          },
-          {
-            "date": "2026-08-07",
-            "revenue": 71961.5202737142,
-            "buybacks": 42539.52954492048,
-            "burned": 5313325.219421129
-          },
-          {
-            "date": "2026-08-08",
-            "revenue": 29895.00174050223,
-            "buybacks": 17618.666026602543,
-            "burned": 2176944.045604622
-          },
-          {
-            "date": "2026-08-09",
-            "revenue": 30025.1683978266,
-            "buybacks": 17729.96848563066,
-            "burned": 2641459.342394964
-          },
-          {
-            "date": "2026-08-10",
-            "revenue": 60504.252948611014,
-            "buybacks": 34699.912107223434,
-            "burned": 3025546.2915728306
-          },
-          {
-            "date": "2026-08-11",
-            "revenue": 79988.36063588559,
-            "buybacks": 44916.78056611928,
-            "burned": 3531276.37288167
-          },
-          {
-            "date": "2026-08-12",
-            "revenue": 46976.561834272856,
-            "buybacks": 27649.443195445023,
-            "burned": 2201037.457179049
-          },
-          {
-            "date": "2026-08-13",
-            "revenue": 53705.17852096313,
-            "buybacks": 31655.2046989376,
-            "burned": 2814051.3922541435
-          },
-          {
-            "date": "2026-08-14",
-            "revenue": 74645.69223192452,
-            "buybacks": 43483.60606538099,
-            "burned": 4267158.040210914
-          },
-          {
-            "date": "2026-08-15",
-            "revenue": 51164.605526001425,
-            "buybacks": 25281.163479597795,
-            "burned": 2478383.1136294426
-          },
-          {
-            "date": "2026-08-16",
-            "revenue": 34824.06671044271,
-            "buybacks": 19780.07027291409,
-            "burned": 2541749.264073717
-          },
-          {
-            "date": "2026-08-17",
-            "revenue": 26390.662310436706,
-            "buybacks": 15117.019352355785,
-            "burned": 2240482.0010079374
-          },
-          {
-            "date": "2026-08-18",
-            "revenue": 32757.15521334276,
-            "buybacks": 18727.564095760863,
-            "burned": 3151316.451197141
-          },
-          {
-            "date": "2026-08-19",
-            "revenue": 33659.09311347585,
-            "buybacks": 19668.023241592746,
-            "burned": 4455763.138659773
-          },
-          {
-            "date": "2026-08-20",
-            "revenue": 34939.72697002666,
-            "buybacks": 20546.279551764885,
-            "burned": 3813742.64743793
-          },
-          {
-            "date": "2026-08-21",
-            "revenue": 18846.762912203892,
-            "buybacks": 10680.202640741154,
-            "burned": 1606126.0377730369
-          },
-          {
-            "date": "2026-08-22",
-            "revenue": 42993.72478048349,
-            "buybacks": 25517.515316737787,
-            "burned": 3453820.924679283
-          },
-          {
-            "date": "2026-08-23",
-            "revenue": 31266.353369228404,
-            "buybacks": 18243.022014967508,
-            "burned": 1897560.8308060856
-          },
-          {
-            "date": "2026-08-24",
-            "revenue": 22725.85101204236,
-            "buybacks": 13359.49115114236,
-            "burned": 1342368.9804144665
-          },
-          {
-            "date": "2026-08-25",
-            "revenue": 26527.43297262622,
-            "buybacks": 15586.555727285971,
-            "burned": 1779865.3370611526
-          },
-          {
-            "date": "2026-08-26",
-            "revenue": 84859.63433141338,
-            "buybacks": 51218.652416031255,
-            "burned": 4140438.592573247
-          },
-          {
-            "date": "2026-08-27",
-            "revenue": 55685.83558941558,
-            "buybacks": 31567.018077087032,
-            "burned": 1984597.5479481113
-          },
-          {
-            "date": "2026-08-28",
-            "revenue": 21477.448130704288,
-            "buybacks": 12982.321607003101,
-            "burned": 923346.460394464
-          },
-          {
-            "date": "2026-08-29",
-            "revenue": 42308.816333951334,
-            "buybacks": 24965.805088468915,
-            "burned": 1535901.0537263798
-          },
-          {
-            "date": "2026-08-30",
-            "revenue": 28898.555927600464,
-            "buybacks": 17401.451964129126,
-            "burned": 775265.086462406
-          },
-          {
-            "date": "2026-08-31",
-            "revenue": 56668.19218432139,
-            "buybacks": 34013.315458567675,
-            "burned": 1755323.7899117088
-          },
-          {
-            "date": "2026-09-01",
-            "revenue": 131343.10268160043,
-            "buybacks": 76853.61533082937,
-            "burned": 3095030.4711377765
-          },
-          {
-            "date": "2026-09-02",
-            "revenue": 38857.954983087366,
-            "buybacks": 23019.251691554437,
-            "burned": 1157232.628885263
-          },
-          {
-            "date": "2026-09-03",
-            "revenue": 64050.003799006474,
-            "buybacks": 38019.55283912329,
-            "burned": 1582135.8928002887
-          },
-          {
-            "date": "2026-09-04",
-            "revenue": 78869.12495296852,
-            "buybacks": 46358.59719919972,
-            "burned": 2151037.2591734147
-          },
-          {
-            "date": "2026-09-05",
-            "revenue": 186107.63435034294,
-            "buybacks": 110863.87317045373,
-            "burned": 3164701.4133898267
-          },
-          {
-            "date": "2026-09-06",
-            "revenue": 1508194.5494740861,
-            "buybacks": 904502.7482378255,
-            "burned": 6797594.085921377
-          },
-          {
-            "date": "2026-09-07",
-            "revenue": 1198986.5950265403,
-            "buybacks": 719516.4534626637,
-            "burned": 5669955.868823888
-          },
-          {
-            "date": "2026-09-08",
-            "revenue": 1341249.3647007262,
-            "buybacks": 783380.3856379893,
-            "burned": 4977566.13791145
-          },
-          {
-            "date": "2026-09-09",
-            "revenue": 1355591.1077829923,
-            "buybacks": 814042.999266001,
-            "burned": 4545753.456321942
-          },
-          {
-            "date": "2026-09-10",
-            "revenue": 867101.5246595899,
-            "buybacks": 525198.501168193,
-            "burned": 2799744.300994438
-          },
-          {
-            "date": "2026-09-11",
-            "revenue": 2205092.135024822,
-            "buybacks": 1269778.0003211813,
-            "burned": 5267353.539949617
-          },
-          {
-            "date": "2026-09-12",
-            "revenue": 1045810.1968834727,
-            "buybacks": 653347.6032155652,
-            "burned": 2486146.662608982
-          },
-          {
-            "date": "2026-09-13",
-            "revenue": 900903.6560629098,
-            "buybacks": 538654.6373630054,
-            "burned": 2235385.4908989416
-          },
-          {
-            "date": "2026-09-14",
-            "revenue": 870664.3581579421,
-            "buybacks": 517396.041252563,
-            "burned": 2574691.281280226
-          },
-          {
-            "date": "2026-09-15",
-            "revenue": 599181.2757824215,
-            "buybacks": 357847.5130599215,
-            "burned": 2064389.9437994198
-          },
-          {
-            "date": "2026-09-16",
-            "revenue": 561373.0288964006,
-            "buybacks": 335378.66719155735,
-            "burned": 2061803.5189059
-          },
-          {
-            "date": "2026-09-17",
-            "revenue": 900646.1855801931,
-            "buybacks": 541460.3500319942,
-            "burned": 2524563.8240973875
-          },
-          {
-            "date": "2026-09-18",
-            "revenue": 1120578.9489319157,
-            "buybacks": 672012.4008107653,
-            "burned": 2690365.745275111
-          },
-          {
-            "date": "2026-09-19",
-            "revenue": 1251411.5921050925,
-            "buybacks": 749636.2178174446,
-            "burned": 2932989.2450586027
-          },
-          {
-            "date": "2026-09-20",
-            "revenue": 1119344.7719102853,
-            "buybacks": 671058.2962332424,
-            "burned": 2349009.5623754384
-          },
-          {
-            "date": "2026-09-21",
-            "revenue": 2113836.704103787,
-            "buybacks": 1227424.9226400035,
-            "burned": 3466251.8510252023
-          },
-          {
-            "date": "2026-09-22",
-            "revenue": 1532433.420396598,
-            "buybacks": 717397.2594511107,
-            "burned": 2395722.1551755024
-          },
-          {
-            "date": "2026-09-23",
-            "revenue": 1509466.7138747864,
-            "buybacks": 1130911.9026433171,
-            "burned": 3666056.1114934036
-          },
-          {
-            "date": "2026-09-24",
-            "revenue": 1095923.7375604166,
-            "buybacks": 672720.5218643746,
-            "burned": 2046039.8781597107
-          },
-          {
-            "date": "2026-09-25",
-            "revenue": 965962.4066531564,
-            "buybacks": 580634.4870484392,
-            "burned": 1895834.3569844356
-          },
-          {
-            "date": "2026-09-26",
-            "revenue": 630301.2986235832,
-            "buybacks": 376494.73575663974,
-            "burned": 1424283.1892350782
-          },
-          {
-            "date": "2026-09-27",
-            "revenue": 526393.1542173232,
-            "buybacks": 316238.6190163919,
-            "burned": 1188799.2066398002
-          },
-          {
-            "date": "2026-09-28",
-            "revenue": 619406.3609935428,
-            "buybacks": 372628.84869734687,
-            "burned": 1535136.317653662
-          },
-          {
-            "date": "2026-09-29",
-            "revenue": 1163258.1134927834,
-            "buybacks": 703179.1086068894,
-            "burned": 2750251.705597568
-          },
-          {
-            "date": "2026-09-30",
-            "revenue": 980100.910027255,
-            "buybacks": 587211.0490203723,
-            "burned": 2296870.729086001
-          },
-          {
-            "date": "2026-10-01",
-            "revenue": 893225.9450488298,
-            "buybacks": 535244.2978268863,
-            "burned": 2300343.748005092
-          },
-          {
-            "date": "2026-10-02",
-            "revenue": 694664.3452360771,
-            "buybacks": 417358.9373313382,
-            "burned": 1802915.1738909013
-          },
-          {
-            "date": "2026-10-03",
-            "revenue": 365714.2560807504,
-            "buybacks": 219316.29044209362,
-            "burned": 1031215.859673975
-          },
-          {
-            "date": "2026-10-04",
-            "revenue": 590268.3639079487,
-            "buybacks": 353601.3863127667,
-            "burned": 1789958.478295282
-          },
-          {
-            "date": "2026-10-05",
-            "revenue": 456429.2586257872,
-            "buybacks": 274231.7724279259,
-            "burned": 1394890.7163385553
-          },
-          {
-            "date": "2026-10-06",
-            "revenue": 461540.0848772764,
-            "buybacks": 277190.36990285193,
-            "burned": 1426112.9236976835
-          },
-          {
-            "date": "2026-10-07",
-            "revenue": 256261.1561235104,
-            "buybacks": 153269.02122878958,
-            "burned": 840562.1428037479
-          },
-          {
-            "date": "2026-10-08",
-            "revenue": 293814.28441869735,
-            "buybacks": 176523.33452611617,
-            "burned": 1178160.173150638
-          },
-          {
-            "date": "2026-10-09",
-            "revenue": 179603.34674026162,
-            "buybacks": 107830.08241085487,
-            "burned": 769197.2708479312
-          },
-          {
-            "date": "2026-10-10",
-            "revenue": 140598.82712688472,
-            "buybacks": 84189.51825220145,
-            "burned": 629547.4208805359
-          },
-          {
-            "date": "2026-10-11",
-            "revenue": 146679.72038764515,
-            "buybacks": 88161.80863211528,
-            "burned": 638140.8859142421
-          },
-          {
-            "date": "2026-10-12",
-            "revenue": 219500.9473448396,
-            "buybacks": 130099.63768343849,
-            "burned": 893851.8267891412
-          },
-          {
-            "date": "2026-10-13",
-            "revenue": 120995.90899060639,
-            "buybacks": 73457.94124755531,
-            "burned": 611784.5710406047
-          },
-          {
-            "date": "2026-10-14",
-            "revenue": 82489.12533439204,
-            "buybacks": 49624.61798620223,
-            "burned": 431222.33963149687
-          },
-          {
-            "date": "2026-10-15",
-            "revenue": 159089.67741489818,
-            "buybacks": 94628.93661514313,
-            "burned": 876728.8199082761
-          },
-          {
-            "date": "2026-10-16",
-            "revenue": 187848.30191389218,
-            "buybacks": 113106.17113608084,
-            "burned": 1002628.5526956241
-          },
-          {
-            "date": "2026-10-17",
-            "revenue": 107650.50269367125,
-            "buybacks": 64379.48552644173,
-            "burned": 601925.2232349189
-          },
-          {
-            "date": "2026-10-18",
-            "revenue": 85850.28361551517,
-            "buybacks": 51650.39417881344,
-            "burned": 569037.574228206
-          },
-          {
-            "date": "2026-10-19",
-            "revenue": 175901.85307179342,
-            "buybacks": 105264.72792805757,
-            "burned": 982378.0866899922
-          },
-          {
-            "date": "2026-10-20",
-            "revenue": 164124.02971042288,
-            "buybacks": 97974.16928145982,
-            "burned": 832665.4796594819
-          },
-          {
-            "date": "2026-10-21",
-            "revenue": 49444.62594788265,
-            "buybacks": 30057.33750598918,
-            "burned": 251007.829327651
-          }
-        ]
-      },
-      "fetchedAt": "2026-10-21T13:51:01.685Z",
-      "url": "https://stonkfun.xyz/api/v2/revenue/daily?limit=90"
-    },
-    "aster": {
-      "value": {
-        "name": "Aster",
-        "symbol": "ASTER",
-        "address": "bsc:0x000ae314e2a2172a039b26378814c252734f556a",
-        "rows": [
-          {
-            "date": "2026-07-15",
-            "value": 766976059
-          },
-          {
-            "date": "2026-07-16",
-            "value": 762648074
-          },
-          {
-            "date": "2026-07-17",
-            "value": 756238071
-          },
-          {
-            "date": "2026-07-18",
-            "value": 773507051
-          },
-          {
-            "date": "2026-07-19",
-            "value": 770682654
-          },
-          {
-            "date": "2026-07-20",
-            "value": 787216480
-          },
-          {
-            "date": "2026-07-21",
-            "value": 789578434
-          },
-          {
-            "date": "2026-07-22",
-            "value": 782649064
-          },
-          {
-            "date": "2026-07-23",
-            "value": 781669787
-          },
-          {
-            "date": "2026-07-24",
-            "value": 762550464
-          },
-          {
-            "date": "2026-07-25",
-            "value": 743825305
-          },
-          {
-            "date": "2026-07-26",
-            "value": 745938926
-          },
-          {
-            "date": "2026-07-27",
-            "value": 759888232
-          },
-          {
-            "date": "2026-07-28",
-            "value": 751651729
-          },
-          {
-            "date": "2026-07-29",
-            "value": 755162683
-          },
-          {
-            "date": "2026-07-30",
-            "value": 750650647
-          },
-          {
-            "date": "2026-07-31",
-            "value": 758929420
-          },
-          {
-            "date": "2026-08-01",
-            "value": 752289459
-          },
-          {
-            "date": "2026-08-02",
-            "value": 751307912
-          },
-          {
-            "date": "2026-08-03",
-            "value": 751294395
-          },
-          {
-            "date": "2026-08-04",
-            "value": 746941355
-          },
-          {
-            "date": "2026-08-05",
-            "value": 750242386
-          },
-          {
-            "date": "2026-08-06",
-            "value": 757378915
-          },
-          {
-            "date": "2026-08-07",
-            "value": 743548691
-          },
-          {
-            "date": "2026-08-08",
-            "value": 739396729
-          },
-          {
-            "date": "2026-08-09",
-            "value": 753413442
-          },
-          {
-            "date": "2026-08-10",
-            "value": 762117676
-          },
-          {
-            "date": "2026-08-11",
-            "value": 763228126
-          },
-          {
-            "date": "2026-08-12",
-            "value": 770691594
-          },
-          {
-            "date": "2026-08-13",
-            "value": 768088959
-          },
-          {
-            "date": "2026-08-14",
-            "value": 754510827
-          },
-          {
-            "date": "2026-08-15",
-            "value": 740099073
-          },
-          {
-            "date": "2026-08-16",
-            "value": 735710899
-          },
-          {
-            "date": "2026-08-17",
-            "value": 732910839
-          },
-          {
-            "date": "2026-08-18",
-            "value": 728459168
-          },
-          {
-            "date": "2026-08-19",
-            "value": 725226831
-          },
-          {
-            "date": "2026-08-20",
-            "value": 740937620
-          },
-          {
-            "date": "2026-08-21",
-            "value": 745502582
-          },
-          {
-            "date": "2026-08-22",
-            "value": 763437566
-          },
-          {
-            "date": "2026-08-23",
-            "value": 769856628
-          },
-          {
-            "date": "2026-08-24",
-            "value": 763972679
-          },
-          {
-            "date": "2026-08-25",
-            "value": 768863550
-          },
-          {
-            "date": "2026-08-26",
-            "value": 770285658
-          },
-          {
-            "date": "2026-08-27",
-            "value": 782930088
-          },
-          {
-            "date": "2026-08-28",
-            "value": 809325594
-          },
-          {
-            "date": "2026-08-29",
-            "value": 804619487
-          },
-          {
-            "date": "2026-08-30",
-            "value": 807827110
-          },
-          {
-            "date": "2026-08-31",
-            "value": 808370400
-          },
-          {
-            "date": "2026-09-01",
-            "value": 817456435
-          },
-          {
-            "date": "2026-09-02",
-            "value": 832227891
-          },
-          {
-            "date": "2026-09-03",
-            "value": 847657701
-          },
-          {
-            "date": "2026-09-04",
-            "value": 862886292
-          },
-          {
-            "date": "2026-09-05",
-            "value": 866602594
-          },
-          {
-            "date": "2026-09-06",
-            "value": 854675853
-          },
-          {
-            "date": "2026-09-07",
-            "value": 855361952
-          },
-          {
-            "date": "2026-09-08",
-            "value": 819030157
-          },
-          {
-            "date": "2026-09-09",
-            "value": 813706085
-          },
-          {
-            "date": "2026-09-10",
-            "value": 812386525
-          },
-          {
-            "date": "2026-09-11",
-            "value": 804542889
-          },
-          {
-            "date": "2026-09-12",
-            "value": 810096520
-          },
-          {
-            "date": "2026-09-13",
-            "value": 816330836
-          },
-          {
-            "date": "2026-09-14",
-            "value": 819441202
-          },
-          {
-            "date": "2026-09-15",
-            "value": 826484428
-          },
-          {
-            "date": "2026-09-16",
-            "value": 833230930
-          },
-          {
-            "date": "2026-09-17",
-            "value": 822620796
-          },
-          {
-            "date": "2026-09-18",
-            "value": 826983413
-          },
-          {
-            "date": "2026-09-19",
-            "value": 832991018
-          },
-          {
-            "date": "2026-09-20",
-            "value": 825622899
-          },
-          {
-            "date": "2026-09-21",
-            "value": 820293705
-          },
-          {
-            "date": "2026-09-22",
-            "value": 822224385
-          },
-          {
-            "date": "2026-09-23",
-            "value": 799745753
-          },
-          {
-            "date": "2026-09-24",
-            "value": 792340398
-          },
-          {
-            "date": "2026-09-25",
-            "value": 787419557
-          },
-          {
-            "date": "2026-09-26",
-            "value": 786548774
-          },
-          {
-            "date": "2026-09-27",
-            "value": 781700957
-          },
-          {
-            "date": "2026-09-28",
-            "value": 782561810
-          },
-          {
-            "date": "2026-09-29",
-            "value": 774643137
-          },
-          {
-            "date": "2026-09-30",
-            "value": 770455118
-          },
-          {
-            "date": "2026-10-01",
-            "value": 771590735
-          },
-          {
-            "date": "2026-10-02",
-            "value": 786502063
-          },
-          {
-            "date": "2026-10-03",
-            "value": 790659608
-          },
-          {
-            "date": "2026-10-04",
-            "value": 792785214
-          },
-          {
-            "date": "2026-10-05",
-            "value": 790014382
-          },
-          {
-            "date": "2026-10-06",
-            "value": 794151962
-          },
-          {
-            "date": "2026-10-07",
-            "value": 794647566
-          },
-          {
-            "date": "2026-10-08",
-            "value": 793025025
-          },
-          {
-            "date": "2026-10-09",
-            "value": 776125050
-          },
-          {
-            "date": "2026-10-10",
-            "value": 775607660
-          },
-          {
-            "date": "2026-10-11",
-            "value": 774118241
-          },
-          {
-            "date": "2026-10-12",
-            "value": 775549965
-          },
-          {
-            "date": "2026-10-13",
-            "value": 763982773
-          },
-          {
-            "date": "2026-10-14",
-            "value": 763890986
-          },
-          {
-            "date": "2026-10-15",
-            "value": 739968522
-          },
-          {
-            "date": "2026-10-16",
-            "value": 735147475
-          },
-          {
-            "date": "2026-10-17",
-            "value": 735153263
-          },
-          {
-            "date": "2026-10-18",
-            "value": 728141056
-          },
-          {
-            "date": "2026-10-19",
-            "value": 730137522
-          },
-          {
-            "date": "2026-10-20",
-            "value": 729648304
-          },
-          {
-            "date": "2026-10-21",
-            "value": 743551046
-          },
-          {
-            "date": "2026-10-21",
-            "value": 741857467
-          }
-        ],
-        "tvl": 741857467
-      },
-      "fetchedAt": "2026-10-21T13:51:02.856Z",
-      "url": "https://api.llama.fi/protocol/aster"
     }
   }
 }
