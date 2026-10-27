@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-27T01:30:08.293Z",
+  "generatedAt": "2026-10-27T07:55:41.817Z",
   "sources": {
     "fed": {
       "title": "Reuniones de la Fed",
@@ -286,7 +286,7 @@
           "projections": true
         }
       ],
-      "fetchedAt": "2026-10-27T01:30:08.213Z"
+      "fetchedAt": "2026-10-27T07:55:41.617Z"
     },
     "cpi": {
       "title": "Inflación · CPI",
