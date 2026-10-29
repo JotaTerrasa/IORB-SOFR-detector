@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-29T19:40:18.836Z",
+  "generatedAt": "2026-10-29T23:57:41.291Z",
   "source": "FRED CSV official series",
   "series": {
     "IORB": [
@@ -3664,6 +3664,10 @@
       {
         "date": "2026-10-21",
         "value": 952002
+      },
+      {
+        "date": "2026-10-28",
+        "value": 999727
       }
     ],
     "WRESBAL": [
@@ -4122,6 +4126,10 @@
       {
         "date": "2026-10-21",
         "value": 2962607
+      },
+      {
+        "date": "2026-10-28",
+        "value": 2893770
       }
     ],
     "RRPONTSYD": [
