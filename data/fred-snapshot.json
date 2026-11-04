@@ -1,12 +1,8 @@
 {
-  "generatedAt": "2026-11-03T23:26:02.149Z",
+  "generatedAt": "2026-11-04T06:30:24.392Z",
   "source": "FRED CSV official series",
   "series": {
     "IORB": [
-      {
-        "date": "2024-08-25",
-        "value": 5.4
-      },
       {
         "date": "2024-08-26",
         "value": 5.4
@@ -3205,6 +3201,10 @@
       },
       {
         "date": "2026-11-03",
+        "value": 3.9
+      },
+      {
+        "date": "2026-11-04",
         "value": 3.9
       }
     ],
