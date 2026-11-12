@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12T09:53:10.206Z",
+  "generatedAt": "2026-11-12T18:21:35.575Z",
   "sources": {
     "fed": {
       "title": "Reuniones de la Fed",
@@ -253,7 +253,7 @@
         {
           "start": "2027-03-16",
           "date": "2027-03-17",
-          "projections": true
+          "projections": false
         },
         {
           "start": "2027-04-27",
@@ -263,7 +263,7 @@
         {
           "start": "2027-06-08",
           "date": "2027-06-09",
-          "projections": true
+          "projections": false
         },
         {
           "start": "2027-07-27",
@@ -273,7 +273,7 @@
         {
           "start": "2027-09-14",
           "date": "2027-09-15",
-          "projections": true
+          "projections": false
         },
         {
           "start": "2027-10-26",
@@ -281,12 +281,12 @@
           "projections": false
         },
         {
-          "start": "2027-12-07",
-          "date": "2027-12-08",
-          "projections": true
+          "start": "2027-11-16",
+          "date": "2027-11-17",
+          "projections": false
         }
       ],
-      "fetchedAt": "2026-11-12T09:53:10.042Z"
+      "fetchedAt": "2026-11-12T18:21:35.428Z"
     },
     "cpi": {
       "title": "Inflación · CPI",
