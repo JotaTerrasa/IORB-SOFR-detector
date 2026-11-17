@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-17T02:57:22.846Z",
+  "generatedAt": "2026-11-17T22:26:37.475Z",
   "source": "FRED CSV official series",
   "series": {
     "IORB": [
@@ -6304,6 +6304,10 @@
       {
         "date": "2026-11-16",
         "value": 0.182
+      },
+      {
+        "date": "2026-11-17",
+        "value": 0.351
       }
     ]
   }
